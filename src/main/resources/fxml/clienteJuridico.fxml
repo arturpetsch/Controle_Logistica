@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="AnchorPane" maxHeight="697.0" maxWidth="1300.0" minHeight="697.0" minWidth="1300.0" prefHeight="697.0" prefWidth="1300.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.cl.controle_logistica.ClienteJuridicoController">
+   <children>
+      <Label layoutX="49.0" layoutY="69.0" text="Cliente Jurídico" textFill="#2196f3">
+         <font>
+            <Font name="Source Sans Pro Semibold" size="24.0" />
+         </font>
+      </Label>
+      <Label layoutX="35.0" layoutY="100.0" prefHeight="11.0" prefWidth="1217.0" style="-fx-background-color: #2196f3;">
+         <font>
+            <Font size="1.0" />
+         </font>
+      </Label>
+      <Pane layoutX="44.0" layoutY="143.0" prefHeight="85.0" prefWidth="365.0" style="-fx-border-radius: 12; -fx-border-width: 1; -fx-border-color: #000000; -fx-border-insets: 2; -fx-background-color: #ffffff;">
+         <children>
+            <Label layoutX="42.0" layoutY="34.0" prefHeight="17.0" prefWidth="99.0" text="Nome Fantasia :">
+               <font>
+                  <Font name="Source Sans Pro Semibold" size="13.0" />
+               </font>
+            </Label>
+            <TextField fx:id="txtnome" layoutX="148.0" layoutY="30.0" />
+            <Button fx:id="btnBuscarNomeClienteJuridico" layoutX="297.0" layoutY="30.0" mnemonicParsing="false" onAction="#buscarPeloNome" prefHeight="25.0" prefWidth="28.0" />
+         </children>
+      </Pane>
+      <Pane layoutX="44.0" layoutY="251.0" prefHeight="402.0" prefWidth="744.0" style="-fx-border-radius: 12; -fx-border-width: 1; -fx-border-color: #000000; -fx-border-insets: 2; -fx-background-color: #ffffff;">
+         <children>
+            <Label layoutX="11.0" layoutY="11.0" text="Dados Empresa  ">
+               <font>
+                  <Font name="Source Sans Pro Semibold" size="14.0" />
+               </font>
+            </Label>
+            <Label layoutX="41.0" layoutY="58.0" text="Nome Fantasia :" textAlignment="RIGHT" />
+            <Label layoutX="91.0" layoutY="127.0" prefHeight="17.0" prefWidth="37.0" text="CNPJ :" textAlignment="RIGHT" />
+            <Label layoutX="71.0" layoutY="161.0" text="Endereço :" textAlignment="RIGHT" />
+            <Label layoutX="90.0" layoutY="197.0" text="Bairro :" textAlignment="RIGHT" />
+            <Label layoutX="103.0" layoutY="231.0" text="CEP :" textAlignment="RIGHT" />
+            <Label layoutX="325.0" layoutY="265.0" text="Estado :" textAlignment="RIGHT" />
+            <TextField fx:id="txtNomeFantasiaClienteJuridico" layoutX="131.0" layoutY="54.0" prefHeight="25.0" prefWidth="587.0" />
+            <TextField fx:id="txtRazaoSocialClienteJuridico" layoutX="131.0" layoutY="87.0" prefHeight="25.0" prefWidth="587.0" />
+            <TextField fx:id="txtCnpjClienteJuridico" layoutX="131.0" layoutY="123.0" prefHeight="25.0" prefWidth="130.0" />
+            <TextField fx:id="txtIEClienteJuridico" layoutX="313.0" layoutY="123.0" prefHeight="25.0" prefWidth="119.0" />
+            <TextField fx:id="txtEnderecoClienteJuridico" layoutX="131.0" layoutY="157.0" prefHeight="25.0" prefWidth="587.0" />
+            <TextField fx:id="txtBairroClienteJuridico" layoutX="133.0" layoutY="193.0" prefHeight="25.0" prefWidth="434.0" />
+            <TextField fx:id="txtCEPClienteJuridico" layoutX="133.0" layoutY="227.0" />
+            <TextField fx:id="txtCidadeClienteJuridico" layoutX="133.0" layoutY="262.0" />
+            <ComboBox fx:id="comboBoxEstadoClienteJuridico" layoutX="375.0" layoutY="260.0" prefWidth="150.0" style="-fx-background-color: #FFFFFF; -fx-border-color: #bbaFFF; -fx-border-radius: 3;" />
+            <Label layoutX="83.0" layoutY="266.0" text="Cidade :" textAlignment="RIGHT" />
+            <TextField fx:id="txtContatoClienteJuridico" cache="true" layoutX="131.0" layoutY="300.0" />
+            <Label layoutX="283.0" layoutY="127.0" text="IE :" textAlignment="RIGHT" />
+            <Label layoutX="78.0" layoutY="304.0" text="Contato :" textAlignment="RIGHT" />
+            <Label layoutX="313.0" layoutY="304.0" text="Contato 2 :" textAlignment="RIGHT" />
+            <TextField fx:id="txtContato1ClienteJuridico" cache="true" layoutX="377.0" layoutY="300.0" />
+            <Label layoutX="87.0" layoutY="343.0" text="E-mail :" textAlignment="RIGHT" />
+            <TextField fx:id="txtEmailClienteJuridico" cache="true" layoutX="131.0" layoutY="339.0" prefHeight="25.0" prefWidth="395.0" />
+            <Label layoutX="54.0" layoutY="91.0" text="Razão Social :" textAlignment="RIGHT" />
+         </children>
+      </Pane>
+      <Button fx:id="btnCancelarClienteJuridico" layoutX="790.0" layoutY="149.0" mnemonicParsing="false" onAction="#cancelarOperacao" prefHeight="40.0" prefWidth="52.0" />
+      <Button fx:id="btnDeletarClienteJuridico" layoutX="862.0" layoutY="149.0" mnemonicParsing="false" onAction="#deletarCliente" prefHeight="40.0" prefWidth="52.0" />
+      <Button fx:id="btnSalvarClienteJuridico" layoutX="931.0" layoutY="149.0" mnemonicParsing="false" onAction="#salvarCliente" prefHeight="40.0" prefWidth="52.0" />
+   </children>
+</AnchorPane>

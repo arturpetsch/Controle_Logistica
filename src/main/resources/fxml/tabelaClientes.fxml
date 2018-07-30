@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="AnchorPane" prefHeight="343.0" prefWidth="597.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.cl.controle_logistica.TabelaClientesController">
+   <children>
+      <TableView fx:id="tabelaClientes" layoutX="14.0" layoutY="43.0" prefHeight="259.0" prefWidth="573.0">
+         <columns>
+            <TableColumn fx:id="idTabelaClientes" prefWidth="47.0" resizable="false" text="ID" />
+            <TableColumn fx:id="nomeTabelaClientes" prefWidth="524.0" resizable="false" text="Nome " />
+         </columns>
+      </TableView>
+      <Label layoutX="14.0" layoutY="312.0" text="** Duplo clique no funcionário que deseja selecionar!" />
+      <Label layoutX="14.0" layoutY="14.0" text="Relação de Clientes" textFill="#2196f3">
+         <font>
+            <Font name="Source Sans Pro Semibold" size="14.0" />
+         </font>
+      </Label>
+   </children>
+</AnchorPane>

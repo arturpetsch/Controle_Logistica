@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="AnchorPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1500.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.cl.controle_logistica.TelaPrincipalController">
+   <children>
+      <SplitPane dividerPositions="0.09279038718291055" prefHeight="700.0" prefWidth="1500.0">
+        <items>
+          <AnchorPane maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="701.0" prefWidth="174.0" style="-fx-background-color: #000054;">
+               <children>
+                  <MenuButton fx:id="btnColaboradores" alignment="CENTER_RIGHT" layoutX="-2.0" layoutY="190.0" mnemonicParsing="false" popupSide="RIGHT" prefHeight="40.0" prefWidth="174.0" style="-fx-background-color: #000054;" text="Colaboradores" textFill="#fffdfd">
+                    <items>
+                        <MenuItem fx:id="btnColaborador" mnemonicParsing="false" onAction="#telaColaborador" text="Colaborador" />
+                        <MenuItem fx:id="btnCargo" mnemonicParsing="false" onAction="#telaCargo" text="Cargo" />
+                    </items>
+                     <font>
+                        <Font size="13.0" />
+                     </font>
+                  </MenuButton>
+                  <MenuButton alignment="CENTER_RIGHT" contentDisplay="TOP" layoutY="331.0" mnemonicParsing="false" popupSide="RIGHT" prefHeight="40.0" prefWidth="174.0" style="-fx-background-color: #000054;" text="Usuário" textFill="#fffdfd">
+                    <items>
+                      <MenuItem mnemonicParsing="false" text="Usuário" />
+                      <MenuItem mnemonicParsing="false" text="Alteração de Senha" />
+                    </items>
+                     <font>
+                        <Font size="13.0" />
+                     </font>
+                  </MenuButton>
+                  <MenuButton fx:id="btnClientes" alignment="CENTER_RIGHT" contentDisplay="TOP" layoutX="-2.0" layoutY="236.0" mnemonicParsing="false" popupSide="RIGHT" prefHeight="40.0" prefWidth="174.0" style="-fx-background-color: #000054;" text="Clientes" textFill="#fffdfd">
+                    <items>
+                      <MenuItem fx:id="btnClienteFisico" mnemonicParsing="false" onAction="#telaClienteFisico" text="Cliente Fisico" />
+                      <MenuItem fx:id="btnClienteJuridico" mnemonicParsing="false" onAction="#telaClienteJuridico" text="Cliente Juridico" />
+                    </items>
+                     <font>
+                        <Font size="13.0" />
+                     </font>
+                  </MenuButton>
+                  <MenuButton fx:id="btnFrota" alignment="CENTER_RIGHT" contentDisplay="TOP" layoutY="283.0" mnemonicParsing="false" popupSide="RIGHT" prefHeight="40.0" prefWidth="174.0" style="-fx-background-color: #000054;" text="Frota" textFill="#fffdfd">
+                    <items>
+                      <MenuItem fx:id="btnVeiculo" mnemonicParsing="false" onAction="#telaVeiculo" text="Veiculo" />
+                      <MenuItem fx:id="btnManutencao" mnemonicParsing="false" onAction="#telaManutencao" text="Manutenção" />
+                    </items>
+                     <font>
+                        <Font size="13.0" />
+                     </font>
+                  </MenuButton>
+                  <MenuButton fx:id="btnViagem" alignment="CENTER_RIGHT" contentDisplay="TOP" layoutX="-2.0" layoutY="143.0" mnemonicParsing="false" popupSide="RIGHT" prefHeight="40.0" prefWidth="174.0" style="-fx-background-color: #000054;" text="Viagem" textFill="#fffdfd">
+                    <items>
+                      <MenuItem fx:id="btnTelaViagem" mnemonicParsing="false" onAction="#telaViagem" text="Viagem" />
+                      <MenuItem fx:id="btnFrete" mnemonicParsing="false" onAction="#telaFrete" text="Frete" />
+                    </items>
+                     <font>
+                        <Font size="13.0" />
+                     </font>
+                  </MenuButton>
+                  <ImageView fx:id="logoTelaPrincipal" fitHeight="108.0" fitWidth="140.0" layoutX="17.0" layoutY="21.0" pickOnBounds="true" preserveRatio="true" />
+               </children>
+            </AnchorPane>
+          <AnchorPane fx:id="paneDireitoPrincipal" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="697.0" prefWidth="1350.0" SplitPane.resizableWithParent="false" />
+        </items>
+      </SplitPane>
+   </children>
+</AnchorPane>

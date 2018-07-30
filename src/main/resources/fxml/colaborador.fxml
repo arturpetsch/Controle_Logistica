@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="AnchorPane" maxHeight="697.0" maxWidth="1300.0" minHeight="697.0" minWidth="1300.0" prefHeight="697.0" prefWidth="1300.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.cl.controle_logistica.ColaboradorController">
+   <children>
+      <Label layoutX="39.0" layoutY="59.0" text="Colaborador" textFill="#2196f3">
+         <font>
+            <Font name="Source Sans Pro Semibold" size="24.0" />
+         </font>
+      </Label>
+      <Label layoutX="25.0" layoutY="90.0" prefHeight="11.0" prefWidth="1217.0" style="-fx-background-color: #2196f3;">
+         <font>
+            <Font size="1.0" />
+         </font>
+      </Label>
+      <Pane layoutX="34.0" layoutY="133.0" prefHeight="85.0" prefWidth="365.0" style="-fx-border-radius: 12; -fx-border-width: 1; -fx-border-color: #000000; -fx-border-insets: 2; -fx-background-color: #ffffff;">
+         <children>
+            <Label layoutX="50.0" layoutY="34.0" prefHeight="17.0" prefWidth="48.0" text="Nome :">
+               <font>
+                  <Font name="Source Sans Pro Semibold" size="13.0" />
+               </font>
+            </Label>
+            <TextField fx:id="txtNome" layoutX="108.0" layoutY="30.0" />
+            <Button fx:id="btnBuscarNomeColaborador" layoutX="257.0" layoutY="30.0" mnemonicParsing="false" onAction="#buscarPeloNome" prefHeight="25.0" prefWidth="28.0" />
+         </children>
+      </Pane>
+      <Pane layoutX="34.0" layoutY="241.0" prefHeight="402.0" prefWidth="744.0" style="-fx-border-radius: 12; -fx-border-width: 1; -fx-border-color: #000000; -fx-border-insets: 2; -fx-background-color: #ffffff;">
+         <children>
+            <Label layoutX="11.0" layoutY="11.0" text="Dados Pessoais  ">
+               <font>
+                  <Font name="Source Sans Pro Semibold" size="14.0" />
+               </font>
+            </Label>
+            <Label layoutX="34.0" layoutY="58.0" text="Nome Completo :" textAlignment="RIGHT" />
+            <Label layoutX="102.0" layoutY="94.0" text="CPF :" textAlignment="RIGHT" />
+            <Label layoutX="71.0" layoutY="128.0" text="Endereço :" textAlignment="RIGHT" />
+            <Label layoutX="88.0" layoutY="163.0" text="Bairro :" textAlignment="RIGHT" />
+            <Label layoutX="101.0" layoutY="197.0" text="CEP :" textAlignment="RIGHT" />
+            <Label layoutX="80.0" layoutY="267.0" text="Estado :" textAlignment="RIGHT" />
+            <TextField fx:id="txtNomeColaborador" layoutX="131.0" layoutY="54.0" prefHeight="25.0" prefWidth="587.0" />
+            <TextField fx:id="txtCPF" layoutX="131.0" layoutY="90.0" prefHeight="25.0" prefWidth="130.0" />
+            <TextField fx:id="txtRGColaborador" layoutX="313.0" layoutY="90.0" prefHeight="25.0" prefWidth="119.0" />
+            <DatePicker fx:id="dataNascimentoColaborador" layoutX="556.0" layoutY="90.0" prefHeight="25.0" prefWidth="161.0" />
+            <TextField fx:id="txtEndereco" layoutX="131.0" layoutY="124.0" prefHeight="25.0" prefWidth="587.0" />
+            <TextField fx:id="txtBairroColaborador" layoutX="131.0" layoutY="159.0" prefHeight="25.0" prefWidth="434.0" />
+            <TextField fx:id="txtCEPColaborador" layoutX="131.0" layoutY="193.0" />
+            <TextField fx:id="txtCidadeColaborador" layoutX="131.0" layoutY="228.0" />
+            <ComboBox fx:id="comboBoxEstadoColaborador" layoutX="130.0" layoutY="262.0" prefWidth="150.0" style="-fx-background-color: #FFFFFF; -fx-border-color: #bbaFFF; -fx-border-radius: 3;" />
+            <Label layoutX="81.0" layoutY="232.0" text="Cidade :" textAlignment="RIGHT" />
+            <TextField fx:id="txtContato" cache="true" layoutX="131.0" layoutY="300.0" />
+            <Label layoutX="283.0" layoutY="94.0" text="RG :" textAlignment="RIGHT" />
+            <Label layoutX="451.0" layoutY="94.0" text="Data Nascimento :" textAlignment="RIGHT" />
+            <Label layoutX="78.0" layoutY="304.0" text="Contato :" textAlignment="RIGHT" />
+            <Label layoutX="313.0" layoutY="304.0" text="Contato 2 :" textAlignment="RIGHT" />
+            <TextField fx:id="txtContato1" cache="true" layoutX="377.0" layoutY="300.0" />
+            <Label layoutX="87.0" layoutY="338.0" text="E-mail :" textAlignment="RIGHT" />
+            <TextField fx:id="txtEmail" cache="true" layoutX="131.0" layoutY="334.0" prefHeight="25.0" prefWidth="395.0" />
+         </children>
+      </Pane>
+      <Pane layoutX="812.0" layoutY="241.0" prefHeight="285.0" prefWidth="365.0" style="-fx-border-radius: 12; -fx-border-width: 1; -fx-border-color: #000000; -fx-border-insets: 2; -fx-background-color: #ffffff;">
+         <children>
+            <TextField fx:id="txtCargo" layoutX="117.0" layoutY="58.0" prefHeight="25.0" prefWidth="189.0" />
+            <Button fx:id="btnBuscarCargo" layoutX="306.0" layoutY="58.0" mnemonicParsing="false" onAction="#buscarCargoPeloNome" prefHeight="25.0" prefWidth="28.0" />
+            <Label layoutX="14.0" layoutY="21.0" text="Dados ">
+               <font>
+                  <Font name="Source Sans Pro Semibold" size="14.0" />
+               </font>
+            </Label>
+            <Label layoutX="61.0" layoutY="62.0" text="Cargo :" textAlignment="RIGHT" />
+            <Label layoutX="42.0" layoutY="96.0" text="Admissão :" textAlignment="RIGHT" />
+            <Label layoutX="45.0" layoutY="134.0" text="Rescisão :" textAlignment="RIGHT" />
+            <Label layoutX="50.0" layoutY="167.0" text="Salário :" textAlignment="RIGHT" />
+            <Label layoutX="16.0" layoutY="201.0" text="Porcentagem :" textAlignment="RIGHT" />
+            <DatePicker fx:id="dataAdmissao" layoutX="117.0" layoutY="92.0" prefHeight="25.0" prefWidth="130.0" />
+            <DatePicker fx:id="dataRescisao" layoutX="117.0" layoutY="130.0" prefHeight="25.0" prefWidth="130.0" />
+            <TextField fx:id="txtSalario" layoutX="117.0" layoutY="163.0" prefHeight="25.0" prefWidth="130.0" />
+            <TextField fx:id="txtPorcentagem" layoutX="117.0" layoutY="197.0" prefHeight="25.0" prefWidth="130.0" />
+         </children>
+      </Pane>
+      <Button fx:id="btnCancelarColaborador" layoutX="780.0" layoutY="139.0" mnemonicParsing="false" onAction="#cancelarOperacao" prefHeight="40.0" prefWidth="52.0" />
+      <Button fx:id="btnDeletarColaborador" layoutX="852.0" layoutY="139.0" mnemonicParsing="false" onAction="#deletarFuncionario" prefHeight="40.0" prefWidth="52.0" />
+      <Button fx:id="btnSalvarColaborador" layoutX="921.0" layoutY="139.0" mnemonicParsing="false" onAction="#salvarFuncionario" prefHeight="40.0" prefWidth="52.0" />
+   </children>
+</AnchorPane>
