@@ -18,5 +18,43 @@ public class Nf {
     private int idNotaFiscal;
     private BigDecimal valorNf;
     private SimpleStringProperty chaveAcesso;
-    private long numeroNF;
+    private int numeroNF;
+    
+    public Nf(){
+        this.chaveAcesso = new SimpleStringProperty();
+    }
+
+    public int getIdNotaFiscal() {
+        return idNotaFiscal;
+    }
+
+    public void setIdNotaFiscal(int idNotaFiscal) {
+        this.idNotaFiscal = idNotaFiscal;
+    }
+
+    public BigDecimal getValorNf() {
+        return valorNf;
+    }
+
+    public void setValorNf(BigDecimal valorNf) {
+        this.valorNf = valorNf;
+    }
+
+    public String getChaveAcesso() {
+        return chaveAcesso.get();
+    }
+
+    public void setChaveAcesso(String chaveAcesso) {
+        this.chaveAcesso.set(chaveAcesso);
+    }
+
+    public int getNumeroNF() {
+        return numeroNF;
+    }
+
+    public void setNumeroNF(int numeroNF) {
+        this.numeroNF = numeroNF;
+    }
+    
+    
 }

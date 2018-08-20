@@ -34,20 +34,20 @@
             <Label layoutX="74.0" layoutY="163.0" text="Produto :" textAlignment="RIGHT" />
             <Label layoutX="59.0" layoutY="197.0" text="Peso Bruto :" textAlignment="RIGHT" />
             <Label layoutX="75.0" layoutY="230.0" text="Volume :" textAlignment="RIGHT" />
-            <TextField fx:id="txtKM" layoutX="131.0" layoutY="193.0" prefHeight="25.0" prefWidth="110.0" />
-            <TextField fx:id="txtPesoTara" layoutX="131.0" layoutY="54.0" />
-            <TextField fx:id="txtAno" layoutX="131.0" layoutY="124.0" prefHeight="25.0" prefWidth="314.0" />
-            <TextField fx:id="txtPlacaCarreta" layoutX="131.0" layoutY="159.0" prefHeight="25.0" prefWidth="314.0" />
-            <TextField fx:id="txtMediaKmLitro" layoutX="335.0" layoutY="193.0" prefHeight="25.0" prefWidth="110.0" />
+            <TextField fx:id="pesoBrutoCte" layoutX="131.0" layoutY="193.0" prefHeight="25.0" prefWidth="110.0" />
+            <TextField fx:id="txtNumeroCte" layoutX="131.0" layoutY="54.0" />
+            <TextField fx:id="chaveAcessoCte" layoutX="131.0" layoutY="124.0" prefHeight="25.0" prefWidth="314.0" />
+            <TextField fx:id="produtoCte" layoutX="131.0" layoutY="159.0" prefHeight="25.0" prefWidth="314.0" />
+            <TextField fx:id="pesoLiquidoCte" layoutX="335.0" layoutY="193.0" prefHeight="25.0" prefWidth="110.0" />
             <Label layoutX="257.0" layoutY="197.0" text="Peso Líquido :" textAlignment="RIGHT" />
-            <TextField fx:id="txtFuncionario" cache="true" layoutX="131.0" layoutY="226.0" prefHeight="25.0" prefWidth="63.0" />
+            <TextField fx:id="volumeCte" cache="true" layoutX="131.0" layoutY="226.0" prefHeight="25.0" prefWidth="63.0" />
             <DatePicker fx:id="dataEmissaoCte" layoutX="131.0" layoutY="90.0" prefHeight="25.0" prefWidth="149.0" />
             <Label layoutX="218.0" layoutY="230.0" text="Espécie :" textAlignment="RIGHT" />
-            <TextField fx:id="txtFuncionario1" cache="true" layoutX="272.0" layoutY="226.0" prefHeight="25.0" prefWidth="173.0" />
-            <TextField fx:id="txtFuncionario2" cache="true" layoutX="335.0" layoutY="54.0" prefHeight="25.0" prefWidth="110.0" />
+            <TextField fx:id="especieCte" cache="true" layoutX="272.0" layoutY="226.0" prefHeight="25.0" prefWidth="173.0" />
+            <TextField fx:id="txtValorCte" cache="true" layoutX="335.0" layoutY="54.0" prefHeight="25.0" prefWidth="110.0" />
             <Label layoutX="294.0" layoutY="58.0" text="Valor :" textAlignment="RIGHT" />
             <Label layoutX="56.0" layoutY="263.0" text="Observação :" textAlignment="RIGHT" />
-            <TextField fx:id="txtPlacaCarreta1" layoutX="131.0" layoutY="259.0" prefHeight="25.0" prefWidth="314.0" />
+            <TextField fx:id="observacaoCte" layoutX="131.0" layoutY="259.0" prefHeight="25.0" prefWidth="314.0" />
          </children>
       </Pane>
       <Pane layoutX="34.0" layoutY="126.0" prefHeight="66.0" prefWidth="365.0" style="-fx-border-radius: 12; -fx-border-width: 1; -fx-border-color: #000000; -fx-border-insets: 2; -fx-background-color: #ffffff;">
@@ -58,10 +58,10 @@
                </font>
             </Label>
             <TextField fx:id="txtPlaca" layoutX="108.0" layoutY="21.0" prefHeight="25.0" prefWidth="142.0" />
-            <Button fx:id="btnBuscarNumeroFrete" layoutX="250.0" layoutY="21.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="28.0" />
+            <Button fx:id="btnBuscarNumeroFrete" layoutX="250.0" layoutY="21.0" mnemonicParsing="false" onAction="#buscarCte" prefHeight="25.0" prefWidth="28.0" />
          </children>
       </Pane>
-      <Pane layoutX="34.0" layoutY="539.0" prefHeight="121.0" prefWidth="490.0" style="-fx-border-radius: 12; -fx-border-width: 1; -fx-border-color: #000000; -fx-border-insets: 2; -fx-background-color: #ffffff;">
+      <Pane layoutX="34.0" layoutY="534.0" prefHeight="137.0" prefWidth="490.0" style="-fx-border-radius: 12; -fx-border-width: 1; -fx-border-color: #000000; -fx-border-insets: 2; -fx-background-color: #ffffff;">
          <children>
             <Label layoutX="11.0" layoutY="11.0" text="Dados NF-e">
                <font>
@@ -70,11 +70,13 @@
             </Label>
             <Label layoutX="66.0" layoutY="43.0" text="Número :" textAlignment="RIGHT" />
             <Label layoutX="27.0" layoutY="76.0" text="Chave de Acesso :" textAlignment="RIGHT" />
-            <TextField fx:id="txtPesoTara1" layoutX="131.0" layoutY="39.0" />
-            <TextField fx:id="txtAno1" layoutX="131.0" layoutY="72.0" prefHeight="25.0" prefWidth="314.0" />
-            <TextField fx:id="txtFuncionario21" cache="true" layoutX="335.0" layoutY="39.0" prefHeight="25.0" prefWidth="110.0" />
+            <TextField fx:id="numeroNf" layoutX="131.0" layoutY="39.0" />
+            <TextField fx:id="chaveAcessoNf" layoutX="131.0" layoutY="72.0" prefHeight="25.0" prefWidth="314.0" />
+            <TextField fx:id="valorNf" cache="true" layoutX="335.0" layoutY="39.0" prefHeight="25.0" prefWidth="110.0" />
             <Label layoutX="294.0" layoutY="43.0" text="Valor :" textAlignment="RIGHT" />
-            <Button fx:id="btnInserirNf" layoutX="445.0" layoutY="72.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="28.0" />
+            <Button fx:id="btnInserirNf" layoutX="445.0" layoutY="72.0" mnemonicParsing="false" onAction="#coletarDadosNf" prefHeight="25.0" prefWidth="28.0" />
+            <Button fx:id="btnVerNfs" layoutX="217.0" layoutY="104.0" mnemonicParsing="false" onAction="#verNotasFiscaisNaTabela" prefHeight="25.0" prefWidth="28.0" />
+            <Label layoutX="27.0" layoutY="108.0" text="Visualizar Notas Fiscais Inseridas :" textAlignment="RIGHT" />
          </children>
       </Pane>
       <Pane layoutX="554.0" layoutY="230.0" prefHeight="215.0" prefWidth="509.0" style="-fx-border-radius: 12; -fx-border-width: 1; -fx-border-color: #000000; -fx-border-insets: 2; -fx-background-color: #ffffff;">
@@ -94,7 +96,7 @@
             <Label layoutX="127.0" layoutY="114.0" prefHeight="17.0" prefWidth="353.0" textAlignment="RIGHT" />
             <Label layoutX="127.0" layoutY="148.0" prefHeight="17.0" prefWidth="221.0" textAlignment="RIGHT" />
             <Label layoutX="408.0" layoutY="148.0" prefHeight="17.0" prefWidth="80.0" textAlignment="RIGHT" />
-            <CheckBox layoutX="43.0" layoutY="177.0" mnemonicParsing="false" text="Tomador do Serviço" />
+            <CheckBox fx:id="tomadorServicoRemetente" layoutX="43.0" layoutY="177.0" mnemonicParsing="false" text="Tomador do Serviço" />
             <Button fx:id="btnBuscarRemetente" layoutX="460.0" layoutY="40.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="28.0" />
          </children>
       </Pane>
@@ -115,7 +117,7 @@
             <Label layoutX="127.0" layoutY="114.0" prefHeight="17.0" prefWidth="353.0" textAlignment="RIGHT" />
             <Label layoutX="127.0" layoutY="148.0" prefHeight="17.0" prefWidth="221.0" textAlignment="RIGHT" />
             <Label layoutX="408.0" layoutY="148.0" prefHeight="17.0" prefWidth="80.0" textAlignment="RIGHT" />
-            <CheckBox layoutX="43.0" layoutY="177.0" mnemonicParsing="false" text="Tomador do Serviço" />
+            <CheckBox fx:id="tomadorServicoDestinatario" layoutX="43.0" layoutY="177.0" mnemonicParsing="false" text="Tomador do Serviço" />
             <Button fx:id="btnBuscarDestinatario" layoutX="459.0" layoutY="40.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="28.0" />
          </children>
       </Pane>

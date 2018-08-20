@@ -26,7 +26,7 @@
                </font>
             </Label>
             <TextField fx:id="txtPlaca" layoutX="108.0" layoutY="30.0" />
-            <Button fx:id="btnBuscarVeiculo" layoutX="257.0" layoutY="30.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="28.0" />
+            <Button fx:id="btnBuscarVeiculo" layoutX="257.0" layoutY="30.0" mnemonicParsing="false" onAction="#buscarPlaca" prefHeight="25.0" prefWidth="28.0" />
          </children>
       </Pane>
       <Label layoutX="25.0" layoutY="90.0" prefHeight="11.0" prefWidth="1217.0" style="-fx-background-color: #2196f3;">
@@ -34,9 +34,9 @@
             <Font size="1.0" />
          </font>
       </Label>
-      <Button fx:id="btnCancelar" layoutX="780.0" layoutY="139.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="52.0" />
-      <Button fx:id="btnDeletarManutencao" layoutX="852.0" layoutY="139.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="52.0" />
-      <Button fx:id="btnSalvar" layoutX="921.0" layoutY="139.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="52.0" />
+      <Button fx:id="btnCancelar" layoutX="780.0" layoutY="139.0" mnemonicParsing="false" onAction="#cancelarOperacao" prefHeight="40.0" prefWidth="52.0" />
+      <Button fx:id="btnDeletarManutencao" layoutX="852.0" layoutY="139.0" mnemonicParsing="false" onAction="#deletarManutencao" prefHeight="40.0" prefWidth="52.0" />
+      <Button fx:id="btnSalvar" layoutX="921.0" layoutY="139.0" mnemonicParsing="false" onAction="#salvarManutencao" prefHeight="40.0" prefWidth="52.0" />
       <Pane layoutX="635.0" layoutY="249.0" prefHeight="261.0" prefWidth="509.0" style="-fx-border-radius: 12; -fx-border-width: 1; -fx-border-color: #000000; -fx-border-insets: 2; -fx-background-color: #ffffff;">
          <children>
             <Label layoutX="11.0" layoutY="11.0" text="Dados Manutenção">
@@ -47,9 +47,9 @@
             <Label layoutX="26.0" layoutY="89.0" text="Tipo Manutenção :" textAlignment="RIGHT" />
             <Label layoutX="90.0" layoutY="125.0" text="Valor :" textAlignment="RIGHT" />
             <Label layoutX="26.0" layoutY="54.0" text="Data Manutenção :" textAlignment="RIGHT" />
-            <TextField fx:id="valorManutencao" layoutX="133.0" layoutY="121.0" />
+            <DatePicker fx:id="dataManutencao" layoutX="131.0" layoutY="50.0" onAction="#inserindoDataManutencao" prefHeight="25.0" prefWidth="150.0" />
             <ComboBox fx:id="comboBoxTipoManutencao" layoutX="132.0" layoutY="85.0" prefWidth="150.0" style="-fx-background-color: #FFFFFF; -fx-border-color: #bbaFFF; -fx-border-radius: 3;" />
-            <DatePicker fx:id="dataManutencao" layoutX="131.0" layoutY="50.0" prefHeight="25.0" prefWidth="150.0" />
+            <TextField fx:id="valorManutencao" layoutX="133.0" layoutY="121.0" />
             <Label layoutX="54.0" layoutY="172.0" text="Observação :" textAlignment="RIGHT" />
             <TextArea fx:id="observacaoManutencao" layoutX="131.0" layoutY="158.0" prefHeight="69.0" prefWidth="296.0" />
          </children>
@@ -63,14 +63,26 @@
             </Label>
             <Label layoutX="74.0" layoutY="58.0" text="Modelo :" textAlignment="RIGHT" />
             <Label layoutX="91.0" layoutY="101.0" text="Ano :" textAlignment="RIGHT" />
-            <Label layoutX="43.0" layoutY="141.0" text="Placa Carreta :" textAlignment="RIGHT" />
+            <Label layoutX="88.0" layoutY="141.0" text="Placa :" textAlignment="RIGHT" />
             <Label layoutX="29.0" layoutY="179.0" text="Quilometragem :" textAlignment="RIGHT" />
-            <Label fx:id="modeloManutencao" layoutX="130.0" layoutY="58.0" prefHeight="17.0" prefWidth="386.0" />
-            <Label fx:id="anoManutencao" layoutX="130.0" layoutY="101.0" prefHeight="17.0" prefWidth="89.0" />
-            <Label fx:id="placaCarretaManutencao" layoutX="130.0" layoutY="141.0" prefHeight="17.0" prefWidth="89.0" />
-            <Label fx:id="kmManutencao" layoutX="130.0" layoutY="179.0" prefHeight="17.0" prefWidth="89.0" />
-            <Label layoutX="43.0" layoutY="216.0" prefHeight="40.0" prefWidth="75.0" text="Data Últimas Manutenções :" wrapText="true" />
-            <ListView fx:id="listaUltimasManutencoes" layoutX="130.0" layoutY="216.0" prefHeight="182.0" prefWidth="191.0" />
+            <Label fx:id="modeloManutencao" layoutX="130.0" layoutY="58.0" prefHeight="17.0" prefWidth="386.0">
+               <font>
+                  <Font name="System Bold Italic" size="12.0" />
+               </font></Label>
+            <Label fx:id="anoManutencao" layoutX="130.0" layoutY="101.0" prefHeight="17.0" prefWidth="89.0">
+               <font>
+                  <Font name="System Bold Italic" size="12.0" />
+               </font></Label>
+            <Label fx:id="placaCarretaManutencao" layoutX="130.0" layoutY="141.0" prefHeight="17.0" prefWidth="89.0">
+               <font>
+                  <Font name="System Bold Italic" size="12.0" />
+               </font></Label>
+            <Label fx:id="kmManutencao" layoutX="130.0" layoutY="179.0" prefHeight="17.0" prefWidth="89.0">
+               <font>
+                  <Font name="System Bold Italic" size="12.0" />
+               </font></Label>
+            <Label layoutX="31.0" layoutY="216.0" prefHeight="40.0" prefWidth="87.0" text="Data Últimas Manutenções :" wrapText="true" />
+            <ListView fx:id="dataUltimasManutencoes" layoutX="130.0" layoutY="216.0" prefHeight="182.0" prefWidth="191.0" />
          </children>
       </Pane>
    </children>

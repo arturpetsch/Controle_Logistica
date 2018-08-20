@@ -203,6 +203,7 @@ public class ClienteJuridicoController implements Initializable {
             confirmacaoAcaoClienteJuridicoController.setCliente(clienteJuridico);
             stage.showAndWait();
             limparCampos();
+            clienteJuridico = new ClienteJuridico();
         }
     }
     
@@ -213,6 +214,7 @@ public class ClienteJuridicoController implements Initializable {
     @FXML
     private void cancelarOperacao(ActionEvent action){
         limparCampos();
+        clienteJuridico = new ClienteJuridico();
     }
     
     /**

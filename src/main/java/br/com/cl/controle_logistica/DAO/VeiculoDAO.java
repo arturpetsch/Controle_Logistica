@@ -46,7 +46,7 @@ public class VeiculoDAO {
                 
                 //Busca Funcionário responsável pelo Veiculo
                 FuncionarioDAO funcionarioDAO = new FuncionarioDAO();
-                Funcionario funcionario = funcionarioDAO.buscaFuncionarioPeloId(resultSet.getInt("id_funcionario"));
+                Funcionario funcionario = funcionarioDAO.buscaFuncionarioPeloId(resultSet.getInt("funcionario_fk"));
                 veiculo.setFuncionario(funcionario);
                 
                 veiculos.add(veiculo);
@@ -58,13 +58,48 @@ public class VeiculoDAO {
         return veiculos;
     }
     
+    public Veiculo consultarVeiculoPorId(int idVeiculo){
+        String sql = "SELECT * FROM veiculo WHERE idVeiculo = " + idVeiculo;
+        
+        ResultSet resultSet;
+        Veiculo veiculo = new Veiculo();
+                
+        try {
+            
+            connection = Conexao.conexao();
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            resultSet = preparedStatement.executeQuery(sql);
+            
+            if(resultSet.next()){
+                veiculo.setIdVeiculo(resultSet.getInt("idVeiculo"));
+                veiculo.setPlaca(resultSet.getString("placa"));
+                veiculo.setModeloVeiculo(resultSet.getString("modeloVeiculo"));
+                veiculo.setPesoTara(resultSet.getDouble("pesoTara"));
+                veiculo.setPlacaCarreta(resultSet.getString("placaCarreta"));
+                veiculo.setAnoVeiculo(resultSet.getString("anoVeiculo"));
+                veiculo.setKm(resultSet.getDouble("km"));
+                veiculo.setMediaKmLitro(resultSet.getDouble("mediaKmLitro"));
+                
+                //Busca Funcionário responsável pelo Veiculo
+                FuncionarioDAO funcionarioDAO = new FuncionarioDAO();
+                Funcionario funcionario = funcionarioDAO.buscaFuncionarioPeloId(resultSet.getInt("funcionario_fk"));
+                veiculo.setFuncionario(funcionario);
+             }
+            return veiculo;
+        }catch(Exception e){
+            e.printStackTrace();
+            return null;
+        }   
+               
+    }
+    
     /**
      * Método que salva o veículo no banco de dados.
      * @param veiculo
      * @return 
      */
     public boolean salvarVeiculo(Veiculo veiculo){
-        String sql = "INSERT INTO veiculo(placa, modeloVeiculo, pesoTara, placaCarreta, anoVeiculo, km, id_funcionario, mediaKmLitro)"
+        String sql = "INSERT INTO veiculo(placa, modeloVeiculo, pesoTara, placaCarreta, anoVeiculo, km, funcionario_fk, mediaKmLitro)"
                 + "VALUES(?,?,?,?,?,?,?,?)";
         veiculo = transformarCamposVazioEmNulos(veiculo);
         try {
@@ -95,7 +130,7 @@ public class VeiculoDAO {
      */
     public boolean atualizarVeiculo(Veiculo veiculo){
         String sql = "UPDATE veiculo SET placa = ?, modeloVeiculo = ?, pesoTara = ?, placaCarreta = ?, anoVeiculo = ?, km = ?,"
-                + " id_funcionario = ?, mediaKmLitro = ?  WHERE idVeiculo = " + veiculo.getIdVeiculo();
+                + " funcionario_fk = ?, mediaKmLitro = ?  WHERE idVeiculo = " + veiculo.getIdVeiculo();
         
           veiculo = transformarCamposVazioEmNulos(veiculo);
         try {

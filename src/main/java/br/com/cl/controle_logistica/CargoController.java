@@ -73,7 +73,7 @@ public class CargoController implements Initializable {
     }
 
     /**
-     * Metodo que através da descrição busca e lista os cargos cadastrado ou
+     * Metodo que através da descrição busca e lista os cargos cadastrados ou
      * oferece ao usuário a opção de inserção de um novo cargo.
      *
      * @param action
@@ -82,19 +82,12 @@ public class CargoController implements Initializable {
     protected void buscarCargo(ActionEvent action) throws IOException, ClassNotFoundException {
         String descricaoInformada = txtBuscaDescricao.getText();
 
-        if (txtBuscaDescricao.getText().isEmpty()) {
-            Alert confirmacao = new Alert(Alert.AlertType.INFORMATION);
-            confirmacao.setTitle("Buscar Cargo");
-            confirmacao.setHeaderText("Por favor, informe uma descrição!");
-            confirmacao.showAndWait();
-        } else {
-
             CargoDAO cargoDAO = new CargoDAO();
             ArrayList<Cargo> cargos = new ArrayList<Cargo>();
             cargos = cargoDAO.buscarCargoPelaDescricao(descricaoInformada);
 
             mostrarCargos(cargos);
-        }
+        
     }
 
     /**

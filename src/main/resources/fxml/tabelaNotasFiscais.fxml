@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="AnchorPane" prefHeight="353.0" prefWidth="597.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.cl.controle_logistica.TabelaNotasFiscaisController">
+   <children>
+      <TableView fx:id="tabelaNotasFiscais" editable="true" layoutX="14.0" layoutY="43.0" prefHeight="259.0" prefWidth="573.0">
+         <columns>
+            <TableColumn fx:id="numeroNfTabelaNotasFiscais" prefWidth="93.0" resizable="false" text="Nº NF" />
+            <TableColumn fx:id="chaveAcessoTabelaNotasFiscais" minWidth="0.0" prefWidth="333.0" resizable="false" text="Chave Acesso" />
+            <TableColumn fx:id="valorTabelaNotasFiscais" prefWidth="146.0" resizable="false" text="Valor " />
+         </columns>
+      </TableView>
+      <Label layoutX="14.0" layoutY="14.0" text="Relação de Notas Fiscais" textFill="#2196f3">
+         <font>
+            <Font name="Source Sans Pro Semibold" size="14.0" />
+         </font>
+      </Label>
+      <Label layoutX="14.0" layoutY="317.0" text="** Para excluir uma nota fiscal, selecione e aperte a tecla DEL." textFill="#2196f3">
+         <font>
+            <Font name="Source Sans Pro Semibold" size="12.0" />
+         </font>
+      </Label>
+   </children>
+</AnchorPane>

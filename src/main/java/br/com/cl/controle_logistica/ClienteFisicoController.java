@@ -206,6 +206,7 @@ public class ClienteFisicoController implements Initializable {
             confirmacaoAcaoClienteController.setCliente(clienteFisico);
             stage.showAndWait();
             limparCampos();
+            clienteFisico = new ClienteFisico();
         }
     }
     
@@ -216,6 +217,7 @@ public class ClienteFisicoController implements Initializable {
     @FXML
     private void cancelarOperacao(ActionEvent action){
         limparCampos();
+        clienteFisico = new ClienteFisico();
     }
     
     /**

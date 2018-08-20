@@ -63,7 +63,7 @@ public class FuncionarioDAO {
                 
                 //Busca e seta o cargo do funcionario
                 CargoDAO cargoDAO = new CargoDAO();
-                Cargo cargo = cargoDAO.buscarCargoPeloId(resultSet.getInt("id_Cargo"));
+                Cargo cargo = cargoDAO.buscarCargoPeloId(resultSet.getInt("cargo_fk"));
                 funcionario.setCargo(cargo);
                 funcionarios.add(funcionario);
                 
@@ -82,7 +82,7 @@ public class FuncionarioDAO {
      */
     public boolean salvarFuncionario(Funcionario funcionario){
         String sql = "INSERT INTO funcionario(nome, CPF, RG, dataNascimento, salario, porcentagem, dataAdmissao,"
-                + " dataRescisao, contato, contato2, endereco, bairro, cidade, estado, cep, id_cargo, email)" 
+                + " dataRescisao, contato, contato2, endereco, bairro, cidade, estado, cep, cargo_fk, email)" 
                 + "VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         funcionario = transformarCamposVazioEmNulos(funcionario);
         try {
@@ -128,7 +128,7 @@ public class FuncionarioDAO {
     public boolean atualizarFuncionario(Funcionario funcionario){
         String sql = "UPDATE funcionario SET nome = ?, CPF = ?, RG = ?, dataNascimento = ?, salario = ?, porcentagem = ?,"
                 + " dataAdmissao = ?, dataRescisao = ?, contato = ?, contato2 = ?, endereco = ?, bairro = ?, cidade = ?, "
-                + "estado = ?, cep = ?, id_cargo = ?, email = ? WHERE idFuncionario = " + funcionario.getIdFuncionario();
+                + "estado = ?, cep = ?, cargo_fk = ?, email = ? WHERE idFuncionario = " + funcionario.getIdFuncionario();
         
           funcionario = transformarCamposVazioEmNulos(funcionario);
         try {
@@ -238,7 +238,7 @@ public class FuncionarioDAO {
                 
                 //Busca e seta o cargo do funcionario
                 CargoDAO cargoDAO = new CargoDAO();
-                Cargo cargo = cargoDAO.buscarCargoPeloId(resultSet.getInt("id_Cargo"));
+                Cargo cargo = cargoDAO.buscarCargoPeloId(resultSet.getInt("cargo_fk"));
                 funcionario.setCargo(cargo);
                 
                 

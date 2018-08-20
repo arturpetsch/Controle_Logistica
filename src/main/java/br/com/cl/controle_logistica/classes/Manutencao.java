@@ -22,4 +22,60 @@ public class Manutencao {
     private SimpleStringProperty tipoManutencao;
     private SimpleStringProperty observacao;
     private Veiculo veiculo;
+
+    public Manutencao() {
+        this.tipoManutencao = new SimpleStringProperty();
+        this.observacao = new SimpleStringProperty();        
+    }
+
+    public int getIdManutencao() {
+        return idManutencao;
+    }
+
+    public void setIdManutencao(int idManutencao) {
+        this.idManutencao = idManutencao;
+    }
+
+    public LocalDate getDataManutencao() {
+        return dataManutencao;
+    }
+
+    public void setDataManutencao(LocalDate dataManutencao) {
+        this.dataManutencao = dataManutencao;
+    }
+
+    public BigDecimal getValor() {
+        return valor;
+    }
+
+    public void setValor(BigDecimal valor) {
+        this.valor = valor;
+    }
+
+    public String getTipoManutencao() {
+        return tipoManutencao.get();
+    }
+
+    public void setTipoManutencao(String tipoManutencao) {
+        this.tipoManutencao.set(tipoManutencao);
+    }
+
+    public String getObservacao() {
+        return observacao.get();
+    }
+
+    public void setObservacao(String observacao) {
+        this.observacao.set(observacao);
+    }
+
+    public Veiculo getVeiculo() {
+        return veiculo;
+    }
+
+    public void setVeiculo(Veiculo veiculo) {
+        this.veiculo = veiculo;
+    }
+    
+    
+    
 }
