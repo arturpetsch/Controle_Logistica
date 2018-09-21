@@ -8,6 +8,7 @@ package br.com.cl.controle_logistica;
 import br.com.cl.controle_logistica.DAO.CteDAO;
 import br.com.cl.controle_logistica.classes.Cte;
 import br.com.cl.controle_logistica.classes.Nf;
+import br.com.cl.controle_logistica.classes.Veiculo;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.URL;
@@ -113,7 +114,9 @@ public class ConhecimentoFreteController implements Initializable {
     private CheckBox tomadorServicoDestinatario;
 
     ArrayList<Nf> notasFiscais = new ArrayList<Nf>();
-
+    
+    private Cte cte = new Cte();
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
@@ -169,6 +172,17 @@ public class ConhecimentoFreteController implements Initializable {
                 }
             }
         }
+        limparCamposNF();
+    }
+    
+    
+    /**
+     * 
+     */
+    private void limparCamposNF(){
+        numeroNf.setText("");
+        valorNf.setText("");
+        chaveAcessoNf.setText("");
     }
     
     /**
@@ -190,10 +204,13 @@ public class ConhecimentoFreteController implements Initializable {
             contador--;
         }
     
+        String valor = valorNf.getText();
+        BigDecimal zero = new BigDecimal(00);
+        BigDecimal vl = new BigDecimal(valor.replace(",", "."));
          if (valorNf.getText().isEmpty()) {
             valorNf.setStyle("-fx-border-color:red");
             contador++;
-        }else if(Double.parseDouble(valorNf.getText()) <= 0){
+        }else if(vl.intValue() <= 0){
             numeroNf.setStyle("-fx-border-color:red");
             contador++;    
         } else {
@@ -272,13 +289,275 @@ public class ConhecimentoFreteController implements Initializable {
      */
     @FXML
     protected void buscarCte(ActionEvent action) throws IOException, ClassNotFoundException {
-        int numeroInformado = Integer.parseInt(txtPlaca.getText());
+        ArrayList<Cte> fretes = new ArrayList<Cte>();
 
-        CteDAO cteDAO = new CteDAO();
-         ArrayList<Cte> fretes = new ArrayList<Cte>();
-        // fretes = cteDAO.buscarCtePeloNumero(numeroInformado);
+        if(!txtPlaca.getText().isEmpty()){
+            int numeroInformado = Integer.parseInt(txtPlaca.getText());
 
-       // mostrarCte(fretes);
+            CteDAO cteDAO = new CteDAO();
+            fretes = cteDAO.buscarCtePeloNumero(numeroInformado);
+        }
         
+        mostrarCTes(fretes);
+        
+    }
+    
+    /**
+     * Método que chama o Stage onde está a tabela que lista todos os
+     * fretes (CTe) com o número informada pelo usuário.
+     *
+     * @param cte's
+     * @throws IOException
+     */
+    private void mostrarCTes(ArrayList<Cte> ctes) throws IOException {
+        if (!ctes.isEmpty()) {
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/tabelaConhecimento.fxml"));
+            Parent root = (Parent) loader.load();
+            TabelaConhecimentoController tabelaConhecimentoController = loader.getController();
+            Scene alert = new Scene(root);
+            Stage stage = new Stage();
+
+            stage.setScene(alert);
+            stage.setResizable(false);
+            stage.centerOnScreen();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            tabelaConhecimentoController.setCte(ctes);
+            stage.showAndWait();
+            this.cte = tabelaConhecimentoController.getCteSelecionado();
+            if (this.cte != null) {
+                popularCamposCte();
+            }
+        } else {
+            Alert confirmacao = new Alert(Alert.AlertType.INFORMATION);
+            confirmacao.setTitle("Buscar CT-e");
+            confirmacao.setHeaderText("Nenhum CT-e encontrado.\nPor favor, refaça sua pesquisa ou cadastre um novo CT-e!");
+            confirmacao.showAndWait();
+        }
+    }
+    
+    /**
+     * Método que limpa o(s) campo(s) na tela de Cte.
+     */
+    private void limparCampos() {
+        txtNumeroCte.setText("");
+        txtValorCte.setText("");
+        dataEmissaoCte.setValue(null);
+        chaveAcessoCte.setText("");
+        produtoCte.setText("");
+        pesoBrutoCte.setText("");
+        pesoLiquidoCte.setText("");
+        volumeCte.setText("");
+        especieCte.setText("");
+        observacaoCte.setText("");
+        numeroNf.setText("");
+        valorNf.setText("");
+        chaveAcessoNf.setText("");
+        
+    }
+    
+    /**
+     * Método que limpa todos os campos e cancela as operações.
+     * @param action 
+     */
+    @FXML
+    private void cancelarOperacao(ActionEvent action){
+        limparCampos();
+    }
+    
+     /**
+     * Método que coleta os dados de todos os campos da tela e seta no objeto
+     * cte.
+     */
+    private boolean getAtributosCte() {
+        if (verificarCamposVazios()) {
+            
+            cte.setNumeroCte(Integer.valueOf(txtNumeroCte.getText()));
+            String valor = txtValorCte.getText();
+            BigDecimal valorInformado = new BigDecimal(valor.replace(",", "."));
+            cte.setValor(valorInformado);
+            cte.setDataEmissao(dataEmissaoCte.getValue());
+            cte.setChaveAcesso(chaveAcessoCte.getText());
+            cte.setProduto(produtoCte.getText().toUpperCase());
+            cte.setPesoBruto(Double.parseDouble(pesoBrutoCte.getText()));
+            cte.setPesoLiquido(Double.parseDouble(pesoLiquidoCte.getText()));
+            cte.setVolume(Double.parseDouble(volumeCte.getText()));
+            cte.setEspecie(especieCte.getText().toUpperCase());
+            cte.setObservacao(observacaoCte.getText().toUpperCase());
+            cte.setNotasFiscais(notasFiscais);
+            
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
+    /**
+     * Método que valida se os campos estão vazios.
+     */
+    private boolean verificarCamposVazios() {
+        boolean retorno = true;
+        int contador = 0;
+        if (txtNumeroCte.getText().isEmpty()) {
+            txtNumeroCte.setStyle("-fx-border-color:red");
+            contador++;
+        } else {
+            txtNumeroCte.setStyle("-fx-border-color:#bbaFFF");
+            contador--;
+        }
+    
+         if (txtValorCte.getText().isEmpty()) {
+            txtValorCte.setStyle("-fx-border-color:red");
+            contador++;
+        } else {
+            txtValorCte.setStyle("-fx-border-color:#bbaFFF");
+            contador--;
+        }
+         
+          if (dataEmissaoCte.getValue().equals(null)) {
+            dataEmissaoCte.setStyle("-fx-border-color:red");
+            contador++;
+        } else {
+            dataEmissaoCte.setStyle("-fx-border-color:#bbaFFF");
+            contador--;
+        }
+         
+          if (chaveAcessoCte.getText().isEmpty()) {
+            chaveAcessoCte.setStyle("-fx-border-color:red");
+            contador++;
+        } else {
+            chaveAcessoCte.setStyle("-fx-border-color:#bbaFFF");
+            contador--;
+        }
+          
+          if (produtoCte.getText().isEmpty()) {
+            produtoCte.setStyle("-fx-border-color:red");
+            contador++;
+        } else {
+            produtoCte.setStyle("-fx-border-color:#bbaFFF");
+            contador--;
+        } 
+          
+           if (pesoBrutoCte.getText().isEmpty()) {
+            pesoBrutoCte.setStyle("-fx-border-color:red");
+            contador++;
+        } else {
+            pesoBrutoCte.setStyle("-fx-border-color:#bbaFFF");
+            contador--;
+        } 
+          
+          if (pesoLiquidoCte.getText().isEmpty()) {
+            pesoLiquidoCte.setStyle("-fx-border-color:red");
+            contador++;
+        } else {
+            pesoLiquidoCte.setStyle("-fx-border-color:#bbaFFF");
+            contador--;
+        }  
+          
+          if (volumeCte.getText().isEmpty()) {
+            volumeCte.setStyle("-fx-border-color:red");
+            contador++;
+        } else {
+            volumeCte.setStyle("-fx-border-color:#bbaFFF");
+            contador--;
+        } 
+          
+          if (especieCte.getText().isEmpty()) {
+            especieCte.setStyle("-fx-border-color:red");
+            contador++;
+        } else {
+            especieCte.setStyle("-fx-border-color:#bbaFFF");
+            contador--;
+        } 
+          
+          if (observacaoCte.getText().isEmpty()) {
+            observacaoCte.setStyle("-fx-border-color:red");
+            contador++;
+        } else {
+            observacaoCte.setStyle("-fx-border-color:#bbaFFF");
+            contador--;
+        } 
+          
+         if(contador<=-10){
+            retorno = true;
+         }else{
+             retorno = false;
+         } 
+         
+         if (retorno) {
+            return retorno;
+        } else {
+            Alert informacao = new Alert(Alert.AlertType.INFORMATION);
+            informacao.setTitle("Salvar CTe");
+            informacao.setHeaderText("Por favor, informe os campos obrigatórios.");
+            informacao.show();
+            return retorno;
+        }
+    }
+    
+     /**
+     * Método que popula os campos da tela com as informações do cte
+     * selecionado.
+     */
+    @FXML
+    private void popularCamposCte() {
+        
+        txtNumeroCte.setText(String.valueOf(this.cte.getNumeroCte()));
+        txtValorCte.setText(String.valueOf(cte.getValor()));
+        dataEmissaoCte.setValue(cte.getDataEmissao());
+        chaveAcessoCte.setText(cte.getChaveAcesso());
+        produtoCte.setText(cte.getProduto());
+        pesoBrutoCte.setText(String.valueOf(cte.getProduto()));
+        pesoLiquidoCte.setText(String.valueOf(cte.getPesoLiquido()));
+        volumeCte.setText(String.valueOf(cte.getVolume()));
+        especieCte.setText(cte.getEspecie());
+        observacaoCte.setText(cte.getObservacao());
+        
+        this.notasFiscais = cte.getNotasFiscais();
+    }
+    
+    
+    
+    /**
+     * Metodo utilizado para setar o cte selecionado na tabela no
+     * cte dessa classe.
+     *
+     * @param cte
+     */
+    public void setCte(Cte cte) {
+        this.cte = cte;
+
+    }
+    
+    /**
+     * Método utilizado pelo botao salvar. Salva um novo cte ou as
+     * alterações feitas em um já existente.
+     *
+     * @param action
+     */
+    @FXML
+    protected void salvarCTe(ActionEvent action) {
+        CteDAO cteDAO = new CteDAO();
+
+        if (this.cte == null) {
+            this.cte = new Cte();
+        }
+
+        if (cte.getNumeroCte() == 0 && getAtributosCte()) {
+            cteDAO.salvarCTe(cte);
+            Alert confirmacao = new Alert(Alert.AlertType.INFORMATION);
+            confirmacao.setTitle("Salvar CT-e");
+            confirmacao.setHeaderText("CT-e Cadastrado com Sucesso!");
+            confirmacao.showAndWait();
+            limparCampos();
+        } else if (getAtributosCte() && cte.getNumeroCte() > 0) {
+            if (cteDAO.atualizarCTe(cte)) {
+                Alert confirmacao = new Alert(Alert.AlertType.INFORMATION);
+                confirmacao.setTitle("Salvar CT-e");
+                confirmacao.setHeaderText("CT-e Atualizado com Sucesso!");
+                confirmacao.showAndWait();
+                limparCampos();
+            }
+        }
     }
 }

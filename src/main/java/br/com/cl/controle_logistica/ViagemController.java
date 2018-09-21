@@ -85,7 +85,7 @@ public class ViagemController implements Initializable, MapComponentInitializedL
     protected StringProperty to = new SimpleStringProperty();
 
     @FXML
-    protected GoogleMapView mapView;
+    protected GoogleMapView mapView;// = new GoogleMapView("pt-BR", "My-Google-Map-API-Key");
 
     @FXML
     protected TextField fromTextField;
@@ -110,6 +110,12 @@ public class ViagemController implements Initializable, MapComponentInitializedL
     
     @FXML
     private TextField totalKmRealizado;
+    
+    @FXML
+    private TextField valorGanhoPrevisto;
+    
+    @FXML
+    private TextField valorGanhoRealizado;
     
     @FXML
     private TextField valorViagemRealizado;
@@ -238,4 +244,6 @@ public class ViagemController implements Initializable, MapComponentInitializedL
     private void popularCamposDadosVeiculo(){
         placaVeiculo.setText(veiculo.getPlaca());
     }
+    
+    
 }

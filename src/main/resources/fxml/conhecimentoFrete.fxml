@@ -121,7 +121,7 @@
             <Button fx:id="btnBuscarDestinatario" layoutX="459.0" layoutY="40.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="28.0" />
          </children>
       </Pane>
-      <Button fx:id="btnCancelarFrete" layoutX="800.0" layoutY="159.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="52.0" />
+      <Button fx:id="btnCancelarFrete" layoutX="800.0" layoutY="159.0" mnemonicParsing="false" onAction="#cancelarOperacao" prefHeight="40.0" prefWidth="52.0" />
       <Button fx:id="btnDeletaFrete" layoutX="872.0" layoutY="159.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="52.0" />
       <Button fx:id="btnSalvarFrete" layoutX="941.0" layoutY="159.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="52.0" />
    </children>

@@ -19,6 +19,7 @@ public class Nf {
     private BigDecimal valorNf;
     private SimpleStringProperty chaveAcesso;
     private int numeroNF;
+    private Cte cte;
     
     public Nf(){
         this.chaveAcesso = new SimpleStringProperty();
@@ -54,6 +55,14 @@ public class Nf {
 
     public void setNumeroNF(int numeroNF) {
         this.numeroNF = numeroNF;
+    }
+
+    public Cte getCte() {
+        return cte;
+    }
+
+    public void setCte(Cte cte) {
+        this.cte = cte;
     }
     
     

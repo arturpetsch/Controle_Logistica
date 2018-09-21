@@ -196,7 +196,6 @@ public class VeiculosController implements Initializable {
                 limparCampos();
             }
         }
-        
     }
     
     /**
