@@ -34,17 +34,17 @@
             <Label layoutX="74.0" layoutY="163.0" text="Produto :" textAlignment="RIGHT" />
             <Label layoutX="59.0" layoutY="197.0" text="Peso Bruto :" textAlignment="RIGHT" />
             <Label layoutX="75.0" layoutY="230.0" text="Volume :" textAlignment="RIGHT" />
-            <TextField fx:id="pesoBrutoCte" layoutX="131.0" layoutY="193.0" prefHeight="25.0" prefWidth="110.0" />
-            <TextField fx:id="txtNumeroCte" layoutX="131.0" layoutY="54.0" />
+            <TextField fx:id="txtNumeroCte" editable="false" layoutX="131.0" layoutY="54.0" />
+            <TextField fx:id="txtValorCte" cache="true" layoutX="335.0" layoutY="54.0" prefHeight="25.0" prefWidth="110.0" />
+            <DatePicker fx:id="dataEmissaoCte" layoutX="131.0" layoutY="90.0" prefHeight="25.0" prefWidth="149.0" />
             <TextField fx:id="chaveAcessoCte" layoutX="131.0" layoutY="124.0" prefHeight="25.0" prefWidth="314.0" />
             <TextField fx:id="produtoCte" layoutX="131.0" layoutY="159.0" prefHeight="25.0" prefWidth="314.0" />
+            <TextField fx:id="pesoBrutoCte" layoutX="131.0" layoutY="193.0" prefHeight="25.0" prefWidth="110.0" />
             <TextField fx:id="pesoLiquidoCte" layoutX="335.0" layoutY="193.0" prefHeight="25.0" prefWidth="110.0" />
             <Label layoutX="257.0" layoutY="197.0" text="Peso Líquido :" textAlignment="RIGHT" />
             <TextField fx:id="volumeCte" cache="true" layoutX="131.0" layoutY="226.0" prefHeight="25.0" prefWidth="63.0" />
-            <DatePicker fx:id="dataEmissaoCte" layoutX="131.0" layoutY="90.0" prefHeight="25.0" prefWidth="149.0" />
             <Label layoutX="218.0" layoutY="230.0" text="Espécie :" textAlignment="RIGHT" />
             <TextField fx:id="especieCte" cache="true" layoutX="272.0" layoutY="226.0" prefHeight="25.0" prefWidth="173.0" />
-            <TextField fx:id="txtValorCte" cache="true" layoutX="335.0" layoutY="54.0" prefHeight="25.0" prefWidth="110.0" />
             <Label layoutX="294.0" layoutY="58.0" text="Valor :" textAlignment="RIGHT" />
             <Label layoutX="56.0" layoutY="263.0" text="Observação :" textAlignment="RIGHT" />
             <TextField fx:id="observacaoCte" layoutX="131.0" layoutY="259.0" prefHeight="25.0" prefWidth="314.0" />
@@ -71,8 +71,8 @@
             <Label layoutX="66.0" layoutY="43.0" text="Número :" textAlignment="RIGHT" />
             <Label layoutX="27.0" layoutY="76.0" text="Chave de Acesso :" textAlignment="RIGHT" />
             <TextField fx:id="numeroNf" layoutX="131.0" layoutY="39.0" />
-            <TextField fx:id="chaveAcessoNf" layoutX="131.0" layoutY="72.0" prefHeight="25.0" prefWidth="314.0" />
             <TextField fx:id="valorNf" cache="true" layoutX="335.0" layoutY="39.0" prefHeight="25.0" prefWidth="110.0" />
+            <TextField fx:id="chaveAcessoNf" layoutX="131.0" layoutY="72.0" prefHeight="25.0" prefWidth="314.0" />
             <Label layoutX="294.0" layoutY="43.0" text="Valor :" textAlignment="RIGHT" />
             <Button fx:id="btnInserirNf" layoutX="445.0" layoutY="72.0" mnemonicParsing="false" onAction="#coletarDadosNf" prefHeight="25.0" prefWidth="28.0" />
             <Button fx:id="btnVerNfs" layoutX="217.0" layoutY="104.0" mnemonicParsing="false" onAction="#verNotasFiscaisNaTabela" prefHeight="25.0" prefWidth="28.0" />
@@ -86,18 +86,18 @@
                   <Font name="Source Sans Pro Semibold" size="14.0" />
                </font>
             </Label>
-            <Label layoutX="84.0" layoutY="80.0" text="CNPJ :" textAlignment="RIGHT" />
-            <Label layoutX="35.0" layoutY="44.0" prefHeight="17.0" prefWidth="87.0" text="Nome Fantasia :" textAlignment="RIGHT" />
+            <Label layoutX="56.0" layoutY="80.0" text="CNPJ / CPF:" textAlignment="RIGHT" />
+            <Label layoutX="79.0" layoutY="44.0" prefHeight="17.0" prefWidth="43.0" text="Nome :" textAlignment="RIGHT" />
             <Label layoutX="65.0" layoutY="114.0" text="Endereço :" textAlignment="RIGHT" />
             <Label layoutX="79.0" layoutY="148.0" text="Cidade :" textAlignment="RIGHT" />
             <Label layoutX="357.0" layoutY="148.0" text="Estado :" textAlignment="RIGHT" />
-            <Label layoutX="127.0" layoutY="44.0" prefHeight="17.0" prefWidth="327.0" textAlignment="RIGHT" />
-            <Label layoutX="127.0" layoutY="80.0" prefHeight="17.0" prefWidth="142.0" textAlignment="RIGHT" />
-            <Label layoutX="127.0" layoutY="114.0" prefHeight="17.0" prefWidth="353.0" textAlignment="RIGHT" />
-            <Label layoutX="127.0" layoutY="148.0" prefHeight="17.0" prefWidth="221.0" textAlignment="RIGHT" />
-            <Label layoutX="408.0" layoutY="148.0" prefHeight="17.0" prefWidth="80.0" textAlignment="RIGHT" />
+            <Label fx:id="lbNomeR" layoutX="127.0" layoutY="44.0" prefHeight="17.0" prefWidth="327.0" textAlignment="RIGHT" />
+            <Label fx:id="lbCnpjCpfR" layoutX="127.0" layoutY="80.0" prefHeight="17.0" prefWidth="142.0" textAlignment="RIGHT" />
+            <Label fx:id="lbEndR" layoutX="127.0" layoutY="114.0" prefHeight="17.0" prefWidth="353.0" textAlignment="RIGHT" />
+            <Label fx:id="lbCidadeR" layoutX="127.0" layoutY="148.0" prefHeight="17.0" prefWidth="221.0" textAlignment="RIGHT" />
+            <Label fx:id="lbEstadoR" layoutX="408.0" layoutY="148.0" prefHeight="17.0" prefWidth="80.0" textAlignment="RIGHT" />
             <CheckBox fx:id="tomadorServicoRemetente" layoutX="43.0" layoutY="177.0" mnemonicParsing="false" text="Tomador do Serviço" />
-            <Button fx:id="btnBuscarRemetente" layoutX="460.0" layoutY="40.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="28.0" />
+            <Button fx:id="btnBuscarRemetente" layoutX="460.0" layoutY="40.0" mnemonicParsing="false" onAction="#mostrarTabelaClientesRemetente" prefHeight="25.0" prefWidth="28.0" />
          </children>
       </Pane>
       <Pane layoutX="554.0" layoutY="456.0" prefHeight="215.0" prefWidth="509.0" style="-fx-border-radius: 12; -fx-border-width: 1; -fx-border-color: #000000; -fx-border-insets: 2; -fx-background-color: #ffffff;">
@@ -108,21 +108,21 @@
                </font>
             </Label>
             <Label layoutX="84.0" layoutY="80.0" text="CNPJ :" textAlignment="RIGHT" />
-            <Label layoutX="35.0" layoutY="44.0" prefHeight="17.0" prefWidth="87.0" text="Nome Fantasia :" textAlignment="RIGHT" />
+            <Label layoutX="79.0" layoutY="44.0" prefHeight="17.0" prefWidth="43.0" text="Nome :" textAlignment="RIGHT" />
             <Label layoutX="65.0" layoutY="114.0" text="Endereço :" textAlignment="RIGHT" />
             <Label layoutX="79.0" layoutY="148.0" text="Cidade :" textAlignment="RIGHT" />
             <Label layoutX="357.0" layoutY="148.0" text="Estado :" textAlignment="RIGHT" />
-            <Label layoutX="127.0" layoutY="44.0" prefHeight="17.0" prefWidth="327.0" textAlignment="RIGHT" />
-            <Label layoutX="127.0" layoutY="80.0" prefHeight="17.0" prefWidth="142.0" textAlignment="RIGHT" />
-            <Label layoutX="127.0" layoutY="114.0" prefHeight="17.0" prefWidth="353.0" textAlignment="RIGHT" />
-            <Label layoutX="127.0" layoutY="148.0" prefHeight="17.0" prefWidth="221.0" textAlignment="RIGHT" />
-            <Label layoutX="408.0" layoutY="148.0" prefHeight="17.0" prefWidth="80.0" textAlignment="RIGHT" />
+            <Label fx:id="lbNomeD" layoutX="127.0" layoutY="44.0" prefHeight="17.0" prefWidth="327.0" textAlignment="RIGHT" />
+            <Label fx:id="lbCnpjCpfD" layoutX="127.0" layoutY="80.0" prefHeight="17.0" prefWidth="142.0" textAlignment="RIGHT" />
+            <Label fx:id="lbEndD" layoutX="127.0" layoutY="114.0" prefHeight="17.0" prefWidth="353.0" textAlignment="RIGHT" />
+            <Label fx:id="lbCidadeD" layoutX="127.0" layoutY="148.0" prefHeight="17.0" prefWidth="221.0" textAlignment="RIGHT" />
+            <Label fx:id="lbEstadoD" layoutX="408.0" layoutY="148.0" prefHeight="17.0" prefWidth="80.0" textAlignment="RIGHT" />
             <CheckBox fx:id="tomadorServicoDestinatario" layoutX="43.0" layoutY="177.0" mnemonicParsing="false" text="Tomador do Serviço" />
-            <Button fx:id="btnBuscarDestinatario" layoutX="459.0" layoutY="40.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="28.0" />
+            <Button fx:id="btnBuscarDestinatario" layoutX="459.0" layoutY="40.0" mnemonicParsing="false" onAction="#mostrarTabelaClientesDestinatario" prefHeight="25.0" prefWidth="28.0" />
          </children>
       </Pane>
       <Button fx:id="btnCancelarFrete" layoutX="800.0" layoutY="159.0" mnemonicParsing="false" onAction="#cancelarOperacao" prefHeight="40.0" prefWidth="52.0" />
-      <Button fx:id="btnDeletaFrete" layoutX="872.0" layoutY="159.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="52.0" />
-      <Button fx:id="btnSalvarFrete" layoutX="941.0" layoutY="159.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="52.0" />
+      <Button fx:id="btnDeletaFrete" layoutX="872.0" layoutY="159.0" mnemonicParsing="false" onAction="#deletarCTe" prefHeight="40.0" prefWidth="52.0" />
+      <Button fx:id="btnSalvarFrete" layoutX="941.0" layoutY="159.0" mnemonicParsing="false" onAction="#salvarCTe" prefHeight="40.0" prefWidth="52.0" />
    </children>
 </AnchorPane>

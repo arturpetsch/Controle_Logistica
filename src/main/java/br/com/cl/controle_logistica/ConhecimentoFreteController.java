@@ -6,6 +6,9 @@
 package br.com.cl.controle_logistica;
 
 import br.com.cl.controle_logistica.DAO.CteDAO;
+import br.com.cl.controle_logistica.classes.Cliente;
+import br.com.cl.controle_logistica.classes.ClienteFisico;
+import br.com.cl.controle_logistica.classes.ClienteJuridico;
 import br.com.cl.controle_logistica.classes.Cte;
 import br.com.cl.controle_logistica.classes.Nf;
 import br.com.cl.controle_logistica.classes.Veiculo;
@@ -25,6 +28,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -41,6 +45,37 @@ public class ConhecimentoFreteController implements Initializable {
     /**
      * Initializes the controller class.
      */
+    
+    @FXML
+    private Label lbNomeR;
+    
+    @FXML
+    private Label lbCnpjCpfR;
+    
+    @FXML
+    private Label lbEndR;
+    
+    @FXML
+    private Label lbCidadeR;
+    
+    @FXML
+    private Label lbEstadoR;
+    
+    @FXML
+    private Label lbNomeD;
+    
+    @FXML
+    private Label lbCnpjCpfD;
+    
+    @FXML
+    private Label lbEndD;
+    
+    @FXML
+    private Label lbCidadeD;
+    
+    @FXML
+    private Label lbEstadoD;
+    
     @FXML
     private Button btnBuscarNumeroFrete;
 
@@ -72,7 +107,7 @@ public class ConhecimentoFreteController implements Initializable {
     private TextField txtValorCte;
 
     @FXML
-    private DatePicker dataEmissaoCte;
+    private DatePicker dataEmissaoCte = new DatePicker();
 
     @FXML
     private TextField chaveAcessoCte;
@@ -117,6 +152,13 @@ public class ConhecimentoFreteController implements Initializable {
     
     private Cte cte = new Cte();
     
+    private ClienteFisico clienteFisicoRemetente = new ClienteFisico();
+    
+    private ClienteFisico clienteFisicoDestinatario = new ClienteFisico();
+    
+    private ClienteJuridico clienteJuridicoRemetente = new ClienteJuridico();
+    
+    private ClienteJuridico clienteJuridicoDestinatario = new ClienteJuridico();
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
@@ -204,15 +246,9 @@ public class ConhecimentoFreteController implements Initializable {
             contador--;
         }
     
-        String valor = valorNf.getText();
-        BigDecimal zero = new BigDecimal(00);
-        BigDecimal vl = new BigDecimal(valor.replace(",", "."));
          if (valorNf.getText().isEmpty()) {
             valorNf.setStyle("-fx-border-color:red");
-            contador++;
-        }else if(vl.intValue() <= 0){
-            numeroNf.setStyle("-fx-border-color:red");
-            contador++;    
+            contador++;  
         } else {
             valorNf.setStyle("-fx-border-color:#bbaFFF");
             contador--;
@@ -372,15 +408,14 @@ public class ConhecimentoFreteController implements Initializable {
     private boolean getAtributosCte() {
         if (verificarCamposVazios()) {
             
-            cte.setNumeroCte(Integer.valueOf(txtNumeroCte.getText()));
             String valor = txtValorCte.getText();
             BigDecimal valorInformado = new BigDecimal(valor.replace(",", "."));
             cte.setValor(valorInformado);
             cte.setDataEmissao(dataEmissaoCte.getValue());
             cte.setChaveAcesso(chaveAcessoCte.getText());
             cte.setProduto(produtoCte.getText().toUpperCase());
-            cte.setPesoBruto(Double.parseDouble(pesoBrutoCte.getText()));
-            cte.setPesoLiquido(Double.parseDouble(pesoLiquidoCte.getText()));
+            cte.setPesoBruto(Double.parseDouble(pesoBrutoCte.getText().replace(",", ".")));
+            cte.setPesoLiquido(Double.parseDouble(pesoLiquidoCte.getText().replace(",", ".")));
             cte.setVolume(Double.parseDouble(volumeCte.getText()));
             cte.setEspecie(especieCte.getText().toUpperCase());
             cte.setObservacao(observacaoCte.getText().toUpperCase());
@@ -398,23 +433,17 @@ public class ConhecimentoFreteController implements Initializable {
     private boolean verificarCamposVazios() {
         boolean retorno = true;
         int contador = 0;
-        if (txtNumeroCte.getText().isEmpty()) {
-            txtNumeroCte.setStyle("-fx-border-color:red");
-            contador++;
-        } else {
-            txtNumeroCte.setStyle("-fx-border-color:#bbaFFF");
-            contador--;
-        }
-    
+        
+        
          if (txtValorCte.getText().isEmpty()) {
             txtValorCte.setStyle("-fx-border-color:red");
             contador++;
-        } else {
+         } else {
             txtValorCte.setStyle("-fx-border-color:#bbaFFF");
             contador--;
         }
-         
-          if (dataEmissaoCte.getValue().equals(null)) {
+                  
+          if (dataEmissaoCte.getValue() == null) {
             dataEmissaoCte.setStyle("-fx-border-color:red");
             contador++;
         } else {
@@ -478,7 +507,15 @@ public class ConhecimentoFreteController implements Initializable {
             contador--;
         } 
           
-         if(contador<=-10){
+        if(clienteFisicoDestinatario.getIdClienteFisico() <= 0 && clienteJuridicoDestinatario.getIdClienteJuridico() <= 0){
+            contador++;
+        }  
+        
+        if(clienteFisicoRemetente.getIdClienteFisico() <= 0 && clienteJuridicoRemetente.getIdClienteJuridico() <= 0){
+            contador++;
+        }
+        
+         if(contador<=-11){
             retorno = true;
          }else{
              retorno = false;
@@ -489,7 +526,7 @@ public class ConhecimentoFreteController implements Initializable {
         } else {
             Alert informacao = new Alert(Alert.AlertType.INFORMATION);
             informacao.setTitle("Salvar CTe");
-            informacao.setHeaderText("Por favor, informe os campos obrigatórios.");
+            informacao.setHeaderText("Por favor, informe os campos obrigatórios!.\nInforme os clientes!");
             informacao.show();
             return retorno;
         }
@@ -507,13 +544,29 @@ public class ConhecimentoFreteController implements Initializable {
         dataEmissaoCte.setValue(cte.getDataEmissao());
         chaveAcessoCte.setText(cte.getChaveAcesso());
         produtoCte.setText(cte.getProduto());
-        pesoBrutoCte.setText(String.valueOf(cte.getProduto()));
-        pesoLiquidoCte.setText(String.valueOf(cte.getPesoLiquido()));
+        pesoBrutoCte.setText(String.valueOf(cte.getPesoBruto()).replace(".", ","));
+        pesoLiquidoCte.setText(String.valueOf(cte.getPesoLiquido()).replace(".", ","));
         volumeCte.setText(String.valueOf(cte.getVolume()));
         especieCte.setText(cte.getEspecie());
         observacaoCte.setText(cte.getObservacao());
         
         this.notasFiscais = cte.getNotasFiscais();
+        
+        if(cte.getClienteFisico() != null){
+            popularCamposDadosRemetenteClienteFisico(cte.getClienteFisico());
+            
+        }else if(cte.getClienteJuridico() != null){
+            popularCamposDadosRemetenteClienteJuridico(cte.getClienteJuridico());
+            
+        }
+        
+        if(cte.getClienteFisicoDestinatario() != null){
+            popularCamposDadosDestinatarioClienteFisico(cte.getClienteFisicoDestinatario());
+            
+        }else if(cte.getClienteJuridicoDestinatario() != null){
+            popularCamposDadosDestinatarioClienteJuridico(cte.getClienteJuridicoDestinatario());
+            
+        }
     }
     
     
@@ -560,4 +613,152 @@ public class ConhecimentoFreteController implements Initializable {
             }
         }
     }
-}
+    
+    /**
+     * Método que chama o Stage onde está a tabela que lista todos os
+     * clientes consultados pelo usuário.
+     *
+     * @param action
+     * @throws IOException
+     */
+    @FXML
+    protected void mostrarTabelaClientesRemetente(ActionEvent action) throws IOException {
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/tabelaClientesConhecimentoFrete.fxml"));
+            Parent root = (Parent) loader.load();
+            TabelaClientesConhecimentoFreteController tabelaClientesConhecimentoFreteController = loader.getController();
+            Scene alert = new Scene(root);
+            Stage stage = new Stage();
+
+            stage.setScene(alert);
+            stage.setResizable(false);
+            stage.centerOnScreen();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            
+            stage.showAndWait();
+            
+            this.clienteFisicoRemetente = tabelaClientesConhecimentoFreteController.getClienteSelecionadoFisico();
+            this.clienteJuridicoRemetente = tabelaClientesConhecimentoFreteController.getClienteSelecionadoJuridico();
+            
+            if(clienteFisicoRemetente.getIdClienteFisico() > 0){
+                popularCamposDadosRemetenteClienteFisico(clienteFisicoRemetente);
+            }else if(clienteJuridicoRemetente.getIdClienteJuridico() > 0){
+                popularCamposDadosRemetenteClienteJuridico(clienteJuridicoRemetente);
+            }
+          
+        }
+    
+    /**
+     * Metodo que popula os campos referentes aos dados do cliente, caso seja fisico na area de remetente.
+     * @param cliente 
+     */
+    private void popularCamposDadosRemetenteClienteFisico(ClienteFisico cliente){
+        lbNomeR.setText(cliente.getNomeCliente().toUpperCase());
+        lbCnpjCpfR.setText(cliente.getCpf());
+        lbEndR.setText(cliente.getEndereco().toUpperCase());
+        lbCidadeR.setText(cliente.getCidade().toUpperCase());
+        lbEstadoR.setText(cliente.getEstado().toUpperCase());
+        
+        cte.setClienteFisico(cliente);
+    }
+   
+     /**
+     * Metodo que popula os campos referentes aos dados do cliente, caso seja juridico na area de remetente.
+     * @param cliente 
+     */
+    private void popularCamposDadosRemetenteClienteJuridico(ClienteJuridico cliente){
+        lbNomeR.setText(cliente.getNomeFantasia().toUpperCase());
+        lbCnpjCpfR.setText(cliente.getCnpj());
+        lbEndR.setText(cliente.getEndereco().toUpperCase());
+        lbCidadeR.setText(cliente.getCidade().toUpperCase());
+        lbEstadoR.setText(cliente.getEstado().toUpperCase());
+        
+        cte.setClienteJuridico(cliente);
+    }
+    
+    /**
+     * Método que chama o Stage onde está a tabela que lista todos os
+     * clientes consultados pelo usuário.
+     *
+     * @param action
+     * @throws IOException
+     */
+    @FXML
+    protected void mostrarTabelaClientesDestinatario(ActionEvent action) throws IOException {
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/tabelaClientesConhecimentoFrete.fxml"));
+            Parent root = (Parent) loader.load();
+            TabelaClientesConhecimentoFreteController tabelaClientesConhecimentoFreteController = loader.getController();
+            Scene alert = new Scene(root);
+            Stage stage = new Stage();
+
+            stage.setScene(alert);
+            stage.setResizable(false);
+            stage.centerOnScreen();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            
+            stage.showAndWait();
+           
+            this.clienteFisicoDestinatario = tabelaClientesConhecimentoFreteController.getClienteSelecionadoFisico();
+            this.clienteJuridicoDestinatario = tabelaClientesConhecimentoFreteController.getClienteSelecionadoJuridico();
+            
+            if(clienteFisicoDestinatario.getIdClienteFisico() > 0){
+                popularCamposDadosDestinatarioClienteFisico(clienteFisicoDestinatario);
+            }else if(clienteJuridicoDestinatario.getIdClienteJuridico() > 0){
+                popularCamposDadosDestinatarioClienteJuridico(clienteJuridicoDestinatario);
+            }
+        }
+    
+    /**
+     * Metodo que popula os campos referentes aos dados do cliente, caso seja fisico na area de destinatario.
+     * @param cliente 
+     */
+    private void popularCamposDadosDestinatarioClienteFisico(ClienteFisico cliente){
+        lbNomeD.setText(cliente.getNomeCliente().toUpperCase());
+        lbCnpjCpfD.setText(cliente.getCpf());
+        lbEndD.setText(cliente.getEndereco().toUpperCase());
+        lbCidadeD.setText(cliente.getCidade().toUpperCase());
+        lbEstadoD.setText(cliente.getEstado().toUpperCase());
+        
+        cte.setClienteFisicoDestinatario(clienteFisicoDestinatario);
+    }
+   
+     /**
+     * Metodo que popula os campos referentes aos dados do cliente, caso seja juridico na area de destinatario.
+     * @param cliente 
+     */
+    private void popularCamposDadosDestinatarioClienteJuridico(ClienteJuridico cliente){
+        lbNomeD.setText(cliente.getNomeFantasia().toUpperCase());
+        lbCnpjCpfD.setText(cliente.getCnpj());
+        lbEndD.setText(cliente.getEndereco().toUpperCase());
+        lbCidadeD.setText(cliente.getCidade().toUpperCase());
+        lbEstadoD.setText(cliente.getEstado().toUpperCase());
+        
+        cte.setClienteJuridicoDestinatario(clienteJuridicoDestinatario);
+    }
+    
+    /**
+     * Metodo utilizado pelo botao Excluir que executa a exclusão do cte selecionado.
+     * @param action 
+     */
+    @FXML
+    private void deletarCTe(ActionEvent action) throws IOException{
+        if(this.cte.getNumeroCte() > 0){
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/confirmacaoAcaoCte.fxml"));
+            Parent root = (Parent) loader.load();
+            ConfirmacaoAcaoCteController confirmacaoAcaoCteController = loader.getController();
+            Scene alert = new Scene(root);
+            Stage stage = new Stage();
+
+            stage.setScene(alert);
+            stage.setResizable(false);
+            stage.centerOnScreen();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            confirmacaoAcaoCteController.setCte(cte);
+            stage.showAndWait();
+            limparCampos();
+            }
+        }
+    }
+    
+

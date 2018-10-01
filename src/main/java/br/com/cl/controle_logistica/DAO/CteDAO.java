@@ -10,6 +10,7 @@ import br.com.cl.controle_logistica.classes.Nf;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ArrayList;
 
 /**
@@ -50,7 +51,7 @@ public class CteDAO {
                 cte.setEspecie(resultSet.getString("especie"));
                 cte.setObservacao(resultSet.getString("observacao"));
                 
-                
+                cte.setNotasFiscais(buscarNotasFiscais(cte.getNumeroCte()));
                 fretes.add(cte);
             }
             return fretes;
@@ -72,7 +73,7 @@ public class CteDAO {
         
         try {
             connection = Conexao.conexao();
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setBigDecimal(1, cte.getValor());
             preparedStatement.setDate(2, java.sql.Date.valueOf(cte.getDataEmissao()));
             preparedStatement.setString(3, cte.getChaveAcesso());
@@ -82,7 +83,9 @@ public class CteDAO {
             preparedStatement.setDouble(7, cte.getVolume());
             preparedStatement.setString(8, cte.getEspecie());
             preparedStatement.setString(9, cte.getObservacao());
-             
+            preparedStatement.setInt(10, 1);
+            preparedStatement.setInt(11, 1);
+            
             preparedStatement.executeUpdate();
             final ResultSet rs = preparedStatement.getGeneratedKeys();
             int idCte = 0;
@@ -90,12 +93,13 @@ public class CteDAO {
                 idCte = (rs.getInt(1));
             }
             int i = 0;
-            while(cte.getNotasFiscais().size() >= 0){
+            preparedStatement.close();
+            while(cte.getNotasFiscais().size() >= i){
                 salvarNF(cte.getNotasFiscais().get(i), idCte);
+                i++;
             }
             
-            preparedStatement.close();
-        
+           
         }catch(Exception e){
             e.printStackTrace();
             return false;
@@ -109,11 +113,85 @@ public class CteDAO {
      * @return 
      */
     public boolean atualizarCTe(Cte cte){
-        return false;
+        String sql = "UPDATE cte SET valor = ?, dataEmissao = ?, chaveAcesso = ?, produto = ?, pesoBruto = ?,"
+                + " pesoLiquido = ?, volume = ?, especie = ?,"
+                + " observacao = ?, clienteRemetente_fk = ?, clienteDestinatario_fk = ? WHERE numeroCte = " + cte.getNumeroCte();
+        
+        try {
+            connection = Conexao.conexao();
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setBigDecimal(1, cte.getValor());
+            preparedStatement.setDate(2, java.sql.Date.valueOf(cte.getDataEmissao()));
+            preparedStatement.setString(3, cte.getChaveAcesso());
+            preparedStatement.setString(4, cte.getProduto());
+            preparedStatement.setDouble(5, cte.getPesoBruto());
+            preparedStatement.setDouble(6, cte.getPesoLiquido());
+            preparedStatement.setDouble(7, cte.getVolume());
+            preparedStatement.setString(8, cte.getEspecie());
+            preparedStatement.setString(9, cte.getObservacao());
+            preparedStatement.setInt(10, 1);
+            preparedStatement.setInt(11, 1);
+            
+            preparedStatement.executeUpdate();
+           
+            deletarNf(cte);
+            
+            int i = 0;
+            preparedStatement.close();
+            while(cte.getNotasFiscais().size() >= i){
+                salvarNF(cte.getNotasFiscais().get(i), cte.getNumeroCte());
+                i++;
+            }
+            
+        }catch(Exception e){
+            e.printStackTrace();
+            return false;
+        }
+        return true;
     }
     
     /**
-     * Método que salva todas as nfs no banco de dados.
+     * Método que realiza a exclusão de um frete no banco de dados.
+     * @param frete
+     * @return 
+     */
+    public boolean deletarCTe(Cte cte){
+        String sql = "DELETE FROM cte WHERE numeroCte = " + cte.getNumeroCte();
+        deletarNf(cte);
+        try {
+            connection = Conexao.conexao();
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.executeUpdate(sql);
+            preparedStatement.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+    
+    //================= NOTAS FISCAIS ==========================================
+    
+    /**
+     * Método que deleta do banco de dados a(s) nota(s) conforme numero do cte.
+     */
+   private void deletarNf(Cte cte){
+       String sql = "DELETE FROM notafiscal WHERE cte_fk = " + cte.getNumeroCte();
+        
+        try {
+            connection = Conexao.conexao();
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.executeUpdate(sql);
+            preparedStatement.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+          
+        }
+   }
+    
+     
+   /**
+    * Método que salva todas as nfs no banco de dados.
      * @param nf
      * @param idCte 
      */
@@ -132,6 +210,41 @@ public class CteDAO {
             preparedStatement.close();
         }catch(Exception e){
             e.printStackTrace();
+        }
+    }
+    
+    
+    /**
+     * Metodo que busca todas as Notas fiscais referentes ao frete selecionado.
+     * @param idCte
+     * @return 
+     */
+    private ArrayList<Nf> buscarNotasFiscais(int idCte){
+        String sql = "SELECT * FROM notaFiscal WHERE cte_fk = " + idCte + " ";
+        
+        ResultSet resultSet;
+        ArrayList<Nf> notasFiscais = new ArrayList<Nf>();
+        
+        try {
+            
+            connection = Conexao.conexao();
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            resultSet = preparedStatement.executeQuery(sql);
+            
+            while(resultSet.next()){
+                Nf nf = new Nf();
+                nf.setChaveAcesso(resultSet.getString("chaveAcesso"));
+                nf.setIdNotaFiscal(resultSet.getInt("idnotaFiscal"));
+                nf.setNumeroNF(resultSet.getInt("numero"));
+                nf.setValorNf(resultSet.getBigDecimal("valorNf"));
+                
+                notasFiscais.add(nf);
+            }
+            
+            return notasFiscais;
+        }catch(Exception e){
+            e.printStackTrace();
+            return null;
         }
     }
 }
