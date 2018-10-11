@@ -6,6 +6,7 @@
 package br.com.cl.controle_logistica;
 
 
+import br.com.cl.controle_logistica.classes.Cliente;
 import br.com.cl.controle_logistica.classes.ClienteJuridico;
 import java.io.IOException;
 import java.net.URL;
@@ -43,11 +44,11 @@ public class TabelaClientesJuridicosController implements Initializable {
     @FXML
     private TableColumn<ClienteJuridico, String> nomeTabelaClientes = new TableColumn();
 
-    ArrayList<ClienteJuridico> clientes = new ArrayList<ClienteJuridico>();
+    ArrayList<Cliente> clientes = new ArrayList<Cliente>();
 
-    ObservableList<ClienteJuridico> clienteBusca = FXCollections.observableArrayList();
+    ObservableList<Cliente> clienteBusca = FXCollections.observableArrayList();
     
-    ClienteJuridico clienteJuridico = new ClienteJuridico();
+    Cliente clienteJuridico = new Cliente();
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -74,12 +75,19 @@ public class TabelaClientesJuridicosController implements Initializable {
      */
     @FXML
     protected void popularTabela() {
-        if (clientes != null) {
+        ArrayList<ClienteJuridico> clientesJuridico = new ArrayList<ClienteJuridico>();
+        int i = 0;
+        while(clientes.size() > i){
+            clientesJuridico.add(clientes.get(i).getClienteJuridico());
+            i++;
+        }
+        
+        if (clientesJuridico != null) {
             idTabelaClientes.setCellValueFactory(new PropertyValueFactory("idClienteJuridico"));
             nomeTabelaClientes.setCellValueFactory(new PropertyValueFactory("nomeFantasia"));
 
             tabelaClientes.setItems(clienteBusca);
-            tabelaClientes.getItems().setAll(clientes);
+            tabelaClientes.getItems().setAll(clientesJuridico);
 
         }
     }
@@ -89,7 +97,7 @@ public class TabelaClientesJuridicosController implements Initializable {
      *
      * @param clientes
      */
-    public void setCliente(ArrayList<ClienteJuridico> clientes) {
+    public void setCliente(ArrayList<Cliente> clientes) {
         this.clientes = clientes;
         popularTabela();
     }
@@ -99,13 +107,20 @@ public class TabelaClientesJuridicosController implements Initializable {
      * cliente.
      */
     private void selecionaCliente(ClienteJuridico clienteJuridico) throws IOException {
-        this.clienteJuridico = clienteJuridico;
-         Stage stage = (Stage) tabelaClientes.getScene().getWindow();
+        int i = 0;
+        while(clientes.size() > i){
+            if(clientes.get(i).getClienteJuridico().equals(clienteJuridico)){
+                this.clienteJuridico = clientes.get(i);
+            }
+            i++;
+        }
+        
+        Stage stage = (Stage) tabelaClientes.getScene().getWindow();
         stage.close();
         getClienteSelecionado();
     }
     
-    public ClienteJuridico getClienteSelecionado(){
+    public Cliente getClienteSelecionado(){
         return this.clienteJuridico;
     }
     

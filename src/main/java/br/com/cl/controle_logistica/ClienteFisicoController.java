@@ -7,6 +7,7 @@ package br.com.cl.controle_logistica;
 
 
 import br.com.cl.controle_logistica.DAO.ClienteFisicoDAO;
+import br.com.cl.controle_logistica.classes.Cliente;
 import br.com.cl.controle_logistica.classes.ClienteFisico;
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -93,7 +94,7 @@ public class ClienteFisicoController implements Initializable {
     @FXML
     private TextField txtEmailClienteFisico;
     
-    ClienteFisico clienteFisico = new ClienteFisico();
+    Cliente clienteFisico = new Cliente();
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -126,7 +127,7 @@ public class ClienteFisicoController implements Initializable {
         String nomeInformado = txtNome.getText();
         
             ClienteFisicoDAO clienteFisicoDAO = new ClienteFisicoDAO();
-            ArrayList<ClienteFisico> clientes = new ArrayList<ClienteFisico>();
+            ArrayList<Cliente> clientes = new ArrayList<Cliente>();
             clientes = clienteFisicoDAO.consultarClientePorNome(nomeInformado);
 
             mostrarClientes(clientes);
@@ -164,17 +165,17 @@ public class ClienteFisicoController implements Initializable {
         ClienteFisicoDAO clienteFisicoDAO = new ClienteFisicoDAO();
 
         if (this.clienteFisico == null) {
-            this.clienteFisico = new ClienteFisico();
+            this.clienteFisico = new Cliente();
         }
 
-        if (clienteFisico.getIdClienteFisico()== 0 && getAtributosClienteFisico()) {
+        if (clienteFisico.getClienteFisico().getIdClienteFisico()== 0 && getAtributosClienteFisico()) {
             clienteFisicoDAO.salvarCliente(clienteFisico);
             Alert confirmacao = new Alert(Alert.AlertType.INFORMATION);
             confirmacao.setTitle("Salvar Cliente");
             confirmacao.setHeaderText("Cliente Cadastrado com Sucesso!");
             confirmacao.showAndWait();
             limparCampos();
-        } else if (getAtributosClienteFisico()&& clienteFisico.getIdClienteFisico()> 0) {
+        } else if (getAtributosClienteFisico()&& clienteFisico.getClienteFisico().getIdClienteFisico()> 0) {
             if (clienteFisicoDAO.atualizarCliente(clienteFisico)) {
                 Alert confirmacao = new Alert(Alert.AlertType.INFORMATION);
                 confirmacao.setTitle("Salvar Cliente");
@@ -192,7 +193,7 @@ public class ClienteFisicoController implements Initializable {
      */
     @FXML
     private void deletarCliente(ActionEvent action) throws IOException{
-        if(this.clienteFisico.getIdClienteFisico() > 0){
+        if(this.clienteFisico.getClienteFisico().getIdClienteFisico() > 0){
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/confirmacaoAcaoCliente.fxml"));
             Parent root = (Parent) loader.load();
             ConfirmacaoAcaoClienteController confirmacaoAcaoClienteController = loader.getController();
@@ -206,7 +207,7 @@ public class ClienteFisicoController implements Initializable {
             confirmacaoAcaoClienteController.setCliente(clienteFisico);
             stage.showAndWait();
             limparCampos();
-            clienteFisico = new ClienteFisico();
+            clienteFisico = new Cliente();
         }
     }
     
@@ -217,7 +218,7 @@ public class ClienteFisicoController implements Initializable {
     @FXML
     private void cancelarOperacao(ActionEvent action){
         limparCampos();
-        clienteFisico = new ClienteFisico();
+        clienteFisico = new Cliente();
     }
     
     /**
@@ -227,7 +228,7 @@ public class ClienteFisicoController implements Initializable {
      * @param clientes
      * @throws IOException
      */
-    private void mostrarClientes(ArrayList<ClienteFisico> clientesFisicos) throws IOException {
+    private void mostrarClientes(ArrayList<Cliente> clientesFisicos) throws IOException {
         if (!clientesFisicos.isEmpty()) {
 
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/tabelaClientes.fxml"));
@@ -261,10 +262,10 @@ public class ClienteFisicoController implements Initializable {
     private boolean getAtributosClienteFisico() {
         if (verificarCamposVazios()) {
             //Coletar todos os atributos e setar no cliente para poder salvar;
-            clienteFisico.setNomeCliente(txtNomeClienteFisico.getText().toUpperCase());
-            clienteFisico.setCpf(txtCpfClienteFisico.getText().toUpperCase());
-            clienteFisico.setRg(txtRGClienteFisico.getText().toUpperCase());
-            clienteFisico.setDataNascimento(dataNascimentoClienteFisico.getValue());
+            clienteFisico.getClienteFisico().setNomeCliente(txtNomeClienteFisico.getText().toUpperCase());
+            clienteFisico.getClienteFisico().setCpf(txtCpfClienteFisico.getText().toUpperCase());
+            clienteFisico.getClienteFisico().setRg(txtRGClienteFisico.getText().toUpperCase());
+            clienteFisico.getClienteFisico().setDataNascimento(dataNascimentoClienteFisico.getValue());
             clienteFisico.setEndereco(txtEnderecoClienteFisico.getText().toUpperCase());
             clienteFisico.setBairro(txtBairroClienteFisico.getText().toUpperCase());
             clienteFisico.setCep(txtCEPClienteFisico.getText().toUpperCase());
@@ -392,10 +393,10 @@ public class ClienteFisicoController implements Initializable {
     @FXML
     private void popularCamposClienteFisico() {
        
-        txtNomeClienteFisico.setText(clienteFisico.getNomeCliente().toUpperCase());
-        txtCpfClienteFisico.setText(clienteFisico.getCpf().toUpperCase());
-        txtRGClienteFisico.setText(clienteFisico.getRg().toUpperCase());
-        dataNascimentoClienteFisico.setValue(clienteFisico.getDataNascimento());
+        txtNomeClienteFisico.setText(clienteFisico.getClienteFisico().getNomeCliente().toUpperCase());
+        txtCpfClienteFisico.setText(clienteFisico.getClienteFisico().getCpf().toUpperCase());
+        txtRGClienteFisico.setText(clienteFisico.getClienteFisico().getRg().toUpperCase());
+        dataNascimentoClienteFisico.setValue(clienteFisico.getClienteFisico().getDataNascimento());
         txtEnderecoClienteFisico.setText(clienteFisico.getEndereco().toUpperCase());
         txtBairroClienteFisico.setText(clienteFisico.getBairro().toUpperCase());
         txtCEPClienteFisico.setText(clienteFisico.getCep().toUpperCase());
@@ -419,7 +420,7 @@ public class ClienteFisicoController implements Initializable {
      *
      * @param clienteFisico
      */
-    public void setClienteFisico(ClienteFisico clienteFisico) {
+    public void setClienteFisico(Cliente clienteFisico) {
         this.clienteFisico = clienteFisico;
 
     }

@@ -24,8 +24,6 @@ public class ViagemDespesa {
         this.tipoDespesa = new SimpleStringProperty();
         this.descricao = new SimpleStringProperty();
     }
-
-    
     
     public int getIdViagemDespesa() {
         return idViagemDespesa;

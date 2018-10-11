@@ -17,6 +17,7 @@ import javafx.beans.property.SimpleStringProperty;
 public class Cliente {
     
 
+    protected int idCliente;
     protected SimpleStringProperty endereco;
     protected SimpleStringProperty cidade;
     protected SimpleStringProperty estado;
@@ -26,6 +27,8 @@ public class Cliente {
     protected SimpleStringProperty email;
     protected SimpleStringProperty contato;
     protected SimpleStringProperty contato1;
+    protected ClienteFisico clienteFisico;
+    protected ClienteJuridico clienteJuridico;
     
     public Cliente(String endereco, String cidade, String estado, String cep, String bairro, LocalDate dataCadastro, 
             String email, String contato, String contato1){
@@ -49,8 +52,11 @@ public class Cliente {
         this.email = new SimpleStringProperty();
         this.contato = new SimpleStringProperty();
         this.contato1 = new SimpleStringProperty();
+        this.clienteFisico = new ClienteFisico();
+        this.clienteJuridico = new ClienteJuridico();
     }
 
+    
     public String getEndereco() {
         return endereco.get();
     }
@@ -121,6 +127,30 @@ public class Cliente {
 
     public void setContato1(String contato1) {
         this.contato1.set(contato1);
+    }
+
+    public ClienteFisico getClienteFisico() {
+        return clienteFisico;
+    }
+
+    public void setClienteFisico(ClienteFisico clienteFisico) {
+        this.clienteFisico = clienteFisico;
+    }
+
+    public ClienteJuridico getClienteJuridico() {
+        return clienteJuridico;
+    }
+
+    public void setClienteJuridico(ClienteJuridico clienteJuridico) {
+        this.clienteJuridico = clienteJuridico;
+    }
+
+    public int getIdCliente() {
+        return idCliente;
+    }
+
+    public void setIdCliente(int idCliente) {
+        this.idCliente = idCliente;
     }
 
     

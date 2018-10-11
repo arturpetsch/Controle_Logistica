@@ -7,6 +7,7 @@ package br.com.cl.controle_logistica;
 
 
 import br.com.cl.controle_logistica.DAO.ClienteFisicoDAO;
+import br.com.cl.controle_logistica.classes.Cliente;
 import br.com.cl.controle_logistica.classes.ClienteFisico;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -43,7 +44,7 @@ public class ConfirmacaoAcaoClienteController implements Initializable {
     @FXML
     private Button botaoNao;
 
-    ClienteFisico clienteFisico = new ClienteFisico();
+    Cliente clienteFisico = new Cliente();
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -85,7 +86,7 @@ public class ConfirmacaoAcaoClienteController implements Initializable {
      * Método que recebe o objeto cliente da tela Cliente.
      * @param cliente 
      */
-    public void setCliente(ClienteFisico clienteFisico){
+    public void setCliente(Cliente clienteFisico){
         this.clienteFisico = clienteFisico;
         popularCampos();
     }
@@ -94,8 +95,8 @@ public class ConfirmacaoAcaoClienteController implements Initializable {
      * Método que insere os dados do cliente nos labels nome e id.
      */
     private void popularCampos(){
-        labelIdCliente.setText(String.valueOf(clienteFisico.getIdClienteFisico()));
-        labelNomeCliente.setText(clienteFisico.getNomeCliente());
+        labelIdCliente.setText(String.valueOf(clienteFisico.getClienteFisico().getIdClienteFisico()));
+        labelNomeCliente.setText(clienteFisico.getClienteFisico().getNomeCliente());
     }
 }
 

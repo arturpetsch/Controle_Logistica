@@ -10,6 +10,7 @@ import br.com.cl.controle_logistica.classes.Cliente;
 import br.com.cl.controle_logistica.classes.ClienteFisico;
 import br.com.cl.controle_logistica.classes.ClienteJuridico;
 import br.com.cl.controle_logistica.classes.Cte;
+import br.com.cl.controle_logistica.classes.CteCliente;
 import br.com.cl.controle_logistica.classes.Nf;
 import br.com.cl.controle_logistica.classes.Veiculo;
 import java.io.IOException;
@@ -146,19 +147,16 @@ public class ConhecimentoFreteController implements Initializable {
     private CheckBox tomadorServicoRemetente;
 
     @FXML
-    private CheckBox tomadorServicoDestinatario;
-
+    private CheckBox tomadorServicoDestinatario; 
+            
     ArrayList<Nf> notasFiscais = new ArrayList<Nf>();
     
     private Cte cte = new Cte();
     
-    private ClienteFisico clienteFisicoRemetente = new ClienteFisico();
+    private Cliente clienteRemetente = new Cliente();
     
-    private ClienteFisico clienteFisicoDestinatario = new ClienteFisico();
-    
-    private ClienteJuridico clienteJuridicoRemetente = new ClienteJuridico();
-    
-    private ClienteJuridico clienteJuridicoDestinatario = new ClienteJuridico();
+    private Cliente clienteDestinatario = new Cliente();
+   
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
@@ -179,6 +177,23 @@ public class ConhecimentoFreteController implements Initializable {
         btnVerNfs.setGraphic(new ImageView(search));
     }
 
+    /**
+     * Método simples que desmarca o remetente quando o destinatario é selecionado.
+     * @param action 
+     */
+    @FXML
+    private void desmarcarRemetente(ActionEvent action){
+        tomadorServicoRemetente.setSelected(false);
+    }
+    
+    /**
+     *  Método simples que desmarca o destinatario quando o remetente é selecionado.
+     * @param action 
+     */
+    @FXML
+    private void desmarcarDestinatario(ActionEvent action){
+        tomadorServicoDestinatario.setSelected(false);
+    }
     /**
      * Método que coleta os dados da NF e insere um objeto NF e posterior em uma
      * ArrayList.
@@ -389,6 +404,19 @@ public class ConhecimentoFreteController implements Initializable {
         numeroNf.setText("");
         valorNf.setText("");
         chaveAcessoNf.setText("");
+        tomadorServicoDestinatario.setSelected(false);
+        tomadorServicoRemetente.setSelected(true);
+        lbNomeD.setText("");
+        lbCnpjCpfD.setText("");
+        lbEndD.setText("");
+        lbCidadeD.setText("");
+        lbEstadoD.setText("");
+        lbNomeD.setText("");
+        lbCnpjCpfD.setText("");
+        lbEndD.setText("");
+        lbCidadeD.setText("");
+        lbEstadoD.setText("");
+        txtPlaca.setText("");
         
     }
     
@@ -507,12 +535,16 @@ public class ConhecimentoFreteController implements Initializable {
             contador--;
         } 
           
-        if(clienteFisicoDestinatario.getIdClienteFisico() <= 0 && clienteJuridicoDestinatario.getIdClienteJuridico() <= 0){
+        if(clienteDestinatario.getClienteFisico().getIdClienteFisico() <= 0 && clienteDestinatario.getClienteJuridico().getIdClienteJuridico() <= 0){
             contador++;
-        }  
+        }  else{
+            contador--;
+        }
         
-        if(clienteFisicoRemetente.getIdClienteFisico() <= 0 && clienteJuridicoRemetente.getIdClienteJuridico() <= 0){
+        if(clienteRemetente.getClienteFisico().getIdClienteFisico() <= 0 && clienteRemetente.getClienteJuridico().getIdClienteJuridico() <= 0){
             contador++;
+        }else{
+            contador--;
         }
         
          if(contador<=-11){
@@ -540,7 +572,7 @@ public class ConhecimentoFreteController implements Initializable {
     private void popularCamposCte() {
         
         txtNumeroCte.setText(String.valueOf(this.cte.getNumeroCte()));
-        txtValorCte.setText(String.valueOf(cte.getValor()));
+        txtValorCte.setText(String.valueOf(cte.getValor()).replace(".", ","));
         dataEmissaoCte.setValue(cte.getDataEmissao());
         chaveAcessoCte.setText(cte.getChaveAcesso());
         produtoCte.setText(cte.getProduto());
@@ -552,19 +584,20 @@ public class ConhecimentoFreteController implements Initializable {
         
         this.notasFiscais = cte.getNotasFiscais();
         
-        if(cte.getClienteFisico() != null){
-            popularCamposDadosRemetenteClienteFisico(cte.getClienteFisico());
+        if(cte.getClienteRemetente().getCliente().getClienteFisico() != null){
+        
+            popularCamposDadosRemetenteClienteFisico(cte.getClienteRemetente().getCliente());
             
-        }else if(cte.getClienteJuridico() != null){
-            popularCamposDadosRemetenteClienteJuridico(cte.getClienteJuridico());
+        }else if(cte.getClienteRemetente().getCliente().getClienteJuridico() != null){
+            popularCamposDadosRemetenteClienteJuridico(cte.getClienteRemetente().getCliente());
             
         }
         
-        if(cte.getClienteFisicoDestinatario() != null){
-            popularCamposDadosDestinatarioClienteFisico(cte.getClienteFisicoDestinatario());
+        if(cte.getClienteDestinatario().getCliente().getClienteFisico() != null){
+            popularCamposDadosDestinatarioClienteFisico(cte.getClienteDestinatario().getCliente());
             
-        }else if(cte.getClienteJuridicoDestinatario() != null){
-            popularCamposDadosDestinatarioClienteJuridico(cte.getClienteJuridicoDestinatario());
+        }else if(cte.getClienteDestinatario().getCliente().getClienteJuridico() != null){
+            popularCamposDadosDestinatarioClienteJuridico(cte.getClienteDestinatario().getCliente());
             
         }
     }
@@ -637,13 +670,12 @@ public class ConhecimentoFreteController implements Initializable {
             
             stage.showAndWait();
             
-            this.clienteFisicoRemetente = tabelaClientesConhecimentoFreteController.getClienteSelecionadoFisico();
-            this.clienteJuridicoRemetente = tabelaClientesConhecimentoFreteController.getClienteSelecionadoJuridico();
+            this.clienteRemetente = tabelaClientesConhecimentoFreteController.getClienteSelecionadoFisico();
             
-            if(clienteFisicoRemetente.getIdClienteFisico() > 0){
-                popularCamposDadosRemetenteClienteFisico(clienteFisicoRemetente);
-            }else if(clienteJuridicoRemetente.getIdClienteJuridico() > 0){
-                popularCamposDadosRemetenteClienteJuridico(clienteJuridicoRemetente);
+            if(clienteRemetente.getClienteFisico().getIdClienteFisico() > 0){
+                popularCamposDadosRemetenteClienteFisico(clienteRemetente);
+            }else if(clienteRemetente.getClienteJuridico().getIdClienteJuridico() > 0){
+                popularCamposDadosRemetenteClienteJuridico(clienteRemetente);
             }
           
         }
@@ -652,28 +684,33 @@ public class ConhecimentoFreteController implements Initializable {
      * Metodo que popula os campos referentes aos dados do cliente, caso seja fisico na area de remetente.
      * @param cliente 
      */
-    private void popularCamposDadosRemetenteClienteFisico(ClienteFisico cliente){
-        lbNomeR.setText(cliente.getNomeCliente().toUpperCase());
-        lbCnpjCpfR.setText(cliente.getCpf());
+    private void popularCamposDadosRemetenteClienteFisico(Cliente cliente){
+        lbNomeR.setText(cliente.getClienteFisico().getNomeCliente().toUpperCase());
+        lbCnpjCpfR.setText(cliente.getClienteFisico().getCpf());
         lbEndR.setText(cliente.getEndereco().toUpperCase());
         lbCidadeR.setText(cliente.getCidade().toUpperCase());
         lbEstadoR.setText(cliente.getEstado().toUpperCase());
         
-        cte.setClienteFisico(cliente);
+        Boolean tomador = tomadorServicoRemetente.isSelected();
+        CteCliente clienteCte = new CteCliente(cte, cliente, tomador);
+        cte.setClienteRemetente(clienteCte);
     }
    
      /**
      * Metodo que popula os campos referentes aos dados do cliente, caso seja juridico na area de remetente.
      * @param cliente 
      */
-    private void popularCamposDadosRemetenteClienteJuridico(ClienteJuridico cliente){
-        lbNomeR.setText(cliente.getNomeFantasia().toUpperCase());
-        lbCnpjCpfR.setText(cliente.getCnpj());
+    private void popularCamposDadosRemetenteClienteJuridico(Cliente cliente){
+        lbNomeR.setText(cliente.getClienteJuridico().getNomeFantasia().toUpperCase());
+        lbCnpjCpfR.setText(cliente.getClienteJuridico().getCnpj());
         lbEndR.setText(cliente.getEndereco().toUpperCase());
         lbCidadeR.setText(cliente.getCidade().toUpperCase());
         lbEstadoR.setText(cliente.getEstado().toUpperCase());
         
-        cte.setClienteJuridico(cliente);
+        Boolean tomador = tomadorServicoRemetente.isSelected();
+        
+        CteCliente clienteCte = new CteCliente(cte, cliente, tomador);
+        cte.setClienteRemetente(clienteCte);
     }
     
     /**
@@ -699,13 +736,12 @@ public class ConhecimentoFreteController implements Initializable {
             
             stage.showAndWait();
            
-            this.clienteFisicoDestinatario = tabelaClientesConhecimentoFreteController.getClienteSelecionadoFisico();
-            this.clienteJuridicoDestinatario = tabelaClientesConhecimentoFreteController.getClienteSelecionadoJuridico();
+            this.clienteDestinatario = tabelaClientesConhecimentoFreteController.getClienteSelecionadoJuridico();
             
-            if(clienteFisicoDestinatario.getIdClienteFisico() > 0){
-                popularCamposDadosDestinatarioClienteFisico(clienteFisicoDestinatario);
-            }else if(clienteJuridicoDestinatario.getIdClienteJuridico() > 0){
-                popularCamposDadosDestinatarioClienteJuridico(clienteJuridicoDestinatario);
+            if(clienteDestinatario.getClienteFisico().getIdClienteFisico() > 0){
+                popularCamposDadosDestinatarioClienteFisico(clienteDestinatario);
+            }else if(clienteDestinatario.getClienteJuridico().getIdClienteJuridico() > 0){
+                popularCamposDadosDestinatarioClienteJuridico(clienteDestinatario);
             }
         }
     
@@ -713,28 +749,34 @@ public class ConhecimentoFreteController implements Initializable {
      * Metodo que popula os campos referentes aos dados do cliente, caso seja fisico na area de destinatario.
      * @param cliente 
      */
-    private void popularCamposDadosDestinatarioClienteFisico(ClienteFisico cliente){
-        lbNomeD.setText(cliente.getNomeCliente().toUpperCase());
-        lbCnpjCpfD.setText(cliente.getCpf());
+    private void popularCamposDadosDestinatarioClienteFisico(Cliente cliente){
+        lbNomeD.setText(cliente.getClienteFisico().getNomeCliente().toUpperCase());
+        lbCnpjCpfD.setText(cliente.getClienteFisico().getCpf());
         lbEndD.setText(cliente.getEndereco().toUpperCase());
         lbCidadeD.setText(cliente.getCidade().toUpperCase());
         lbEstadoD.setText(cliente.getEstado().toUpperCase());
         
-        cte.setClienteFisicoDestinatario(clienteFisicoDestinatario);
+        Boolean tomador = tomadorServicoDestinatario.isSelected();
+        
+        CteCliente clienteCte = new CteCliente(cte, cliente, tomador);
+        cte.setClienteDestinatario(clienteCte);
     }
    
      /**
      * Metodo que popula os campos referentes aos dados do cliente, caso seja juridico na area de destinatario.
      * @param cliente 
      */
-    private void popularCamposDadosDestinatarioClienteJuridico(ClienteJuridico cliente){
-        lbNomeD.setText(cliente.getNomeFantasia().toUpperCase());
-        lbCnpjCpfD.setText(cliente.getCnpj());
+    private void popularCamposDadosDestinatarioClienteJuridico(Cliente cliente){
+        lbNomeD.setText(cliente.getClienteJuridico().getNomeFantasia().toUpperCase());
+        lbCnpjCpfD.setText(cliente.getClienteJuridico().getCnpj());
         lbEndD.setText(cliente.getEndereco().toUpperCase());
         lbCidadeD.setText(cliente.getCidade().toUpperCase());
         lbEstadoD.setText(cliente.getEstado().toUpperCase());
         
-        cte.setClienteJuridicoDestinatario(clienteJuridicoDestinatario);
+        Boolean tomador = tomadorServicoDestinatario.isSelected();
+        
+        CteCliente clienteCte = new CteCliente(cte, cliente, tomador);
+        cte.setClienteDestinatario(clienteCte);
     }
     
     /**

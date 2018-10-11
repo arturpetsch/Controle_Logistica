@@ -5,6 +5,7 @@
  */
 package br.com.cl.controle_logistica.DAO;
 
+import br.com.cl.controle_logistica.classes.Cliente;
 import br.com.cl.controle_logistica.classes.ClienteFisico;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -21,11 +22,11 @@ public class ClienteFisicoDAO {
     
     private Connection connection = null;
     
-     public ArrayList<ClienteFisico> consultarClientePorNome(String nomeInformado){
+     public ArrayList<Cliente> consultarClientePorNome(String nomeInformado){
         String sql = "SELECT * FROM clientefisico WHERE nomeCliente LIKE " + "'%" + nomeInformado + "%' order by nomeCliente";
         
         ResultSet resultSet;
-        ArrayList<ClienteFisico> clientes = new ArrayList<ClienteFisico>();
+        ArrayList<Cliente> clientes = new ArrayList<Cliente>();
         ClienteDAO clienteDAO = new ClienteDAO();
         
         try {
@@ -35,12 +36,12 @@ public class ClienteFisicoDAO {
             resultSet = preparedStatement.executeQuery(sql);
             
             while(resultSet.next()){
-                ClienteFisico clienteFisico = new ClienteFisico();
-                clienteFisico.setIdClienteFisico(resultSet.getInt("idCliente"));
-                clienteFisico.setNomeCliente(resultSet.getString("nomeCliente"));
-                clienteFisico.setCpf(resultSet.getString("CPF"));
-                clienteFisico.setDataNascimento(resultSet.getDate("dataNascimento").toLocalDate());    
-                clienteFisico.setRg(resultSet.getString("rg"));
+                Cliente clienteFisico = new Cliente();
+                clienteFisico.getClienteFisico().setIdClienteFisico(resultSet.getInt("idCliente"));
+                clienteFisico.getClienteFisico().setNomeCliente(resultSet.getString("nomeCliente"));
+                clienteFisico.getClienteFisico().setCpf(resultSet.getString("CPF"));
+                clienteFisico.getClienteFisico().setDataNascimento(resultSet.getDate("dataNascimento").toLocalDate());    
+                clienteFisico.getClienteFisico().setRg(resultSet.getString("rg"));
                 clienteFisico = clienteDAO.buscarClienteFisico(clienteFisico);
                 clientes.add(clienteFisico);
                 
@@ -57,7 +58,7 @@ public class ClienteFisicoDAO {
      * @param clienteFisico
      * @return 
      */
-    public boolean salvarCliente(ClienteFisico clienteFisico){
+    public boolean salvarCliente(Cliente clienteFisico){
         String sql = "INSERT INTO clientefisico(nomeCliente, CPF, dataNascimento, RG)" 
                 + "VALUES(?,?,?,?)";
         
@@ -65,15 +66,15 @@ public class ClienteFisicoDAO {
         try {
             connection = Conexao.conexao();
             PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            preparedStatement.setString(1, clienteFisico.getNomeCliente());
-            preparedStatement.setString(2, clienteFisico.getCpf());
-            preparedStatement.setDate(3, java.sql.Date.valueOf(clienteFisico.getDataNascimento()));
-            preparedStatement.setString(4, clienteFisico.getRg());
+            preparedStatement.setString(1, clienteFisico.getClienteFisico().getNomeCliente());
+            preparedStatement.setString(2, clienteFisico.getClienteFisico().getCpf());
+            preparedStatement.setDate(3, java.sql.Date.valueOf(clienteFisico.getClienteFisico().getDataNascimento()));
+            preparedStatement.setString(4, clienteFisico.getClienteFisico().getRg());
             
             preparedStatement.executeUpdate();
             final ResultSet rs = preparedStatement.getGeneratedKeys();
             if(rs.next()){
-                clienteFisico.setIdClienteFisico(rs.getInt(1));
+                clienteFisico.getClienteFisico().setIdClienteFisico(rs.getInt(1));
                 clienteDAO.salvarClienteFisico(clienteFisico);
             }
         }catch(Exception e){
@@ -84,20 +85,21 @@ public class ClienteFisicoDAO {
     
      /**
      * Método que atualiza um cliente fisico já salvo no banco.
-     * @param clienteFisico
+     * @param cliente
      * @return 
      */
-    public boolean atualizarCliente(ClienteFisico clienteFisico){
-        String sql = "UPDATE clientefisico SET nomeCliente = ?, CPF = ?, dataNascimento = ?, RG = ? WHERE idCliente = " + clienteFisico.getIdClienteFisico();
+    public boolean atualizarCliente(Cliente clienteFisico){
+        String sql = "UPDATE clientefisico SET nomeCliente = ?, CPF = ?, dataNascimento = ?, RG = ? WHERE idCliente = " 
+                + clienteFisico.getClienteFisico().getIdClienteFisico();
         ClienteDAO clienteDAO = new ClienteDAO();
           clienteFisico = transformarCamposVazioEmNulos(clienteFisico);
         try {
             connection = Conexao.conexao();
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
-           preparedStatement.setString(1, clienteFisico.getNomeCliente());
-            preparedStatement.setString(2, clienteFisico.getCpf());
-             preparedStatement.setDate(3, java.sql.Date.valueOf(clienteFisico.getDataNascimento()));
-            preparedStatement.setString(4, clienteFisico.getRg());
+           preparedStatement.setString(1, clienteFisico.getClienteFisico().getNomeCliente());
+            preparedStatement.setString(2, clienteFisico.getClienteFisico().getCpf());
+             preparedStatement.setDate(3, java.sql.Date.valueOf(clienteFisico.getClienteFisico().getDataNascimento()));
+            preparedStatement.setString(4, clienteFisico.getClienteFisico().getRg());
             preparedStatement.executeUpdate();
             
             clienteDAO.atualizarClienteFisico(clienteFisico);
@@ -108,7 +110,7 @@ public class ClienteFisicoDAO {
         return true;
     }
     
-    private ClienteFisico transformarCamposVazioEmNulos(ClienteFisico clienteFisico){
+    private Cliente transformarCamposVazioEmNulos(Cliente clienteFisico){
         if(clienteFisico.getContato1().isEmpty()){
             clienteFisico.setContato1("");
         }
@@ -121,8 +123,8 @@ public class ClienteFisicoDAO {
      * @param clienteFisico
      * @return 
      */
-    public boolean deletarCliente(ClienteFisico clienteFisico){
-        String sql = "DELETE FROM clientefisico WHERE idCliente = " + clienteFisico.getIdClienteFisico();
+    public boolean deletarCliente(Cliente clienteFisico){
+        String sql = "DELETE FROM clientefisico WHERE idCliente = " + clienteFisico.getClienteFisico().getIdClienteFisico();
         
         ClienteDAO clienteDAO = new ClienteDAO();
         

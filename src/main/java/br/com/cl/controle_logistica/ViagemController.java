@@ -85,7 +85,7 @@ public class ViagemController implements Initializable, MapComponentInitializedL
     protected StringProperty to = new SimpleStringProperty();
 
     @FXML
-    protected GoogleMapView mapView;// = new GoogleMapView("pt-BR", "My-Google-Map-API-Key");
+    protected GoogleMapView mapView;
 
     @FXML
     protected TextField fromTextField;
@@ -160,7 +160,6 @@ public class ViagemController implements Initializable, MapComponentInitializedL
         DirectionsResult directionsResult = results;
        
         try {
-            //Double km = directionsResult.getRoutes().get(0).getLegs().get(0).getDistance().getValue();
             String km = directionsResult.getRoutes().get(0).getLegs().get(0).getDistance().getText().replace("km", "");
             totalKmPrevisto.setText(km.toString());
         } catch (Exception e) {
@@ -246,4 +245,18 @@ public class ViagemController implements Initializable, MapComponentInitializedL
     }
     
     
+    @FXML
+    private void incluirDespesa(ActionEvent action) throws IOException{
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/despesaViagem.fxml"));
+            Parent root = (Parent) loader.load();
+            Scene alert = new Scene(root);
+            Stage stage = new Stage();
+
+            stage.setScene(alert);
+            stage.setResizable(false);
+            stage.centerOnScreen();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.showAndWait();
+            
+    }
 }

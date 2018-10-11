@@ -25,14 +25,15 @@ public class Cte {
     private SimpleDoubleProperty pesoBruto;
     private SimpleDoubleProperty pesoLiquido;
     private SimpleDoubleProperty volume;
-    private ClienteFisico clienteFisico;
-    private ClienteJuridico clienteJuridico;
-    private ClienteJuridico clienteJuridicoDestinatario;
-    private ClienteFisico clienteFisicoDestinatario;
+    
+    private CteCliente clienteDestinatario;
+    private CteCliente clienteRemetente;
+    
+    
     private ArrayList<Nf> notasFiscais;
     private SimpleStringProperty especie;
     private SimpleStringProperty observacao;
-    private int tomadorServico;
+
     
     public Cte() {
         chaveAcesso = new SimpleStringProperty();
@@ -45,8 +46,8 @@ public class Cte {
     }
 
     public Cte(BigDecimal valor, LocalDate dataEmissao, int numeroCte, String chaveAcesso, String produto, Double pesoBruto, 
-            Double pesoLiquido, Double volume, ClienteFisico clienteFisico, ClienteJuridico clienteJuridico, ClienteJuridico clienteJuridicoDestinatario, 
-            ClienteFisico clienteFisicoDestinatario, ArrayList<Nf> notasFiscais, String especie, String observacao, int tomadorServico) {
+            Double pesoLiquido, Double volume, CteCliente clienteDestinatario, CteCliente clienteRemetente,
+            ArrayList<Nf> notasFiscais, String especie, String observacao) {
         
         this.valor = valor;
         this.dataEmissao = dataEmissao;
@@ -56,14 +57,11 @@ public class Cte {
         this.pesoBruto = new SimpleDoubleProperty(pesoBruto);
         this.pesoLiquido = new SimpleDoubleProperty(pesoLiquido);
         this.volume = new SimpleDoubleProperty(volume);
-        this.clienteFisico = clienteFisico;
-        this.clienteJuridico = clienteJuridico;
-        this.clienteJuridicoDestinatario = clienteJuridicoDestinatario;
-        this.clienteFisicoDestinatario = clienteFisicoDestinatario;
+        this.clienteDestinatario = clienteDestinatario;
+        this.clienteRemetente = clienteRemetente;
         this.notasFiscais = notasFiscais;
         this.especie = new SimpleStringProperty(especie);
         this.observacao = new SimpleStringProperty(observacao);
-        this.tomadorServico = tomadorServico;
     }
 
     public BigDecimal getValor() {
@@ -130,36 +128,20 @@ public class Cte {
         this.volume.set(volume);
     }
 
-    public ClienteFisico getClienteFisico() {
-        return clienteFisico;
+    public CteCliente getClienteDestinatario() {
+        return clienteDestinatario;
     }
 
-    public void setClienteFisico(ClienteFisico clienteFisico) {
-        this.clienteFisico = clienteFisico;
+    public void setClienteDestinatario(CteCliente clienteDestinatario) {
+        this.clienteDestinatario = clienteDestinatario;
     }
 
-    public ClienteJuridico getClienteJuridico() {
-        return clienteJuridico;
+    public CteCliente getClienteRemetente() {
+        return clienteRemetente;
     }
 
-    public void setClienteJuridico(ClienteJuridico clienteJuridico) {
-        this.clienteJuridico = clienteJuridico;
-    }
-
-    public ClienteJuridico getClienteJuridicoDestinatario() {
-        return clienteJuridicoDestinatario;
-    }
-
-    public void setClienteJuridicoDestinatario(ClienteJuridico clienteJuridicoDestinatario) {
-        this.clienteJuridicoDestinatario = clienteJuridicoDestinatario;
-    }
-
-    public ClienteFisico getClienteFisicoDestinatario() {
-        return clienteFisicoDestinatario;
-    }
-
-    public void setClienteFisicoDestinatario(ClienteFisico clienteFisicoDestinatario) {
-        this.clienteFisicoDestinatario = clienteFisicoDestinatario;
+    public void setClienteRemetente(CteCliente clienteRemetente) {
+        this.clienteRemetente = clienteRemetente;
     }
 
     public ArrayList<Nf> getNotasFiscais() {
@@ -186,13 +168,7 @@ public class Cte {
         this.observacao.set(observacao);
     }
 
-    public int getTomadorServico() {
-        return tomadorServico;
-    }
-
-    public void setTomadorServico(int tomadorServico) {
-        this.tomadorServico = tomadorServico;
-    }
+    
     
     
 }

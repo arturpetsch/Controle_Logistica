@@ -60,17 +60,14 @@ public class TabelaClientesConhecimentoFreteController implements Initializable 
     ObservableList<ClienteFisico> clienteFBusca = FXCollections.observableArrayList();
     
     ObservableList<ClienteJuridico> clienteJBusca = FXCollections.observableArrayList();
-    
-    ArrayList<ClienteFisico> clientesFisico = new ArrayList<ClienteFisico>();
-       
-    ArrayList<ClienteJuridico> clientesJuridicos = new ArrayList<ClienteJuridico>();
+        
+    ArrayList<Cliente> clientes = new ArrayList<Cliente>();
        
     @FXML
     private ComboBox comboBoxTipoCliente;
     
-    ClienteFisico clienteFisico = new ClienteFisico();
+    Cliente cliente = new Cliente();
     
-    ClienteJuridico clienteJuridico = new ClienteJuridico();
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -95,15 +92,15 @@ public class TabelaClientesConhecimentoFreteController implements Initializable 
        if(comboBoxTipoCliente.getValue().equals("Fisico")){
            ClienteFisicoDAO clienteFisicoDAO = new ClienteFisicoDAO();
            
-           clientesFisico = clienteFisicoDAO.consultarClientePorNome(nomeClienteInformado);
+           clientes = clienteFisicoDAO.consultarClientePorNome(nomeClienteInformado);
            
-           popularTabelaClientesFisicos(clientesFisico);
+           popularTabelaClientesFisicos(clientes);
        }else{
            ClienteJuridicoDAO clienteJuridicoDAO = new ClienteJuridicoDAO();
            
-           clientesJuridicos = clienteJuridicoDAO.consultarClientePorNome(nomeClienteInformado);
+           clientes = clienteJuridicoDAO.consultarClientePorNome(nomeClienteInformado);
            
-           popularTabelaClientesJuridicos(clientesJuridicos);
+           popularTabelaClientesJuridicos(clientes);
        }
        
     }
@@ -112,7 +109,7 @@ public class TabelaClientesConhecimentoFreteController implements Initializable 
      * Método que insere os dados do arraylist na tabela.
      */
     @FXML
-    protected void popularTabelaClientesJuridicos(ArrayList<ClienteJuridico> clientesJuridicos){
+    protected void popularTabelaClientesJuridicos(ArrayList<Cliente> clientesJuridicos){
         if(clientesJuridicos != null){
             cpfCnpjTabelaClientes.setCellValueFactory(new PropertyValueFactory("cnpj"));
             nomeTabelaClientes.setCellValueFactory(new PropertyValueFactory("nomeFantasia"));
@@ -121,7 +118,7 @@ public class TabelaClientesConhecimentoFreteController implements Initializable 
             tabelaClientes.getItems().setAll(clientesJuridicos);
 
             tabelaClientes.setRowFactory(tv -> {
-            TableRow<ClienteJuridico> row = new TableRow<>();
+            TableRow<Cliente> row = new TableRow<>();
             row.setOnMouseClicked(event -> {
                 if (event.getClickCount() == 2 && (!row.isEmpty())) {
                     selecionaClienteJuridico(row.getItem());
@@ -138,39 +135,39 @@ public class TabelaClientesConhecimentoFreteController implements Initializable 
      * Método que recebe o cliente selecionado da tabela e retorna a tela de
      * fretes.
      */
-    private void selecionaClienteJuridico(ClienteJuridico clienteJuridico){
-        this.clienteJuridico = clienteJuridico;
+    private void selecionaClienteJuridico(Cliente clienteJuridico){
+        this.cliente = clienteJuridico;
          Stage stage = (Stage) tabelaClientes.getScene().getWindow();
         stage.close();
         getClienteSelecionadoJuridico();
     }
         
     
-    public ClienteJuridico getClienteSelecionadoJuridico(){
-        return this.clienteJuridico;
+    public Cliente getClienteSelecionadoJuridico(){
+        return this.cliente;
     }
     
         /**
      * Método que recebe o cliente selecionado da tabela e retorna a tela de
      * fretes.
      */
-    private void selecionaClienteFisico(ClienteFisico clienteFisico){
-        this.clienteFisico = clienteFisico;
+    private void selecionaClienteFisico(Cliente clienteFisico){
+        this.cliente = clienteFisico;
          Stage stage = (Stage) tabelaClientes.getScene().getWindow();
         stage.close();
         getClienteSelecionadoFisico();
     }
         
     
-    public ClienteFisico getClienteSelecionadoFisico(){
-        return this.clienteFisico;
+    public Cliente getClienteSelecionadoFisico(){
+        return this.cliente;
     }
     
       /**
      * Método que insere os dados do arraylist na tabela.
      */
     @FXML
-    protected void popularTabelaClientesFisicos(ArrayList<ClienteFisico> clientesFisicos){
+    protected void popularTabelaClientesFisicos(ArrayList<Cliente> clientesFisicos){
         if(clientesFisicos != null){
             cpfCnpjTabelaClientes.setCellValueFactory(new PropertyValueFactory("cpf"));
             nomeTabelaClientes.setCellValueFactory(new PropertyValueFactory("nomeCliente"));
@@ -179,7 +176,7 @@ public class TabelaClientesConhecimentoFreteController implements Initializable 
             tabelaClientes.getItems().setAll(clientesFisicos);
 
             tabelaClientes.setRowFactory(tv -> {
-            TableRow<ClienteFisico> row = new TableRow<>();
+            TableRow<Cliente> row = new TableRow<>();
             row.setOnMouseClicked(event -> {
                 if (event.getClickCount() == 2 && (!row.isEmpty())) {
                     selecionaClienteFisico(row.getItem());

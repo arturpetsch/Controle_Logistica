@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="AnchorPane" prefHeight="540.0" prefWidth="464.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.cl.controle_logistica.DespesaViagemController">
+   <children>
+      <Label layoutX="34.0" layoutY="39.0" text="Gerenciar Despesas" textFill="#2196f3">
+         <font>
+            <Font name="Source Sans Pro Semibold" size="18.0" />
+         </font>
+      </Label>
+      <Label layoutX="19.0" layoutY="69.0" prefHeight="11.0" prefWidth="427.0" style="-fx-background-color: #2196f3;">
+         <font>
+            <Font size="1.0" />
+         </font>
+      </Label>
+      <Pane layoutX="19.0" layoutY="102.0" prefHeight="200.0" prefWidth="427.0" style="-fx-border-radius: 12; -fx-border-width: 1; -fx-border-color: #000000; -fx-border-insets: 2; -fx-background-color: #ffffff;">
+         <children>
+            <Label layoutX="11.0" layoutY="11.0" text="Dados Despesa">
+               <font>
+                  <Font name="Source Sans Pro Semibold" size="14.0" />
+               </font>
+            </Label>
+            <TextField fx:id="descricao" layoutX="104.0" layoutY="55.0" prefHeight="25.0" prefWidth="294.0" />
+            <Label layoutX="36.0" layoutY="59.0" text="Descrição :" textAlignment="RIGHT" />
+            <Label layoutX="64.0" layoutY="150.0" text="Tipo :" textAlignment="RIGHT" />
+            <Label layoutX="64.0" layoutY="104.0" text="Valor :" textAlignment="RIGHT" />
+            <TextField fx:id="valor" layoutX="106.0" layoutY="100.0" prefHeight="25.0" prefWidth="105.0" />
+            <ComboBox fx:id="comboBoxTipo" layoutX="104.0" layoutY="146.0" prefHeight="25.0" prefWidth="173.0" style="-fx-background-color: #FFFFFF; -fx-border-color: #bbaFFF; -fx-border-radius: 3;" />
+            <Button fx:id="botaoIncluir" layoutX="285.0" layoutY="146.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="34.0" />
+         </children>
+      </Pane>
+      <Pane layoutX="19.0" layoutY="302.0" prefHeight="231.0" prefWidth="427.0" style="-fx-border-radius: 12; -fx-border-width: 1; -fx-border-color: #000000; -fx-border-insets: 2; -fx-background-color: #ffffff;">
+         <children>
+            <Label layoutX="11.0" layoutY="11.0" text="Despesas Cadastradas">
+               <font>
+                  <Font name="Source Sans Pro Semibold" size="14.0" />
+               </font>
+            </Label>
+            <TableView fx:id="tabelaDespesas" layoutX="11.0" layoutY="30.0" prefHeight="158.0" prefWidth="403.0">
+              <columns>
+                <TableColumn fx:id="descricaoDespesa" prefWidth="185.0" resizable="false" text="Descrição" />
+                <TableColumn fx:id="tipoDespesa" prefWidth="117.0" resizable="false" text="Tipo" />
+                  <TableColumn fx:id="valorDespesa" prefWidth="100.0" resizable="false" text="Valor " />
+              </columns>
+            </TableView>
+            <Label layoutX="11.0" layoutY="201.0" text="** Para excluir uma despesa, selecione e aperte a tecla DEL." textFill="#2196f3">
+               <font>
+                  <Font name="Source Sans Pro Semibold" size="12.0" />
+               </font>
+            </Label>
+         </children>
+      </Pane>
+   </children>
+</AnchorPane>

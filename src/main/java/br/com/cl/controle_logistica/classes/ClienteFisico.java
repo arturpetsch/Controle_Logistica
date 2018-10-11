@@ -12,7 +12,7 @@ import javafx.beans.property.SimpleStringProperty;
  *
  * @author Artur
  */
-public class ClienteFisico extends Cliente{
+public class ClienteFisico {
     
     private int idClienteFisico;
     private SimpleStringProperty nomeCliente;
@@ -31,7 +31,7 @@ public class ClienteFisico extends Cliente{
             String cidade, String estado, String cep, String bairro, LocalDate dataCadastro, String rg, String email, 
             String contato, String contato1) {
         
-        super(endereco, cidade, estado, cep, bairro, dataCadastro, email, contato, contato1);
+        
         this.idClienteFisico = idClienteFisico;
         this.nomeCliente  = new SimpleStringProperty(nomeCliente);
         this.cpf = new SimpleStringProperty(cpf);

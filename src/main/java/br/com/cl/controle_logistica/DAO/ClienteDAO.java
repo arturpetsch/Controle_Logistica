@@ -5,6 +5,7 @@
  */
 package br.com.cl.controle_logistica.DAO;
 
+import br.com.cl.controle_logistica.classes.Cliente;
 import br.com.cl.controle_logistica.classes.ClienteFisico;
 import br.com.cl.controle_logistica.classes.ClienteJuridico;
 import java.sql.Connection;
@@ -20,8 +21,8 @@ public class ClienteDAO {
 
     private Connection connection = null;
 
-    public ClienteFisico buscarClienteFisico(ClienteFisico clienteFisico) {
-        String sql = "SELECT * FROM cliente WHERE idClienteFisico = " + clienteFisico.getIdClienteFisico();
+    public Cliente buscarClienteFisico(Cliente clienteFisico) {
+        String sql = "SELECT * FROM cliente WHERE idClienteFisico = " + clienteFisico.getClienteFisico().getIdClienteFisico();
 
         ResultSet resultSet;
 
@@ -48,7 +49,7 @@ public class ClienteDAO {
         return clienteFisico;
     }
 
-    public boolean salvarClienteFisico(ClienteFisico clienteFisico) {
+    public boolean salvarClienteFisico(Cliente clienteFisico) {
         String sql = "INSERT INTO cliente(idClienteFisico, endereco, bairro, cidade, estado, cep, email, contato, contato2, dataCadastro)"
                 + "VALUES(?,?,?,?,?,?,?,?,?,?)";
 
@@ -56,7 +57,7 @@ public class ClienteDAO {
         try {
             connection = Conexao.conexao();
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setInt(1, clienteFisico.getIdClienteFisico());
+            preparedStatement.setInt(1, clienteFisico.getClienteFisico().getIdClienteFisico());
             preparedStatement.setString(2, clienteFisico.getEndereco());
             preparedStatement.setString(3, clienteFisico.getBairro());
             preparedStatement.setString(4, clienteFisico.getCidade());
@@ -74,10 +75,10 @@ public class ClienteDAO {
         return true;
     }
 
-    public boolean atualizarClienteFisico(ClienteFisico clienteFisico) {
+    public boolean atualizarClienteFisico(Cliente clienteFisico) {
         String sql = "UPDATE cliente SET endereco = ?,"
                 + " bairro = ?, cidade = ?, estado = ?, cep = ?, email = ?,"
-                + " contato = ?, contato2 = ? WHERE idClienteFisico = " + clienteFisico.getIdClienteFisico();
+                + " contato = ?, contato2 = ? WHERE idClienteFisico = " + clienteFisico.getClienteFisico().getIdClienteFisico();
 
         clienteFisico = transformarCamposVazioEmNulos(clienteFisico);
         try {
@@ -99,8 +100,8 @@ public class ClienteDAO {
         return true;
     }
 
-    public boolean deletarClienteFisico(ClienteFisico clienteFisico) {
-        String sql = "DELETE FROM cliente WHERE idClienteFisico = " + clienteFisico.getIdClienteFisico();
+    public boolean deletarClienteFisico(Cliente clienteFisico) {
+        String sql = "DELETE FROM cliente WHERE idClienteFisico = " + clienteFisico.getClienteFisico().getIdClienteFisico();
 
         try {
             connection = Conexao.conexao();
@@ -120,7 +121,7 @@ public class ClienteDAO {
      * @param clienteFisico
      * @return
      */
-    private ClienteFisico transformarCamposVazioEmNulos(ClienteFisico clienteFisico) {
+    private Cliente transformarCamposVazioEmNulos(Cliente clienteFisico) {
         if (clienteFisico.getContato1().isEmpty()) {
             clienteFisico.setContato1("");
         }
@@ -129,8 +130,8 @@ public class ClienteDAO {
     }
 
     //=====================Métodos Cliente Juridico===========================
-    public ClienteJuridico buscarClienteJuridico(ClienteJuridico clienteJuridico) {
-        String sql = "SELECT * FROM cliente WHERE idClienteJuridico = " + clienteJuridico.getIdClienteJuridico();
+    public Cliente buscarClienteJuridico(Cliente clienteJuridico) {
+        String sql = "SELECT * FROM cliente WHERE idClienteJuridico = " + clienteJuridico.getClienteJuridico().getIdClienteJuridico();
 
         ResultSet resultSet;
 
@@ -157,7 +158,7 @@ public class ClienteDAO {
         return clienteJuridico;
     }
     
-    public boolean salvarClienteJuridico(ClienteJuridico clienteJuridico){
+    public boolean salvarClienteJuridico(Cliente clienteJuridico){
         String sql = "INSERT INTO cliente(idClienteJuridico, endereco, bairro, cidade, estado, cep, email, contato, contato2, dataCadastro)"
                 + "VALUES(?,?,?,?,?,?,?,?,?,?)";
 
@@ -165,7 +166,7 @@ public class ClienteDAO {
         try {
             connection = Conexao.conexao();
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setInt(1, clienteJuridico.getIdClienteJuridico());
+            preparedStatement.setInt(1, clienteJuridico.getClienteJuridico().getIdClienteJuridico());
             preparedStatement.setString(2, clienteJuridico.getEndereco());
             preparedStatement.setString(3, clienteJuridico.getBairro());
             preparedStatement.setString(4, clienteJuridico.getCidade());
@@ -183,10 +184,10 @@ public class ClienteDAO {
         return true;
     }
     
-    public boolean atualizarClienteJuridico(ClienteJuridico clienteJuridico) {
+    public boolean atualizarClienteJuridico(Cliente clienteJuridico) {
         String sql = "UPDATE cliente SET endereco = ?,"
                 + " bairro = ?, cidade = ?, estado = ?, cep = ?, email = ?,"
-                + " contato = ?, contato2 = ? WHERE idClienteJuridico = " + clienteJuridico.getIdClienteJuridico();
+                + " contato = ?, contato2 = ? WHERE idClienteJuridico = " + clienteJuridico.getClienteJuridico().getIdClienteJuridico();
 
         clienteJuridico = transformarCamposVazioEmNulos(clienteJuridico);
         try {
@@ -208,8 +209,8 @@ public class ClienteDAO {
         return true;
     }
     
-     public boolean deletarClienteJuridico(ClienteJuridico clienteJuridico) {
-        String sql = "DELETE FROM cliente WHERE idClienteJuridico = " + clienteJuridico.getIdClienteJuridico();
+     public boolean deletarClienteJuridico(Cliente clienteJuridico) {
+        String sql = "DELETE FROM cliente WHERE idClienteJuridico = " + clienteJuridico.getClienteJuridico().getIdClienteJuridico();
 
         try {
             connection = Conexao.conexao();
@@ -223,11 +224,5 @@ public class ClienteDAO {
         return true;
     }
     
-    private ClienteJuridico transformarCamposVazioEmNulos(ClienteJuridico clienteJuridico){
-        if(clienteJuridico.getContato1().isEmpty()){
-            clienteJuridico.setContato1("");
-        }
-        
-         return clienteJuridico;
-    }
+    
 }

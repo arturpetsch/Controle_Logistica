@@ -96,7 +96,7 @@
             <Label fx:id="lbEndR" layoutX="127.0" layoutY="114.0" prefHeight="17.0" prefWidth="353.0" textAlignment="RIGHT" />
             <Label fx:id="lbCidadeR" layoutX="127.0" layoutY="148.0" prefHeight="17.0" prefWidth="221.0" textAlignment="RIGHT" />
             <Label fx:id="lbEstadoR" layoutX="408.0" layoutY="148.0" prefHeight="17.0" prefWidth="80.0" textAlignment="RIGHT" />
-            <CheckBox fx:id="tomadorServicoRemetente" layoutX="43.0" layoutY="177.0" mnemonicParsing="false" text="Tomador do Serviço" />
+            <CheckBox fx:id="tomadorServicoRemetente" layoutX="43.0" layoutY="177.0" mnemonicParsing="false" onAction="#desmarcarDestinatario" text="Tomador do Serviço" />
             <Button fx:id="btnBuscarRemetente" layoutX="460.0" layoutY="40.0" mnemonicParsing="false" onAction="#mostrarTabelaClientesRemetente" prefHeight="25.0" prefWidth="28.0" />
          </children>
       </Pane>
@@ -117,7 +117,7 @@
             <Label fx:id="lbEndD" layoutX="127.0" layoutY="114.0" prefHeight="17.0" prefWidth="353.0" textAlignment="RIGHT" />
             <Label fx:id="lbCidadeD" layoutX="127.0" layoutY="148.0" prefHeight="17.0" prefWidth="221.0" textAlignment="RIGHT" />
             <Label fx:id="lbEstadoD" layoutX="408.0" layoutY="148.0" prefHeight="17.0" prefWidth="80.0" textAlignment="RIGHT" />
-            <CheckBox fx:id="tomadorServicoDestinatario" layoutX="43.0" layoutY="177.0" mnemonicParsing="false" text="Tomador do Serviço" />
+            <CheckBox fx:id="tomadorServicoDestinatario" layoutX="43.0" layoutY="177.0" mnemonicParsing="false" onAction="#desmarcarRemetente" text="Tomador do Serviço" />
             <Button fx:id="btnBuscarDestinatario" layoutX="459.0" layoutY="40.0" mnemonicParsing="false" onAction="#mostrarTabelaClientesDestinatario" prefHeight="25.0" prefWidth="28.0" />
          </children>
       </Pane>

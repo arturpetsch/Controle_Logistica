@@ -7,6 +7,7 @@ package br.com.cl.controle_logistica;
 
 
 import br.com.cl.controle_logistica.DAO.ClienteJuridicoDAO;
+import br.com.cl.controle_logistica.classes.Cliente;
 import br.com.cl.controle_logistica.classes.ClienteJuridico;
 import java.io.IOException;
 import java.net.URL;
@@ -91,7 +92,7 @@ public class ClienteJuridicoController implements Initializable {
     @FXML
     private TextField txtEmailClienteJuridico;
     
-    ClienteJuridico clienteJuridico = new ClienteJuridico();
+    Cliente clienteJuridico = new Cliente();
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -124,7 +125,7 @@ public class ClienteJuridicoController implements Initializable {
         String nomeInformado = txtnome.getText();
         
             ClienteJuridicoDAO clienteJuridicoDAO = new ClienteJuridicoDAO();
-            ArrayList<ClienteJuridico> clientes = new ArrayList<ClienteJuridico>();
+            ArrayList<Cliente> clientes = new ArrayList<Cliente>();
             clientes = clienteJuridicoDAO.consultarClientePorNome(nomeInformado);
 
             mostrarClientes(clientes);
@@ -161,17 +162,17 @@ public class ClienteJuridicoController implements Initializable {
          ClienteJuridicoDAO clienteJuridicoDAO = new ClienteJuridicoDAO();
 
         if (this.clienteJuridico == null) {
-            this.clienteJuridico = new ClienteJuridico();
+            this.clienteJuridico = new Cliente();
         }
 
-        if (clienteJuridico.getIdClienteJuridico()== 0 && getAtributosClienteJuridico()) {
+        if (clienteJuridico.getClienteJuridico().getIdClienteJuridico()== 0 && getAtributosClienteJuridico()) {
             clienteJuridicoDAO.salvarCliente(clienteJuridico);
             Alert confirmacao = new Alert(Alert.AlertType.INFORMATION);
             confirmacao.setTitle("Salvar Cliente");
             confirmacao.setHeaderText("Cliente Cadastrado com Sucesso!");
             confirmacao.showAndWait();
             limparCampos();
-        } else if (getAtributosClienteJuridico()&& clienteJuridico.getIdClienteJuridico()> 0) {
+        } else if (getAtributosClienteJuridico()&& clienteJuridico.getClienteJuridico().getIdClienteJuridico()> 0) {
             if (clienteJuridicoDAO.atualizarCliente(clienteJuridico)) {
                 Alert confirmacao = new Alert(Alert.AlertType.INFORMATION);
                 confirmacao.setTitle("Salvar Cliente");
@@ -189,7 +190,7 @@ public class ClienteJuridicoController implements Initializable {
      */
     @FXML
     private void deletarCliente(ActionEvent action) throws IOException{
-        if(this.clienteJuridico.getIdClienteJuridico()> 0){
+        if(this.clienteJuridico.getClienteJuridico().getIdClienteJuridico()> 0){
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/confirmacaoAcaoClienteJuridico.fxml"));
             Parent root = (Parent) loader.load();
             ConfirmacaoAcaoClienteJuridicoController confirmacaoAcaoClienteJuridicoController = loader.getController();
@@ -203,7 +204,7 @@ public class ClienteJuridicoController implements Initializable {
             confirmacaoAcaoClienteJuridicoController.setCliente(clienteJuridico);
             stage.showAndWait();
             limparCampos();
-            clienteJuridico = new ClienteJuridico();
+            clienteJuridico = new Cliente();
         }
     }
     
@@ -214,7 +215,7 @@ public class ClienteJuridicoController implements Initializable {
     @FXML
     private void cancelarOperacao(ActionEvent action){
         limparCampos();
-        clienteJuridico = new ClienteJuridico();
+        clienteJuridico = new Cliente();
     }
     
     /**
@@ -224,7 +225,7 @@ public class ClienteJuridicoController implements Initializable {
      * @param clientes
      * @throws IOException
      */
-    private void mostrarClientes(ArrayList<ClienteJuridico> clientesJuridicos) throws IOException {
+    private void mostrarClientes(ArrayList<Cliente> clientesJuridicos) throws IOException {
         if (!clientesJuridicos.isEmpty()) {
 
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/tabelaClientesJuridicos.fxml"));
@@ -258,10 +259,10 @@ public class ClienteJuridicoController implements Initializable {
     private boolean getAtributosClienteJuridico() {
         if (verificarCamposVazios()) {
             //Coletar todos os atributos e setar no cliente para poder salvar;
-            clienteJuridico.setNomeFantasia(txtNomeFantasiaClienteJuridico.getText().toUpperCase());
-            clienteJuridico.setRazaoSocial(txtRazaoSocialClienteJuridico.getText().toUpperCase());
-            clienteJuridico.setCnpj(txtCnpjClienteJuridico.getText().toUpperCase());
-            clienteJuridico.setIe(txtIEClienteJuridico.getText().toUpperCase());
+            clienteJuridico.getClienteJuridico().setNomeFantasia(txtNomeFantasiaClienteJuridico.getText().toUpperCase());
+            clienteJuridico.getClienteJuridico().setRazaoSocial(txtRazaoSocialClienteJuridico.getText().toUpperCase());
+            clienteJuridico.getClienteJuridico().setCnpj(txtCnpjClienteJuridico.getText().toUpperCase());
+            clienteJuridico.getClienteJuridico().setIe(txtIEClienteJuridico.getText().toUpperCase());
             clienteJuridico.setEndereco(txtEnderecoClienteJuridico.getText().toUpperCase());
             clienteJuridico.setBairro(txtBairroClienteJuridico.getText().toUpperCase());
             clienteJuridico.setCep(txtCEPClienteJuridico.getText().toUpperCase());
@@ -388,10 +389,10 @@ public class ClienteJuridicoController implements Initializable {
     @FXML
     private void popularCamposClienteJuridico() {
        
-        txtNomeFantasiaClienteJuridico.setText(clienteJuridico.getNomeFantasia().toUpperCase());
-        txtRazaoSocialClienteJuridico.setText(clienteJuridico.getRazaoSocial().toUpperCase());
-        txtCnpjClienteJuridico.setText(clienteJuridico.getCnpj().toUpperCase());
-        txtIEClienteJuridico.setText(clienteJuridico.getIe().toUpperCase());
+        txtNomeFantasiaClienteJuridico.setText(clienteJuridico.getClienteJuridico().getNomeFantasia().toUpperCase());
+        txtRazaoSocialClienteJuridico.setText(clienteJuridico.getClienteJuridico().getRazaoSocial().toUpperCase());
+        txtCnpjClienteJuridico.setText(clienteJuridico.getClienteJuridico().getCnpj().toUpperCase());
+        txtIEClienteJuridico.setText(clienteJuridico.getClienteJuridico().getIe().toUpperCase());
         txtEnderecoClienteJuridico.setText(clienteJuridico.getEndereco().toUpperCase());
         txtBairroClienteJuridico.setText(clienteJuridico.getBairro().toUpperCase());
         txtCEPClienteJuridico.setText(clienteJuridico.getCep().toUpperCase());
@@ -415,7 +416,7 @@ public class ClienteJuridicoController implements Initializable {
      *
      * @param clienteJuridico 
      */
-    public void setClienteJuridico(ClienteJuridico clienteJuridico) {
+    public void setClienteJuridico(Cliente clienteJuridico) {
         this.clienteJuridico = clienteJuridico;
 
     }

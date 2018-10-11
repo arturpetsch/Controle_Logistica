@@ -67,34 +67,87 @@ public class CteDAO {
      * @return 
      */
     public boolean salvarCTe(Cte cte){
-        String sql = "INSERT INTO cte(valor, dataEmissao, chaveAcesso, produto, pesoBruto, pesoLiquido, volume, especie,"
-                + " observacao, clienteRemetente_fk, clienteDestinatario_fk)"
-                + "VALUES(?,?,?,?,?,?,?,?,?,?,?)";
+        String sqlCte = "INSERT INTO cte(valor, dataEmissao, chaveAcesso, produto, pesoBruto, pesoLiquido, volume, especie,"
+                + " observacao)"
+                + "VALUES(?,?,?,?,?,?,?,?,?)";
+        
+         String sqlUpdateCte = "UPDATE cte SET clienteRemetente_fk = ?, clienteDestinatario_fk = ?";
+                 
+        String sqlClienteCte = "INSERT INTO cte_cliente(cte_fk, cliente_fk, tomadorServico) VALUES(?,?,?)";
         
         try {
             connection = Conexao.conexao();
-            PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            preparedStatement.setBigDecimal(1, cte.getValor());
-            preparedStatement.setDate(2, java.sql.Date.valueOf(cte.getDataEmissao()));
-            preparedStatement.setString(3, cte.getChaveAcesso());
-            preparedStatement.setString(4, cte.getProduto());
-            preparedStatement.setDouble(5, cte.getPesoBruto());
-            preparedStatement.setDouble(6, cte.getPesoLiquido());
-            preparedStatement.setDouble(7, cte.getVolume());
-            preparedStatement.setString(8, cte.getEspecie());
-            preparedStatement.setString(9, cte.getObservacao());
-            preparedStatement.setInt(10, 1);
-            preparedStatement.setInt(11, 1);
+            connection.setAutoCommit(false);
             
-            preparedStatement.executeUpdate();
-            final ResultSet rs = preparedStatement.getGeneratedKeys();
+            // insere a cte (sem os clientes destinatário e remetente)
+            PreparedStatement preparedStatementCte = connection.prepareStatement(sqlCte,  Statement.RETURN_GENERATED_KEYS);
+            
+            preparedStatementCte.setBigDecimal(1, cte.getValor());
+            preparedStatementCte.setDate(2, java.sql.Date.valueOf(cte.getDataEmissao()));
+            preparedStatementCte.setString(3, cte.getChaveAcesso());
+            preparedStatementCte.setString(4, cte.getProduto());
+            preparedStatementCte.setDouble(5, cte.getPesoBruto());
+            preparedStatementCte.setDouble(6, cte.getPesoLiquido());
+            preparedStatementCte.setDouble(7, cte.getVolume());
+            preparedStatementCte.setString(8, cte.getEspecie());
+            preparedStatementCte.setString(9, cte.getObservacao());
+            
+            preparedStatementCte.executeUpdate();
+            
+            // recupera o id da cte inserida
+            final ResultSet rsCte = preparedStatementCte.getGeneratedKeys();
             int idCte = 0;
-            if(rs.next()){
-                idCte = (rs.getInt(1));
+            if(rsCte.next()){
+                idCte = (rsCte.getInt(1));
             }
+            
+            // insere cliente destinatário
+            PreparedStatement preparedStatementClienteDestinatario = connection.prepareStatement(sqlClienteCte, Statement.RETURN_GENERATED_KEYS);
+            
+            preparedStatementClienteDestinatario.setInt(1, idCte);
+            preparedStatementClienteDestinatario.setInt(2, cte.getClienteDestinatario().getCliente().getIdCliente());
+            preparedStatementClienteDestinatario.setBoolean(3, cte.getClienteDestinatario().getTomador());
+            
+            preparedStatementClienteDestinatario.executeUpdate();
+            
+            // recupera o id do cliente destinatário da cte inserido
+            final ResultSet rsClienteDestinatarioCte = preparedStatementClienteDestinatario.getGeneratedKeys();
+            int idClienteDestinatarioCte = 0;
+            if(rsClienteDestinatarioCte.next()){
+                idClienteDestinatarioCte = (rsClienteDestinatarioCte.getInt(1));
+            }
+            
+            // insere cliente remetente
+            PreparedStatement preparedStatementClienteRemetente = connection.prepareStatement(sqlClienteCte, Statement.RETURN_GENERATED_KEYS);
+            
+            preparedStatementClienteRemetente.setInt(1, idCte);
+            preparedStatementClienteRemetente.setInt(2, cte.getClienteRemetente().getCliente().getIdCliente());
+            preparedStatementClienteRemetente.setBoolean(3, cte.getClienteRemetente().getTomador());
+            
+            preparedStatementClienteRemetente.executeUpdate();
+            
+            // recupera o id do cliente remetente da cte inserido
+            final ResultSet rsClienteRemetenteCte = preparedStatementClienteRemetente.getGeneratedKeys();
+            int idClienteRemetenteCte = 0;
+            if(rsClienteRemetenteCte.next()){
+                idClienteRemetenteCte = (rsClienteRemetenteCte.getInt(1));
+            }
+            // atualiza cte inserindo os ids dos clientes cte (destinatário e remetente)
+            PreparedStatement preparedStatementUpdateCte = connection.prepareStatement(sqlUpdateCte, Statement.RETURN_GENERATED_KEYS);
+            preparedStatementUpdateCte.setInt(1, idClienteRemetenteCte);
+            preparedStatementUpdateCte.setInt(2, idClienteDestinatarioCte);
+            preparedStatementUpdateCte.executeUpdate();
+            
+            // commita a fecha os PreparedStatement
+            connection.commit();
+            preparedStatementClienteDestinatario.close();
+            preparedStatementClienteRemetente.close();
+            preparedStatementUpdateCte.close();
+            preparedStatementCte.close();
+            
+            // salva as notas fiscais
             int i = 0;
-            preparedStatement.close();
-            while(cte.getNotasFiscais().size() >= i){
+            while(cte.getNotasFiscais().size() > i){
                 salvarNF(cte.getNotasFiscais().get(i), idCte);
                 i++;
             }
