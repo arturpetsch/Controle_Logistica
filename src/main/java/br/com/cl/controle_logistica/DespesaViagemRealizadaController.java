@@ -1,12 +1,10 @@
-package br.com.cl.controle_logistica;
-
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+package br.com.cl.controle_logistica;
 
-import br.com.cl.controle_logistica.classes.Nf;
 import br.com.cl.controle_logistica.classes.ViagemDespesa;
 import java.math.BigDecimal;
 import java.net.URL;
@@ -28,20 +26,18 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javax.naming.Binding;
 
 /**
  * FXML Controller class
  *
  * @author Artur
  */
-public class DespesaViagemController implements Initializable {
+public class DespesaViagemRealizadaController implements Initializable {
 
     /**
      * Initializes the controller class.
      */
-    
-    @FXML
+        @FXML
     private TextField descricao;
     
     @FXML
@@ -203,7 +199,7 @@ public class DespesaViagemController implements Initializable {
     @FXML
     private void popularComboBoxTipoDespesa(){
         ObservableList<String> tipo = FXCollections.observableArrayList();
-         tipo.add("Previsto");
+         tipo.add("Realizado");
          
          comboBoxTipo.setItems(tipo);
          comboBoxTipo.getSelectionModel().select(0);
@@ -225,3 +221,4 @@ public class DespesaViagemController implements Initializable {
         popularTabelaViagem();
     }
 }
+

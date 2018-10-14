@@ -14,7 +14,7 @@
             <TableColumn fx:id="modeloTabelaVeiculos" prefWidth="440.0" resizable="false" text="Modelo Veículo" />
          </columns>
       </TableView>
-      <Label layoutX="14.0" layoutY="312.0" text="** Duplo clique no funcionário que deseja selecionar!" />
+      <Label layoutX="14.0" layoutY="312.0" text="** Duplo clique no veículo que deseja selecionar!" />
       <Label layoutX="14.0" layoutY="14.0" text="Relação de Veículos" textFill="#2196f3">
          <font>
             <Font name="Source Sans Pro Semibold" size="14.0" />

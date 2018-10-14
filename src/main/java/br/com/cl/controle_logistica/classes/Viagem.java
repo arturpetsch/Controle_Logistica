@@ -5,6 +5,8 @@
  */
 package br.com.cl.controle_logistica.classes;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -21,10 +23,17 @@ public class Viagem {
     private SimpleDoubleProperty qtdeKmRealizado;
     private Cte cte;
     private ArrayList<ViagemDespesa> despesas;
+    private BigDecimal valorTotalGastoPrevisto;
+    private BigDecimal valorTotalGastoRealizado;
+    private BigDecimal valorTotalGanhoPrevisto;
+    private BigDecimal valorTotalGanhoRealizado;
+    private LocalDate dataViagem;
     
     public Viagem(){
         this.qtdeKmPrevisto = new SimpleDoubleProperty();
-        this.qtdeKmRealizado = new SimpleDoubleProperty();
+        this.qtdeKmRealizado = new SimpleDoubleProperty(0.00);
+        valorTotalGastoRealizado = null;
+        valorTotalGanhoRealizado = null;
     }
 
     public int getIdViagem() {
@@ -73,6 +82,46 @@ public class Viagem {
 
     public void setDespesas(ArrayList<ViagemDespesa> despesas) {
         this.despesas = despesas;
+    }
+
+    public BigDecimal getValorTotalGastoPrevisto() {
+        return valorTotalGastoPrevisto;
+    }
+
+    public void setValorTotalGastoPrevisto(BigDecimal valorTotalGastoPrevisto) {
+        this.valorTotalGastoPrevisto = valorTotalGastoPrevisto;
+    }
+
+    public BigDecimal getValorTotalGastoRealizado() {
+        return valorTotalGastoRealizado;
+    }
+
+    public void setValorTotalGastoRealizado(BigDecimal valorTotalGastoRealizado) {
+        this.valorTotalGastoRealizado = valorTotalGastoRealizado;
+    }
+
+    public BigDecimal getValorTotalGanhoPrevisto() {
+        return valorTotalGanhoPrevisto;
+    }
+
+    public void setValorTotalGanhoPrevisto(BigDecimal valorTotalGanhoPrevisto) {
+        this.valorTotalGanhoPrevisto = valorTotalGanhoPrevisto;
+    }
+
+    public BigDecimal getValorTotalGanhoRealizado() {
+        return valorTotalGanhoRealizado;
+    }
+
+    public void setValorTotalGanhoRealizado(BigDecimal valorTotalGanhoRealizado) {
+        this.valorTotalGanhoRealizado = valorTotalGanhoRealizado;
+    }
+
+    public LocalDate getDataViagem() {
+        return dataViagem;
+    }
+
+    public void setDataViagem(LocalDate dataViagem) {
+        this.dataViagem = dataViagem;
     }
     
     

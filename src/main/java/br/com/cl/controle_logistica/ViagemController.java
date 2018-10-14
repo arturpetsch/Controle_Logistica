@@ -7,9 +7,13 @@ package br.com.cl.controle_logistica;
 
 
 
+import br.com.cl.controle_logistica.DAO.CteDAO;
 import br.com.cl.controle_logistica.DAO.VeiculoDAO;
+import br.com.cl.controle_logistica.DAO.ViagemDAO;
+import br.com.cl.controle_logistica.classes.Cte;
 import br.com.cl.controle_logistica.classes.Veiculo;
 import br.com.cl.controle_logistica.classes.Viagem;
+import br.com.cl.controle_logistica.classes.ViagemDespesa;
 import com.lynden.gmapsfx.GoogleMapView;
 import com.lynden.gmapsfx.MapComponentInitializedListener;
 import com.lynden.gmapsfx.javascript.object.DirectionsPane;
@@ -25,6 +29,7 @@ import com.lynden.gmapsfx.service.directions.DirectionsService;
 import com.lynden.gmapsfx.service.directions.DirectionsServiceCallback;
 import com.lynden.gmapsfx.service.directions.TravelModes;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -124,6 +129,11 @@ public class ViagemController implements Initializable, MapComponentInitializedL
     
     Veiculo veiculo = new Veiculo();
     
+    ArrayList<ViagemDespesa> despesasPrevistas = new ArrayList<>();
+    
+    ArrayList<ViagemDespesa> despesasRealizadas = new ArrayList<>();
+    
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
@@ -142,6 +152,8 @@ public class ViagemController implements Initializable, MapComponentInitializedL
         btnIncluirCustoRealizado.setGraphic(new ImageView(plus));
         btnIncluirCte.setGraphic(new ImageView(search));
         
+        String key = "AIzaSyBwMONSVg9lwK1HVCFNugI3ESG1OhPKkSc";
+        mapView.setKey(key);
        mapView.addMapInializedListener(this);
         to.bindBidirectional(toTextField.textProperty());
         from.bindBidirectional(fromTextField.textProperty());
@@ -182,9 +194,27 @@ public class ViagemController implements Initializable, MapComponentInitializedL
         
     }
     
+    /**
+     * Metodo que coleta os dados da viagem para depois disso salvar.
+     */
     @FXML
-    private void coletarDadosViagem(){
-        
+    private boolean coletarDadosViagem(){
+         if (verificarCamposVazios()) {
+            viagem.setQtdeKmPrevisto(Double.parseDouble(totalKmPrevisto.getText()));
+            
+            String valorInformado = valorViagemPrevisto.getText();
+            BigDecimal valor = new BigDecimal(valorInformado.replace(",", "."));
+            viagem.setValorTotalGastoPrevisto(valor);
+            
+            valorInformado = valorGanhoPrevisto.getText();
+            BigDecimal valorGanhoP = new BigDecimal(valorInformado.replace(",", "."));
+            viagem.setValorTotalGanhoPrevisto(valorGanhoP);
+            
+            
+            return true;
+        } else {
+            return false;
+        }
     }
     
     /**
@@ -230,6 +260,7 @@ public class ViagemController implements Initializable, MapComponentInitializedL
             this.veiculo = tabelaVeiculosController.getVeiculoSelecionado();
             if (this.veiculo != null) {
                 popularCamposDadosVeiculo();
+                mostrarViagens();
             }
         } else {
             Alert confirmacao = new Alert(Alert.AlertType.INFORMATION);
@@ -239,16 +270,20 @@ public class ViagemController implements Initializable, MapComponentInitializedL
         }
     }
     
-    @FXML
-    private void popularCamposDadosVeiculo(){
-        placaVeiculo.setText(veiculo.getPlaca());
-    }
-    
-    
-    @FXML
-    private void incluirDespesa(ActionEvent action) throws IOException{
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/despesaViagem.fxml"));
+    /**
+     * Metodo que busca e mostra as viagens do veiculo selecionado.
+     * @throws IOException 
+     */
+    private void mostrarViagens() throws IOException{
+        ViagemDAO viagemDAO = new ViagemDAO();
+        
+        ArrayList<Viagem> viagens = new ArrayList<Viagem>();
+        viagens = viagemDAO.consultarViagemPorIdVeiculo(this.veiculo.getIdVeiculo());
+        
+        if(!viagens.isEmpty()){
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/tabelaViagens.fxml"));
             Parent root = (Parent) loader.load();
+            TabelaViagensController tabelaViagensController = loader.getController();
             Scene alert = new Scene(root);
             Stage stage = new Stage();
 
@@ -256,7 +291,366 @@ public class ViagemController implements Initializable, MapComponentInitializedL
             stage.setResizable(false);
             stage.centerOnScreen();
             stage.initModality(Modality.APPLICATION_MODAL);
+            tabelaViagensController.setViagens(viagens);
             stage.showAndWait();
+            this.viagem = tabelaViagensController.getViagemSelecionada();
+            if (this.viagem != null) {
+                popularCamposDadosViagem();
+            }
+        }else{
+            Alert confirmacao = new Alert(Alert.AlertType.INFORMATION);
+            confirmacao.setTitle("Buscar Viagens");
+            confirmacao.setHeaderText("Nenhuma viagem encontrada.\nPor favor, refaça sua pesquisa ou cadastre uma nova viagem!");
+            confirmacao.showAndWait();
+        }
+    }
+    
+    /**
+     * Metodo que popula os campos da tela com os dados da viagem selecionada.
+     */
+    @FXML
+    private void popularCamposDadosViagem(){
+        numeroCTE.setText(String.valueOf(this.viagem.getCte().getNumeroCte()));
+        totalKmPrevisto.setText(this.viagem.getQtdeKmPrevisto().toString());
+        valorViagemPrevisto.setText(this.viagem.getValorTotalGastoPrevisto().toString());
+        valorGanhoPrevisto.setText(this.viagem.getValorTotalGanhoPrevisto().toString());
+        totalKmRealizado.setText(this.viagem.getQtdeKmRealizado().toString());
+        valorViagemRealizado.setText(this.viagem.getValorTotalGastoRealizado().toString());
+        valorGanhoRealizado.setText(this.viagem.getValorTotalGanhoRealizado().toString());
+        
+        int i = 0;
+        while(viagem.getDespesas().size() > i){
+            if(viagem.getDespesas().get(i).getTipoDespesa().equals("Previsto")){
+                despesasPrevistas.add(viagem.getDespesas().get(i));
+            }else{
+                despesasRealizadas.add(viagem.getDespesas().get(i));
+            }
+            i++;
+        }
+    }
+    
+    /**
+     * Método que popula o campo com a placa do veiculo.
+     */
+    @FXML
+    private void popularCamposDadosVeiculo(){
+        placaVeiculo.setText(veiculo.getPlaca());
+    }
+    
+    /**
+     * Metodo que abre a tela para inclusão de novas despesas previstas;
+     * @param action
+     * @throws IOException 
+     */
+    @FXML
+    private void incluirDespesa(ActionEvent action) throws IOException{
             
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/despesaViagem.fxml"));
+            Parent root = (Parent) loader.load();
+            DespesaViagemController despesaViagemController = loader.getController();
+            Scene alert = new Scene(root);
+            Stage stage = new Stage();
+
+            stage.setScene(alert);
+            stage.setResizable(false);
+            stage.centerOnScreen();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            despesaViagemController.setDespesas(despesasPrevistas);
+            
+            stage.showAndWait();
+            despesasPrevistas = despesaViagemController.getDespesas();
+            BigDecimal valorTotal = calcularDespesas(despesasPrevistas);
+            valorViagemPrevisto.setText(valorTotal.toString().replace(".", ","));
+            
+            
+    }
+    
+    /**
+     * Metodo que recebe um arraylist de despesas, calcula e retorna o valor total da despesa daquela viagem.
+     * 
+     * @param despesas
+     * @return 
+     */
+    private BigDecimal calcularDespesas(ArrayList<ViagemDespesa> despesas){
+        BigDecimal valorTotal = new BigDecimal(0);
+        
+       valorTotal = despesas.stream()
+               .map(ViagemDespesa::getValor)
+               .reduce(BigDecimal.ZERO, BigDecimal::add);
+       
+               return valorTotal;
+    }
+    
+   /**
+     * Metodo que abre a tela para inclusão de novas despesas realizadas;
+     * @param action
+     * @throws IOException 
+     */
+    @FXML
+    private void incluirDespesaRealizadas(ActionEvent action) throws IOException{
+            
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/despesaViagemRealizada.fxml"));
+            Parent root = (Parent) loader.load();
+            DespesaViagemRealizadaController despesaViagemRealizadaController = loader.getController();
+            Scene alert = new Scene(root);
+            Stage stage = new Stage();
+
+            stage.setScene(alert);
+            stage.setResizable(false);
+            stage.centerOnScreen();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            despesaViagemRealizadaController.setDespesas(despesasRealizadas);
+            
+            stage.showAndWait();
+            despesasRealizadas = despesaViagemRealizadaController.getDespesas();
+            BigDecimal valorTotal = calcularDespesas(despesasRealizadas);
+            valorViagemRealizado.setText(valorTotal.toString().replace(".", ","));
+            
+    }
+    
+    
+    
+    /**
+     * Metodo que cancela todas as operações e limpa todos os campos, arrays e objetos.
+     * @param action 
+     */
+    @FXML
+    public void cancelarOperacao(ActionEvent action){
+        limparCampos();
+    }
+    
+     /**
+     * Metodo que através do número busca e lista os fretes (Cte's) cadastrados ou
+     * .
+     *
+     * @param action
+     */
+    @FXML
+    protected void buscarCte(ActionEvent action) throws IOException, ClassNotFoundException {
+        ArrayList<Cte> fretes = new ArrayList<Cte>();
+
+        if(!numeroCTE.getText().isEmpty()){
+            int numeroInformado = Integer.parseInt(numeroCTE.getText());
+
+            CteDAO cteDAO = new CteDAO();
+            fretes = cteDAO.buscarCtePeloNumero(numeroInformado);
+        }
+        
+        mostrarCTes(fretes);
+        
+    }
+    
+    /**
+     * Método que chama o Stage onde está a tabela que lista todos os
+     * fretes (CTe) com o número informada pelo usuário.
+     *
+     * @param cte's
+     * @throws IOException
+     */
+    private void mostrarCTes(ArrayList<Cte> ctes) throws IOException {
+        if (!ctes.isEmpty()) {
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/tabelaConhecimento.fxml"));
+            Parent root = (Parent) loader.load();
+            TabelaConhecimentoController tabelaConhecimentoController = loader.getController();
+            Scene alert = new Scene(root);
+            Stage stage = new Stage();
+
+            stage.setScene(alert);
+            stage.setResizable(false);
+            stage.centerOnScreen();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            tabelaConhecimentoController.setCte(ctes);
+            stage.showAndWait();
+            this.viagem.setCte(tabelaConhecimentoController.getCteSelecionado()); 
+            if (this.viagem.getCte() != null) {
+                popularCamposCte();
+            }
+        } else {
+            Alert confirmacao = new Alert(Alert.AlertType.INFORMATION);
+            confirmacao.setTitle("Buscar CT-e");
+            confirmacao.setHeaderText("Nenhum CT-e encontrado.\nPor favor, refaça sua pesquisa ou cadastre um novo CT-e!");
+            confirmacao.showAndWait();
+        }
+    }
+    
+    /**
+     * Método que insere o numero do cte selecionado.
+     */
+    @FXML
+    private void popularCamposCte(){
+        numeroCTE.setText(String.valueOf(this.viagem.getCte().getNumeroCte()));
+        
+    }
+    
+    /**
+     * Método que valida se os campos obrigatorios não estão vazios.
+     */
+    private boolean verificarCamposVazios() {
+        boolean retorno = true;
+        int contador = 0;
+        if (placaVeiculo.getText().isEmpty()) {
+            placaVeiculo.setStyle("-fx-border-color:red");
+            contador++;
+        } else {
+            placaVeiculo.setStyle("-fx-border-color:#bbaFFF");
+            contador--;
+        }
+
+        if (viagem.getCte() == null) {
+            numeroCTE.setStyle("-fx-border-color:red");
+            contador++;
+        } else {
+            numeroCTE.setStyle("-fx-border-color:#bbaFFF");
+            contador--;
+        }
+
+        if (totalKmPrevisto.getText().isEmpty()) {
+            totalKmPrevisto.setStyle("-fx-border-color:red");
+            contador++;
+        } else {
+            totalKmPrevisto.setStyle("-fx-border-color:#bbaFFF");
+            contador--;
+        }
+
+         if (valorViagemPrevisto.getText().isEmpty()) {
+            valorViagemPrevisto.setStyle("-fx-border-color:red");
+            contador++;
+        } else {
+            valorViagemPrevisto.setStyle("-fx-border-color:#bbaFFF");
+            contador--;
+        }
+         
+          if (valorGanhoPrevisto.getText().isEmpty()) {
+            valorGanhoPrevisto.setStyle("-fx-border-color:red");
+            contador++;
+        } else {
+            valorGanhoPrevisto.setStyle("-fx-border-color:#bbaFFF");
+            contador--;
+        }
+          
+        if(!totalKmRealizado.getText().isEmpty()){
+            if(valorViagemRealizado.getText().isEmpty()){
+                valorViagemRealizado.setStyle("-fx-border-color:red");
+                contador++;
+            }else{
+                valorViagemRealizado.setStyle("-fx-border-color:#bbaFFF");
+                contador --;
+            }
+            
+            if(valorGanhoRealizado.getText().isEmpty()){
+                valorGanhoRealizado.setStyle("-fx-border-color:red");
+                contador++;
+            }else{
+                valorGanhoRealizado.setStyle("-fx-border-color:#bbaFFF");
+                contador--;
+            }
+        }
+        
+        if(!valorViagemRealizado.getText().isEmpty()){
+            if(totalKmRealizado.getText().isEmpty()){
+                totalKmRealizado.setStyle("-fx-border-color:red");
+                contador++;
+            }else{
+                totalKmRealizado.setStyle("-fx-border-color:#bbaFFF");
+                contador --;
+            }
+            
+            if(valorGanhoRealizado.getText().isEmpty()){
+                valorGanhoRealizado.setStyle("-fx-border-color:red");
+                contador++;
+            }else{
+                valorGanhoRealizado.setStyle("-fx-border-color:#bbaFFF");
+                contador--;
+            }
+        }
+        
+        
+        if(!valorGanhoRealizado.getText().isEmpty()){
+            if(valorViagemRealizado.getText().isEmpty()){
+                valorViagemRealizado.setStyle("-fx-border-color:red");
+                contador++;
+            }else{
+                valorViagemRealizado.setStyle("-fx-border-color:#bbaFFF");
+                contador --;
+            }
+            
+            if(totalKmRealizado.getText().isEmpty()){
+                totalKmRealizado.setStyle("-fx-border-color:red");
+                contador++;
+            }else{
+                totalKmRealizado.setStyle("-fx-border-color:#bbaFFF");
+                contador--;
+            }
+        }
+        
+        if (contador <= -7) {
+            retorno = true;
+        } else {
+            retorno = false;
+        }
+
+        if (retorno) {
+            return retorno;
+        } else {
+            Alert informacao = new Alert(Alert.AlertType.INFORMATION);
+            informacao.setTitle("Salvar Viagem");
+            informacao.setHeaderText("Por favor, informe os campos obrigatórios.");
+            informacao.show();
+            return retorno;
+        }
+    }
+    
+    /**
+     * Metodo utilizado pela botao de salvar.
+     * 
+     */
+    @FXML
+    public void salvarManutencao(ActionEvent action) {
+        ViagemDAO viagemDAO = new ViagemDAO();
+
+        if (this.viagem == null) {
+            this.viagem = new Viagem();
+        }
+
+        if (this.viagem.getIdViagem() == 0 && coletarDadosViagem()) {
+
+            viagemDAO.salvarViagem(viagem);
+            Alert confirmacao = new Alert(Alert.AlertType.INFORMATION);
+            confirmacao.setTitle("Salvar Viagem");
+            confirmacao.setHeaderText("Viagem Cadastrada com Sucesso!");
+            confirmacao.showAndWait();
+            limparCampos();
+        } else if (this.viagem.getIdViagem() > 0 && coletarDadosViagem()) {
+            if (viagemDAO.alterarViagem(viagem)) {
+                Alert confirmacao = new Alert(Alert.AlertType.INFORMATION);
+                confirmacao.setTitle("Salvar Viagem");
+                confirmacao.setHeaderText("Viagem Atualizada com Sucesso!");
+                confirmacao.showAndWait();
+                limparCampos();
+            }
+        }
+    }
+    
+    /**
+     * Metodo que limpa todos os campos da tela.
+     */
+    @FXML
+    private void limparCampos(){
+        txtBuscaVeiculo.setText("");
+        fromTextField.setText("");
+        toTextField.setText("");
+        placaVeiculo.setText("");
+        numeroCTE.setText("");
+        totalKmPrevisto.setText("");
+        valorViagemPrevisto.setText("");
+        valorGanhoPrevisto.setText("");
+        totalKmRealizado.setText("");
+        valorViagemRealizado.setText("");
+        valorGanhoRealizado.setText("");
+        despesasPrevistas = new ArrayList<ViagemDespesa>();
+        despesasRealizadas = new ArrayList<ViagemDespesa>();
+        veiculo = new Veiculo();
+        viagem = new Viagem();
     }
 }

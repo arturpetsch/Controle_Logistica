@@ -62,6 +62,45 @@ public class CteDAO {
     }
     
     /**
+     * Metodo que consulta o cte pelo numero e retorna um cte.
+     * @param numero
+     * @return 
+     */
+    public Cte consultarCtePorNumero(int numero){
+        String sql = "SELECT * FROM cte WHERE numeroCte = " + numero; 
+        
+        ResultSet resultSet;
+        Cte cte = new Cte();
+        
+        try {
+            
+            connection = Conexao.conexao();
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            resultSet = preparedStatement.executeQuery(sql);
+            
+            if(resultSet.next()){
+                
+                cte.setValor(resultSet.getBigDecimal("valor"));
+                cte.setDataEmissao(resultSet.getDate("dataEmissao").toLocalDate());
+                cte.setNumeroCte(resultSet.getInt("numeroCte"));
+                cte.setChaveAcesso(resultSet.getString("chaveAcesso"));
+                cte.setProduto(resultSet.getString("produto"));
+                cte.setPesoBruto(resultSet.getDouble("pesoBruto"));
+                cte.setPesoLiquido(resultSet.getDouble("pesoLiquido"));
+                cte.setVolume(resultSet.getDouble("volume"));
+                cte.setEspecie(resultSet.getString("especie"));
+                cte.setObservacao(resultSet.getString("observacao"));
+                
+                cte.setNotasFiscais(buscarNotasFiscais(cte.getNumeroCte()));
+                }
+                return cte;
+         }catch(Exception e){
+             e.printStackTrace();
+             return null;
+         }
+    }
+    
+    /**
      * Método que salva o cte no banco de dados.
      * @param cte
      * @return 
