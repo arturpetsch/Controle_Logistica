@@ -200,7 +200,24 @@ public class ViagemController implements Initializable, MapComponentInitializedL
     @FXML
     private boolean coletarDadosViagem(){
          if (verificarCamposVazios()) {
-            viagem.setQtdeKmPrevisto(Double.parseDouble(totalKmPrevisto.getText()));
+            ArrayList<ViagemDespesa> despesas = new ArrayList<>();
+            int i = 0;
+            while(despesasPrevistas.size() > i){
+                despesas.add(despesasPrevistas.get(i));
+                i++;
+            }
+            
+            i = 0;
+            if(!despesasRealizadas.isEmpty()){
+                while(despesasRealizadas.size() > i){
+                    despesas.add(despesasRealizadas.get(i));
+                    i++;
+                }
+            }
+            
+            viagem.setDespesas(despesas);
+             viagem.setVeiculo(veiculo);
+             viagem.setQtdeKmPrevisto(Double.parseDouble(totalKmPrevisto.getText()));
             
             String valorInformado = valorViagemPrevisto.getText();
             BigDecimal valor = new BigDecimal(valorInformado.replace(",", "."));
@@ -210,6 +227,17 @@ public class ViagemController implements Initializable, MapComponentInitializedL
             BigDecimal valorGanhoP = new BigDecimal(valorInformado.replace(",", "."));
             viagem.setValorTotalGanhoPrevisto(valorGanhoP);
             
+            if(!valorViagemRealizado.getText().isEmpty()){
+                valorInformado = valorViagemRealizado.getText();
+                BigDecimal valorViagemR = new BigDecimal(valorInformado.replace(",", "."));
+                viagem.setValorTotalGastoRealizado(valor);
+            }
+            
+            if(!valorGanhoRealizado.getText().isEmpty()){
+                valorInformado = valorGanhoRealizado.getText();
+                BigDecimal valorGanhoR = new BigDecimal(valorInformado.replace(",", "."));
+                viagem.setValorTotalGanhoRealizado(valor);
+            }
             
             return true;
         } else {
@@ -314,9 +342,18 @@ public class ViagemController implements Initializable, MapComponentInitializedL
         totalKmPrevisto.setText(this.viagem.getQtdeKmPrevisto().toString());
         valorViagemPrevisto.setText(this.viagem.getValorTotalGastoPrevisto().toString());
         valorGanhoPrevisto.setText(this.viagem.getValorTotalGanhoPrevisto().toString());
-        totalKmRealizado.setText(this.viagem.getQtdeKmRealizado().toString());
-        valorViagemRealizado.setText(this.viagem.getValorTotalGastoRealizado().toString());
-        valorGanhoRealizado.setText(this.viagem.getValorTotalGanhoRealizado().toString());
+        
+        if(viagem.getValorTotalGastoRealizado()!= null){
+            totalKmRealizado.setText(this.viagem.getQtdeKmRealizado().toString());
+            valorViagemRealizado.setText(this.viagem.getValorTotalGastoRealizado().toString());
+            valorGanhoRealizado.setText(this.viagem.getValorTotalGanhoRealizado().toString());
+        
+        }else{
+            totalKmRealizado.setText("");
+            valorViagemRealizado.setText("");
+            valorGanhoRealizado.setText("");
+        
+        }
         
         int i = 0;
         while(viagem.getDespesas().size() > i){
@@ -335,6 +372,7 @@ public class ViagemController implements Initializable, MapComponentInitializedL
     @FXML
     private void popularCamposDadosVeiculo(){
         placaVeiculo.setText(veiculo.getPlaca());
+        this.viagem.setVeiculo(veiculo);
     }
     
     /**
@@ -360,8 +398,11 @@ public class ViagemController implements Initializable, MapComponentInitializedL
             stage.showAndWait();
             despesasPrevistas = despesaViagemController.getDespesas();
             BigDecimal valorTotal = calcularDespesas(despesasPrevistas);
-            valorViagemPrevisto.setText(valorTotal.toString().replace(".", ","));
-            
+            if(valorTotal.intValue()==0){
+                valorViagemPrevisto.setText("");
+            }else{
+                valorViagemPrevisto.setText(valorTotal.toString().replace(".", ","));
+            }
             
     }
     
@@ -404,11 +445,13 @@ public class ViagemController implements Initializable, MapComponentInitializedL
             stage.showAndWait();
             despesasRealizadas = despesaViagemRealizadaController.getDespesas();
             BigDecimal valorTotal = calcularDespesas(despesasRealizadas);
-            valorViagemRealizado.setText(valorTotal.toString().replace(".", ","));
-            
+            if(valorTotal.intValue()==0){
+                valorViagemRealizado.setText("");
+            }else{
+                valorViagemRealizado.setText(valorTotal.toString().replace(".", ","));
+            }
     }
-    
-    
+        
     
     /**
      * Metodo que cancela todas as operações e limpa todos os campos, arrays e objetos.
@@ -545,6 +588,8 @@ public class ViagemController implements Initializable, MapComponentInitializedL
                 valorGanhoRealizado.setStyle("-fx-border-color:#bbaFFF");
                 contador--;
             }
+        }else{
+            contador--;
         }
         
         if(!valorViagemRealizado.getText().isEmpty()){
@@ -563,6 +608,8 @@ public class ViagemController implements Initializable, MapComponentInitializedL
                 valorGanhoRealizado.setStyle("-fx-border-color:#bbaFFF");
                 contador--;
             }
+        }else{
+            contador--;
         }
         
         
@@ -582,6 +629,8 @@ public class ViagemController implements Initializable, MapComponentInitializedL
                 totalKmRealizado.setStyle("-fx-border-color:#bbaFFF");
                 contador--;
             }
+        }else{
+            contador--;
         }
         
         if (contador <= -7) {
@@ -606,7 +655,7 @@ public class ViagemController implements Initializable, MapComponentInitializedL
      * 
      */
     @FXML
-    public void salvarManutencao(ActionEvent action) {
+    public void salvarViagem(ActionEvent action) {
         ViagemDAO viagemDAO = new ViagemDAO();
 
         if (this.viagem == null) {

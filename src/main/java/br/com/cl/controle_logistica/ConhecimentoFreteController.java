@@ -7,17 +7,13 @@ package br.com.cl.controle_logistica;
 
 import br.com.cl.controle_logistica.DAO.CteDAO;
 import br.com.cl.controle_logistica.classes.Cliente;
-import br.com.cl.controle_logistica.classes.ClienteFisico;
-import br.com.cl.controle_logistica.classes.ClienteJuridico;
 import br.com.cl.controle_logistica.classes.Cte;
 import br.com.cl.controle_logistica.classes.CteCliente;
 import br.com.cl.controle_logistica.classes.Nf;
-import br.com.cl.controle_logistica.classes.Veiculo;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

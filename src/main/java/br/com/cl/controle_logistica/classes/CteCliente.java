@@ -20,6 +20,10 @@ public class CteCliente {
         this.tomador = tomador;
     }
 
+    public CteCliente() {
+    }
+
+    
     
     public Cte getCte() {
         return cte;
