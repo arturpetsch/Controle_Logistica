@@ -5,7 +5,9 @@
  */
 package br.com.cl.controle_logistica;
 
+import br.com.cl.controle_logistica.classes.Cliente;
 import br.com.cl.controle_logistica.classes.Cte;
+import br.com.cl.controle_logistica.classes.CteCliente;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -16,6 +18,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
@@ -40,10 +43,10 @@ public class TabelaConhecimentoController implements Initializable {
     private TableColumn<Cte, Integer> numeroTabelaCte = new TableColumn();
 
     @FXML
-    private TableColumn<Cte, String> remetenteTabelaCte = new TableColumn();
+    private TableColumn<Cte, CteCliente> remetenteTabelaCte = new TableColumn();
 
     @FXML
-    private TableColumn<Cte, Integer> destinatarioTabelaCte = new TableColumn();
+    private TableColumn<Cte, CteCliente> destinatarioTabelaCte = new TableColumn();
 
     @FXML
     private TableColumn<Cte, Integer> valorTabelaCte = new TableColumn();
@@ -72,6 +75,8 @@ public class TabelaConhecimentoController implements Initializable {
 
             return row;
         });
+        
+        
     }    
     
     /**
@@ -81,10 +86,13 @@ public class TabelaConhecimentoController implements Initializable {
     protected void popularTabela() {
         if (fretes != null) {
             numeroTabelaCte.setCellValueFactory(new PropertyValueFactory("numeroCte"));
-            remetenteTabelaCte.setCellValueFactory(new PropertyValueFactory("nomeCliente"));
-            destinatarioTabelaCte.setCellValueFactory(new PropertyValueFactory("nomeCliente"));
+            remetenteTabelaCte.setCellValueFactory(new PropertyValueFactory("clienteRemetente"));
+            destinatarioTabelaCte.setCellValueFactory(new PropertyValueFactory("clienteDestinatario"));
             valorTabelaCte.setCellValueFactory(new PropertyValueFactory("valor"));
 
+            
+            formatarNomeClienteRemetente();
+            formatarNomeClienteDestinatario();
             tabelaConhecimentos.setItems(fretesBusca);
             tabelaConhecimentos.getItems().setAll(fretes);
 
@@ -115,6 +123,48 @@ public class TabelaConhecimentoController implements Initializable {
     public Cte getCteSelecionado(){
         return this.cte;
     }
+    
+     @FXML
+    private void formatarNomeClienteRemetente() {
+        remetenteTabelaCte.setCellFactory(column -> {
+            return new TableCell<Cte, CteCliente>() {
+
+                @Override
+                protected void updateItem(CteCliente item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (item == null) {
+
+                    } else if(item.getCliente().getClienteFisico() != null && item.getCliente().getClienteFisico().getIdClienteFisico() > 0){
+                        setText(item.getCliente().getClienteFisico().getNomeCliente());
+                    }else if(item.getCliente().getClienteJuridico() != null && item.getCliente().getClienteJuridico().getIdClienteJuridico() > 0
+                            ){
+                        setText(item.getCliente().getClienteJuridico().getNomeFantasia());
+                    }
+                }
+            };
+        });
+    }
+    
+         @FXML
+    private void formatarNomeClienteDestinatario() {
+        destinatarioTabelaCte.setCellFactory(column -> {
+            return new TableCell<Cte, CteCliente>() {
+
+                @Override
+                protected void updateItem(CteCliente item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (item == null) {
+
+                    } else if(item.getCliente().getClienteFisico() != null && item.getCliente().getClienteFisico().getIdClienteFisico() > 0){
+                        setText(item.getCliente().getClienteFisico().getNomeCliente());
+                    }else if(item.getCliente().getClienteJuridico() != null && item.getCliente().getClienteJuridico().getIdClienteJuridico() > 0
+                            ){
+                        setText(item.getCliente().getClienteJuridico().getNomeFantasia());
+                    }
+                }
+            };
+        });
+        }
     }    
     
 

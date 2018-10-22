@@ -12,6 +12,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 /**
  *
@@ -21,8 +22,10 @@ public class ClienteDAO {
 
     private Connection connection = null;
 
-    public Cliente buscarClienteFisico(Cliente clienteFisico) {
-        String sql = "SELECT * FROM cliente WHERE idClienteFisico = " + clienteFisico.getClienteFisico().getIdClienteFisico();
+    
+    
+    public Cliente buscarCliente(int clienteId) {
+        String sql = "SELECT * FROM cliente WHERE idCliente = " + clienteId;
 
         ResultSet resultSet;
 
@@ -33,22 +36,69 @@ public class ClienteDAO {
             resultSet = preparedStatement.executeQuery(sql);
 
             if (resultSet.next()) {
-                clienteFisico.setEndereco(resultSet.getString("endereco"));
-                clienteFisico.setBairro(resultSet.getString("bairro"));
-                clienteFisico.setCidade(resultSet.getString("cidade"));
-                clienteFisico.setEstado(resultSet.getString("estado"));
-                clienteFisico.setCep(resultSet.getString("cep"));
-                clienteFisico.setEmail(resultSet.getString("email"));
-                clienteFisico.setContato(resultSet.getString("contato"));
-                clienteFisico.setContato1(resultSet.getString("contato2"));
+                Cliente cliente = new Cliente();
+
+                Integer clienteFisicoId = resultSet.getInt("idClienteFisico");
+                Integer clienteJuridicoId = resultSet.getInt("idClienteJuridico");
+
+                if (clienteFisicoId != null && clienteFisicoId > 0) {
+                    String sqlClienteFisico = "SELECT * FROM clientefisico WHERE idCliente = " + clienteFisicoId;
+
+                    ResultSet resultSetClienteFisico;
+
+                    PreparedStatement preparedStatementClienteFisico = connection.prepareStatement(sqlClienteFisico);
+                    resultSetClienteFisico = preparedStatementClienteFisico.executeQuery(sqlClienteFisico);
+
+                    if (resultSetClienteFisico.next()) {
+                        ClienteFisico clienteFisico = new ClienteFisico();
+
+                        clienteFisico.setIdClienteFisico(resultSetClienteFisico.getInt("idCliente"));
+                        clienteFisico.setNomeCliente(resultSetClienteFisico.getString("nomeCliente"));
+                        clienteFisico.setCpf(resultSetClienteFisico.getString("CPF"));
+                        clienteFisico.setDataNascimento(resultSetClienteFisico.getDate("dataNascimento").toLocalDate());
+                        clienteFisico.setRg(resultSetClienteFisico.getString("rg"));
+
+                        cliente.setClienteFisico(clienteFisico);
+                    }
+                } else if (clienteJuridicoId != null && clienteJuridicoId > 0) {
+                    String sqlClienteJuridico = "SELECT * FROM clientejuridico WHERE idClienteJuridico = " + clienteJuridicoId;
+
+                    ResultSet resultSetClienteJuridico;
+
+                    PreparedStatement preparedStatementClienteJuridico = connection.prepareStatement(sqlClienteJuridico);
+                    resultSetClienteJuridico = preparedStatementClienteJuridico.executeQuery(sqlClienteJuridico);
+
+                    if (resultSetClienteJuridico.next()) {
+                        ClienteJuridico clienteJuridico = new ClienteJuridico();
+
+                        clienteJuridico.setIdClienteJuridico(resultSetClienteJuridico.getInt("idClienteJuridico"));
+                        clienteJuridico.setNomeFantasia(resultSetClienteJuridico.getString("nomeFantasia"));
+                        clienteJuridico.setRazaoSocial(resultSetClienteJuridico.getString("razaoSocial"));
+                        clienteJuridico.setCnpj(resultSetClienteJuridico.getString("cnpj"));
+                        clienteJuridico.setIe(resultSetClienteJuridico.getString("inscricaoEstadual"));
+
+                        cliente.setClienteJuridico(clienteJuridico);
+                    }
+                }
+
+                cliente.setEndereco(resultSet.getString("endereco"));
+                cliente.setBairro(resultSet.getString("bairro"));
+                cliente.setCidade(resultSet.getString("cidade"));
+                cliente.setEstado(resultSet.getString("estado"));
+                cliente.setCep(resultSet.getString("cep"));
+                cliente.setEmail(resultSet.getString("email"));
+                cliente.setContato(resultSet.getString("contato"));
+                cliente.setContato1(resultSet.getString("contato2"));
+                return cliente;
             }
         } catch (Exception e) {
             e.printStackTrace();
-            return null;
+            
         }
-        return clienteFisico;
+        return null;
     }
 
+     
     public boolean salvarClienteFisico(Cliente clienteFisico) {
         String sql = "INSERT INTO cliente(idClienteFisico, endereco, bairro, cidade, estado, cep, email, contato, contato2, dataCadastro)"
                 + "VALUES(?,?,?,?,?,?,?,?,?,?)";
@@ -129,6 +179,36 @@ public class ClienteDAO {
         return clienteFisico;
     }
 
+    public Cliente buscarClienteFisico(Cliente clienteFisico) {
+        String sql = "SELECT * FROM cliente WHERE idClienteFisico = " + clienteFisico.getClienteFisico().getIdClienteFisico();
+
+        ResultSet resultSet;
+
+        try {
+
+            connection = Conexao.conexao();
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            resultSet = preparedStatement.executeQuery(sql);
+
+            if (resultSet.next()) {
+                clienteFisico.setEndereco(resultSet.getString("endereco"));
+                clienteFisico.setBairro(resultSet.getString("bairro"));
+                clienteFisico.setCidade(resultSet.getString("cidade"));
+                clienteFisico.setEstado(resultSet.getString("estado"));
+                clienteFisico.setCep(resultSet.getString("cep"));
+                clienteFisico.setEmail(resultSet.getString("email"));
+                clienteFisico.setContato(resultSet.getString("contato"));
+                clienteFisico.setContato1(resultSet.getString("contato2"));
+              
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+                return null;
+        }
+                return clienteFisico;
+    }
+
+    
     //=====================Métodos Cliente Juridico===========================
     public Cliente buscarClienteJuridico(Cliente clienteJuridico) {
         String sql = "SELECT * FROM cliente WHERE idClienteJuridico = " + clienteJuridico.getClienteJuridico().getIdClienteJuridico();
@@ -157,8 +237,8 @@ public class ClienteDAO {
         }
         return clienteJuridico;
     }
-    
-    public boolean salvarClienteJuridico(Cliente clienteJuridico){
+
+    public boolean salvarClienteJuridico(Cliente clienteJuridico) {
         String sql = "INSERT INTO cliente(idClienteJuridico, endereco, bairro, cidade, estado, cep, email, contato, contato2, dataCadastro)"
                 + "VALUES(?,?,?,?,?,?,?,?,?,?)";
 
@@ -183,7 +263,7 @@ public class ClienteDAO {
         }
         return true;
     }
-    
+
     public boolean atualizarClienteJuridico(Cliente clienteJuridico) {
         String sql = "UPDATE cliente SET endereco = ?,"
                 + " bairro = ?, cidade = ?, estado = ?, cep = ?, email = ?,"
@@ -208,8 +288,8 @@ public class ClienteDAO {
         }
         return true;
     }
-    
-     public boolean deletarClienteJuridico(Cliente clienteJuridico) {
+
+    public boolean deletarClienteJuridico(Cliente clienteJuridico) {
         String sql = "DELETE FROM cliente WHERE idClienteJuridico = " + clienteJuridico.getClienteJuridico().getIdClienteJuridico();
 
         try {
@@ -223,6 +303,5 @@ public class ClienteDAO {
         }
         return true;
     }
-    
-    
+
 }

@@ -407,12 +407,12 @@ public class ConhecimentoFreteController implements Initializable {
         lbEndD.setText("");
         lbCidadeD.setText("");
         lbEstadoD.setText("");
-        lbNomeD.setText("");
-        lbCnpjCpfD.setText("");
-        lbEndD.setText("");
-        lbCidadeD.setText("");
-        lbEstadoD.setText("");
         txtPlaca.setText("");
+        lbNomeR.setText("");
+        lbCnpjCpfR.setText("");
+        lbEndR.setText("");
+        lbCidadeR.setText("");
+        lbEstadoR.setText("");
         
     }
     
@@ -444,6 +444,7 @@ public class ConhecimentoFreteController implements Initializable {
             cte.setEspecie(especieCte.getText().toUpperCase());
             cte.setObservacao(observacaoCte.getText().toUpperCase());
             cte.setNotasFiscais(notasFiscais);
+            
             
             return true;
         } else {
@@ -577,28 +578,27 @@ public class ConhecimentoFreteController implements Initializable {
         volumeCte.setText(String.valueOf(cte.getVolume()));
         especieCte.setText(cte.getEspecie());
         observacaoCte.setText(cte.getObservacao());
-        
+        this.clienteDestinatario = cte.getClienteDestinatario().getCliente();
+        this.clienteRemetente = cte.getClienteRemetente().getCliente();
         this.notasFiscais = cte.getNotasFiscais();
         
-        if(cte.getClienteRemetente().getCliente().getClienteFisico() != null){
+        if(cte.getClienteRemetente().getCliente().getClienteFisico() != null && cte.getClienteRemetente().getCliente().getClienteFisico().getIdClienteFisico() > 0){
         
             popularCamposDadosRemetenteClienteFisico(cte.getClienteRemetente().getCliente());
             
-        }else if(cte.getClienteRemetente().getCliente().getClienteJuridico() != null){
+        }else if(cte.getClienteRemetente().getCliente().getClienteJuridico() != null && cte.getClienteRemetente().getCliente().getClienteJuridico().getIdClienteJuridico() > 0){
             popularCamposDadosRemetenteClienteJuridico(cte.getClienteRemetente().getCliente());
             
         }
         
-        if(cte.getClienteDestinatario().getCliente().getClienteFisico() != null){
+        if(cte.getClienteDestinatario().getCliente().getClienteFisico() != null && cte.getClienteDestinatario().getCliente().getClienteFisico().getIdClienteFisico() > 0){
             popularCamposDadosDestinatarioClienteFisico(cte.getClienteDestinatario().getCliente());
             
-        }else if(cte.getClienteDestinatario().getCliente().getClienteJuridico() != null){
+        }else if(cte.getClienteDestinatario().getCliente().getClienteJuridico() != null && cte.getClienteDestinatario().getCliente().getClienteJuridico().getIdClienteJuridico() > 0){
             popularCamposDadosDestinatarioClienteJuridico(cte.getClienteDestinatario().getCliente());
             
         }
     }
-    
-    
     
     /**
      * Metodo utilizado para setar o cte selecionado na tabela no
@@ -687,6 +687,7 @@ public class ConhecimentoFreteController implements Initializable {
         lbCidadeR.setText(cliente.getCidade().toUpperCase());
         lbEstadoR.setText(cliente.getEstado().toUpperCase());
         
+        
         Boolean tomador = tomadorServicoRemetente.isSelected();
         CteCliente clienteCte = new CteCliente(cte, cliente, tomador);
         cte.setClienteRemetente(clienteCte);
@@ -753,7 +754,6 @@ public class ConhecimentoFreteController implements Initializable {
         lbEstadoD.setText(cliente.getEstado().toUpperCase());
         
         Boolean tomador = tomadorServicoDestinatario.isSelected();
-        
         CteCliente clienteCte = new CteCliente(cte, cliente, tomador);
         cte.setClienteDestinatario(clienteCte);
     }
@@ -770,7 +770,6 @@ public class ConhecimentoFreteController implements Initializable {
         lbEstadoD.setText(cliente.getEstado().toUpperCase());
         
         Boolean tomador = tomadorServicoDestinatario.isSelected();
-        
         CteCliente clienteCte = new CteCliente(cte, cliente, tomador);
         cte.setClienteDestinatario(clienteCte);
     }

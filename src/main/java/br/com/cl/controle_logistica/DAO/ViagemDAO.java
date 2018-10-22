@@ -9,6 +9,7 @@ import br.com.cl.controle_logistica.classes.Veiculo;
 import br.com.cl.controle_logistica.classes.Viagem;
 import br.com.cl.controle_logistica.classes.ViagemDespesa;
 import com.sun.org.apache.bcel.internal.generic.RETURN;
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -66,6 +67,43 @@ public class ViagemDAO {
         return null;
      }
      
+     /**
+      * Método que busca e retorna o valor total realizado nas viagens dos últimos 12 meses.
+      * @return 
+      */
+     public ArrayList<Viagem> buscarValorTotalRealizadosUltimoAno(){
+         LocalDate dataRetroativa = LocalDate.now();
+         dataRetroativa = dataRetroativa.minusMonths(12);
+         String sqlBusca = "SELECT * FROM viagem WHERE date(dataViagem) BETWEEN date('" + dataRetroativa 
+                 + "') AND date('" + LocalDate.now() + "') ";
+         
+         ResultSet resultSetBuscaValorTotal;
+         ArrayList<Viagem> viagens = new ArrayList<>();
+         
+         try {
+            
+            connection = Conexao.conexao();
+            PreparedStatement preparedStatement = connection.prepareStatement(sqlBusca);
+            resultSetBuscaValorTotal = preparedStatement.executeQuery(sqlBusca);
+            
+            while(resultSetBuscaValorTotal.next()){
+                Viagem viagem = new Viagem();
+                viagem.setIdViagem(resultSetBuscaValorTotal.getInt("idViagem"));
+                viagem.setQtdeKmPrevisto(resultSetBuscaValorTotal.getDouble("totalKmPrevisto"));
+                viagem.setQtdeKmRealizado(resultSetBuscaValorTotal.getDouble("totalKmRealizado"));
+                viagem.setValorTotalGastoPrevisto(resultSetBuscaValorTotal.getBigDecimal("valorTotalGastoPrevisto"));
+                viagem.setValorTotalGastoRealizado(resultSetBuscaValorTotal.getBigDecimal("valorTotalGastoRealizado"));
+                viagem.setValorTotalGanhoPrevisto(resultSetBuscaValorTotal.getBigDecimal("valorTotalGanhoPrevisto"));
+                viagem.setValorTotalGanhoRealizado(resultSetBuscaValorTotal.getBigDecimal("valorTotalGanhoRealizado"));
+                viagem.setDataViagem(resultSetBuscaValorTotal.getDate("dataViagem").toLocalDate());
+                viagens.add(viagem);
+            }
+            return viagens;
+         }catch(Exception e){
+             e.printStackTrace();
+         }
+         return viagens;
+     }
      /**
      * Método que salva o veículo no banco de dados.
      * @param veiculo

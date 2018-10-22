@@ -15,14 +15,14 @@ import javafx.beans.property.SimpleStringProperty;
 public class ClienteJuridico {
 
     private int idClienteJuridico;
-    private SimpleStringProperty nomeFantasia;
+    private SimpleStringProperty nomeCliente;
     private SimpleStringProperty razaoSocial;
     private SimpleStringProperty cnpj;
     private SimpleStringProperty ie;
     
     public ClienteJuridico(){
         super();
-        this.nomeFantasia  = new SimpleStringProperty();
+        this.nomeCliente  = new SimpleStringProperty();
         this.razaoSocial = new SimpleStringProperty();
         this.cnpj = new SimpleStringProperty();
         this.ie = new SimpleStringProperty();
@@ -32,7 +32,7 @@ public class ClienteJuridico {
             String cidade, String estado, String cep, String bairro, LocalDate dataCadastro, String email, 
             String contato, String contato1) {
         this.idClienteJuridico = idClienteJuridico;
-        this.nomeFantasia = new SimpleStringProperty(nomeFantasia);
+        this.nomeCliente = new SimpleStringProperty(nomeFantasia);
         this.razaoSocial  = new SimpleStringProperty(razaoSocial);
         this.cnpj  = new SimpleStringProperty(cnpj);
         this.ie = new SimpleStringProperty(ie);
@@ -47,11 +47,11 @@ public class ClienteJuridico {
     }
 
     public String getNomeFantasia() {
-        return nomeFantasia.get();
+        return nomeCliente.get();
     }
 
     public void setNomeFantasia(String nomeFantasia) {
-        this.nomeFantasia.set(nomeFantasia);
+        this.nomeCliente.set(nomeFantasia);
     }
 
     public String getRazaoSocial() {

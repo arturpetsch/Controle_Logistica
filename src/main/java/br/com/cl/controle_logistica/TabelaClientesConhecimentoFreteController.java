@@ -11,6 +11,8 @@ import br.com.cl.controle_logistica.DAO.ClienteJuridicoDAO;
 import br.com.cl.controle_logistica.classes.Cliente;
 import br.com.cl.controle_logistica.classes.ClienteFisico;
 import br.com.cl.controle_logistica.classes.ClienteJuridico;
+import br.com.cl.controle_logistica.classes.Cte;
+import br.com.cl.controle_logistica.classes.CteCliente;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -22,6 +24,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
@@ -57,12 +60,12 @@ public class TabelaClientesConhecimentoFreteController implements Initializable 
     @FXML
     private Button botaoPesquisar;
     
-    ObservableList<ClienteFisico> clienteFBusca = FXCollections.observableArrayList();
+    ObservableList<Cliente> clienteFBusca = FXCollections.observableArrayList();
     
-    ObservableList<ClienteJuridico> clienteJBusca = FXCollections.observableArrayList();
+    ObservableList<Cliente> clienteJBusca = FXCollections.observableArrayList();
         
     ArrayList<Cliente> clientes = new ArrayList<Cliente>();
-       
+        
     @FXML
     private ComboBox comboBoxTipoCliente;
     
@@ -112,8 +115,10 @@ public class TabelaClientesConhecimentoFreteController implements Initializable 
     protected void popularTabelaClientesJuridicos(ArrayList<Cliente> clientesJuridicos){
         if(clientesJuridicos != null){
             cpfCnpjTabelaClientes.setCellValueFactory(new PropertyValueFactory("cnpj"));
-            nomeTabelaClientes.setCellValueFactory(new PropertyValueFactory("nomeFantasia"));
+            nomeTabelaClientes.setCellValueFactory(new PropertyValueFactory("nomeCliente"));
             
+            //formatarNomeClienteRemetente();
+            //formatarCpfCnpjCliente();
             tabelaClientes.setItems(clienteJBusca);
             tabelaClientes.getItems().setAll(clientesJuridicos);
 
@@ -172,6 +177,8 @@ public class TabelaClientesConhecimentoFreteController implements Initializable 
             cpfCnpjTabelaClientes.setCellValueFactory(new PropertyValueFactory("cpf"));
             nomeTabelaClientes.setCellValueFactory(new PropertyValueFactory("nomeCliente"));
             
+            //formatarNomeClienteRemetente();
+            //formatarCpfCnpjCliente();
             tabelaClientes.setItems(clienteFBusca);
             tabelaClientes.getItems().setAll(clientesFisicos);
 
@@ -189,6 +196,42 @@ public class TabelaClientesConhecimentoFreteController implements Initializable 
         }
         }
     
+  /**@FXML
+    private void formatarNomeClienteRemetente() {
+        nomeTabelaClientes.setCellFactory(column -> {
+            return new TableCell<Cliente, String>() {
+
+                @Override
+                protected void updateItem(String item,  boolean empty) {
+                    super.updateItem(item, empty);
+                    if (item == null) {
+
+                    } else if(item != null){
+                        setText(item);
+                    }
+                }
+            };
+        });
+    }
+    
+          @FXML
+    private void formatarCpfCnpjCliente() {
+        cpfCnpjTabelaClientes.setCellFactory(column -> {
+            return new TableCell<Cliente, String>() {
+
+                @Override
+                protected void updateItem(String item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (item == null) {
+
+                    } else if(item != null){
+                        setText(item);
+                    }
+                }
+            };
+        });
+        }
+   */
     
     /**
      * Metodo que popula o tipo do cliente no combobox.

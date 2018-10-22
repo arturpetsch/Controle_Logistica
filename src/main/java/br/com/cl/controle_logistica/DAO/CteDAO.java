@@ -52,7 +52,16 @@ public class CteDAO {
                 cte.setEspecie(resultSet.getString("especie"));
                 cte.setObservacao(resultSet.getString("observacao"));
 
+                Integer idClienteDestinatario = resultSet.getInt("clienteDestinatario_fk");
+                cte.setClienteDestinatario(buscarCteCliente(idClienteDestinatario));
+                 cte.getClienteDestinatario().setCte(cte);
+                 
+                Integer idClienteRemetente = resultSet.getInt("clienteRemetente_fk");
+                cte.setClienteRemetente(buscarCteCliente(idClienteRemetente));
+                cte.getClienteRemetente().setCte(cte);
+                
                 cte.setNotasFiscais(buscarNotasFiscais(cte.getNumeroCte()));
+                
                 fretes.add(cte);
             }
             return fretes;
@@ -93,6 +102,14 @@ public class CteDAO {
                 cte.setEspecie(resultSet.getString("especie"));
                 cte.setObservacao(resultSet.getString("observacao"));
 
+                Integer idClienteDestinatario = resultSet.getInt("clienteDestinatario_fk");
+                cte.setClienteDestinatario(buscarCteCliente(idClienteDestinatario));
+                cte.getClienteDestinatario().setCte(cte);
+              
+                Integer idClienteRemetente = resultSet.getInt("clienteRemetente_fk");
+                cte.setClienteRemetente(buscarCteCliente(idClienteRemetente));
+                cte.getClienteRemetente().setCte(cte);
+
                 cte.setNotasFiscais(buscarNotasFiscais(cte.getNumeroCte()));
             }
             return cte;
@@ -108,10 +125,10 @@ public class CteDAO {
      * @param idCte
      * @return
      */
-    private ArrayList<CteCliente> buscarCteCliente(int idCte) {
-        String sqlCteCliente = "SELECT * FROM cte_cliente WHERE cte_fk = " + idCte;
+    private CteCliente buscarCteCliente(int idClienteCte) {
+        String sqlCteCliente = "SELECT * FROM cte_cliente WHERE idCteCliente = " + idClienteCte;
         
-        ArrayList<CteCliente> cteClientes = new ArrayList<>();
+        CteCliente cteCliente = new CteCliente();
         ResultSet resultSet;
         ClienteDAO clienteDAO = new ClienteDAO();
         CteDAO cteDAO = new CteDAO();
@@ -122,14 +139,13 @@ public class CteDAO {
             PreparedStatement preparedStatement = connection.prepareStatement(sqlCteCliente);
             resultSet = preparedStatement.executeQuery(sqlCteCliente);
 
-            while (resultSet.next()) {
-                CteCliente cteCliente = new CteCliente();
-                //cteCliente.setCliente(clienteDAO); verificar esse caso
-                cteCliente.setCte(cteDAO.consultarCtePorNumero(resultSet.getInt("cte_fk")));
+            if (resultSet.next()) {
+
+                cteCliente.setCliente(clienteDAO.buscarCliente(resultSet.getInt("cliente_fk"))); 
                 cteCliente.setTomador(resultSet.getBoolean("tomadorServico"));
-                cteClientes.add(cteCliente);
+                
             }
-            return cteClientes;
+            return cteCliente;
         }catch(Exception e){
             e.printStackTrace();
         }
@@ -258,8 +274,8 @@ public class CteDAO {
             preparedStatement.setDouble(7, cte.getVolume());
             preparedStatement.setString(8, cte.getEspecie());
             preparedStatement.setString(9, cte.getObservacao());
-            preparedStatement.setInt(10, 1);
-            preparedStatement.setInt(11, 1);
+            preparedStatement.setInt(10, cte.getClienteRemetente().getCliente().getIdCliente());
+            preparedStatement.setInt(11, cte.getClienteDestinatario().getCliente().getIdCliente());
 
             preparedStatement.executeUpdate();
 
@@ -271,7 +287,8 @@ public class CteDAO {
                 salvarNF(cte.getNotasFiscais().get(i), cte.getNumeroCte());
                 i++;
             }
-
+            
+            
         } catch (Exception e) {
             e.printStackTrace();
             return false;
