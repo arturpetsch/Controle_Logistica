@@ -285,7 +285,6 @@ public class ManutencaoController implements Initializable {
             if (manutencao != null) {
                 popularCamposManutencao();
             } else {
-                limparCamposManutencao();
                 Alert alerta = new Alert(Alert.AlertType.INFORMATION);
                 alerta.setTitle("Buscar Manutenção");
                 alerta.setHeaderText("Nenhuma manutenção cadastrada nessa data.");

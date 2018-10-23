@@ -92,9 +92,23 @@ public class ViagemDAO {
                 viagem.setQtdeKmPrevisto(resultSetBuscaValorTotal.getDouble("totalKmPrevisto"));
                 viagem.setQtdeKmRealizado(resultSetBuscaValorTotal.getDouble("totalKmRealizado"));
                 viagem.setValorTotalGastoPrevisto(resultSetBuscaValorTotal.getBigDecimal("valorTotalGastoPrevisto"));
-                viagem.setValorTotalGastoRealizado(resultSetBuscaValorTotal.getBigDecimal("valorTotalGastoRealizado"));
+                
+                BigDecimal valorTotalGastoRealizado = (resultSetBuscaValorTotal.getBigDecimal("valorTotalGastoRealizado"));
+                if(valorTotalGastoRealizado!=null){
+                    viagem.setValorTotalGastoRealizado(valorTotalGastoRealizado);
+                }else{
+                    viagem.setValorTotalGastoRealizado(BigDecimal.ZERO);
+                }
+                
                 viagem.setValorTotalGanhoPrevisto(resultSetBuscaValorTotal.getBigDecimal("valorTotalGanhoPrevisto"));
-                viagem.setValorTotalGanhoRealizado(resultSetBuscaValorTotal.getBigDecimal("valorTotalGanhoRealizado"));
+                
+                BigDecimal valorTotalGanhoRealizado = (resultSetBuscaValorTotal.getBigDecimal("valorTotalGanhoRealizado"));
+                if(valorTotalGanhoRealizado!=null){
+                    viagem.setValorTotalGanhoRealizado(valorTotalGanhoRealizado);
+                }else{
+                    viagem.setValorTotalGanhoRealizado(BigDecimal.ZERO);
+                }
+                
                 viagem.setDataViagem(resultSetBuscaValorTotal.getDate("dataViagem").toLocalDate());
                 viagens.add(viagem);
             }

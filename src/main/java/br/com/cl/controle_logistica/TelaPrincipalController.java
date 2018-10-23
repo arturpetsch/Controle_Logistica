@@ -5,11 +5,14 @@
  */
 package br.com.cl.controle_logistica;
 
+import br.com.cl.controle_logistica.DAO.ManutencaoDAO;
 import br.com.cl.controle_logistica.DAO.ViagemDAO;
+import br.com.cl.controle_logistica.classes.Manutencao;
 import br.com.cl.controle_logistica.classes.Viagem;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.URL;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
@@ -102,22 +105,22 @@ public class TelaPrincipalController implements Initializable {
     private Label lblValorTotalPrevisto;
     
     @FXML
-    private Label lblPlacaVeiculoRealizado;
+    private Label lblPlacaVeiculoCorretiva;
     
     @FXML
-    private Label lblDataRealizado;
+    private Label lblDataCorretiva;
     
     @FXML
-    private Label lblValorRealizado;
+    private Label lblValorCorretiva;
     
     @FXML
-    private Label lblPlacaVeiculoPreventiva;
+    private Label lblPlacaVeiculo;
     
     @FXML
-    private Label lblDataPreventiva;
+    private Label lblData;
     
     @FXML
-    private Label lblValorPreventiva;
+    private Label lblValor;
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
@@ -126,45 +129,84 @@ public class TelaPrincipalController implements Initializable {
          
          popularDashBoardValorViagemRealizado();
          popularDashBoardValorViagemPrevisto();
-         popularDashBoardManutencaoRealizada();
-         popularDashBoardManutencaoPreventiva();
+         popularDashBoardUltimaManutencaoCorretiva();
+         popularDashBoardUltimaManutencaoPreventiva();
     }    
 
+ 
+    /**
+     * Metodo que popula os labels referentes ao dashboard de viagem realizado.
+     */
     private void popularDashBoardValorViagemRealizado(){
         ViagemDAO viagemDAO = new ViagemDAO();
-        BigDecimal valorTotalGasto = new BigDecimal(0);
+        BigDecimal valorTotalGasto;
         BigDecimal valorTotalGanho = new BigDecimal(0);
         BigDecimal valorTotal = new BigDecimal(0);
         
         ArrayList<Viagem> viagens = viagemDAO.buscarValorTotalRealizadosUltimoAno();
-        
-        
-       valorTotalGasto = viagens.stream()
+       
+        valorTotalGasto = viagens.stream()
                .map(Viagem::getValorTotalGastoRealizado)
                .reduce(BigDecimal.ZERO, BigDecimal::add);
        
-       // valorTotalGanho = viagens.stream()
-        //       .map(Viagem::getValorTotalGanhoRealizado)
-           //    .reduce(BigDecimal.ZERO, BigDecimal::add);       
+        valorTotalGanho = viagens.stream()
+               .map(Viagem::getValorTotalGanhoRealizado)
+              .reduce(BigDecimal.ZERO, BigDecimal::add);       
+      
+       lblValorGanhoRealizado.setText("R$" + valorTotalGanho.toString());
+      lblValorGastoRealizado.setText("R$" + valorTotalGasto.toString());
         
-       // lblValorGanhoRealizado.setText("R$" + valorTotalGanho.toString());
-        lblValorGastoRealizado.setText("R$" + valorTotalGasto.toString());
+        valorTotal = valorTotalGanho.subtract(valorTotalGasto);
         
-        //valorTotal = valorTotalGanho.subtract(valorTotalGasto);
-        
-       // lblValorTotalRealizado.setText("R$" + valorTotal.toString());
+        lblValorTotalRealizado.setText("R$" + valorTotal.toString());
     }
     
+    /**
+     * Metodo que popula os labels referentes ao dashboard de viagens previstas.
+     */
     private void popularDashBoardValorViagemPrevisto(){
+        ViagemDAO viagemDAO = new ViagemDAO();
+        BigDecimal valorTotalGasto;
+        BigDecimal valorTotalGanho = new BigDecimal(0);
+        BigDecimal valorTotal = new BigDecimal(0);
         
+        ArrayList<Viagem> viagens = viagemDAO.buscarValorTotalRealizadosUltimoAno();
+       
+        valorTotalGasto = viagens.stream()
+               .map(Viagem::getValorTotalGastoPrevisto)
+               .reduce(BigDecimal.ZERO, BigDecimal::add);
+       
+        valorTotalGanho = viagens.stream()
+               .map(Viagem::getValorTotalGanhoPrevisto)
+              .reduce(BigDecimal.ZERO, BigDecimal::add);       
+      
+       lblValorGanhoPrevisto.setText("R$" + valorTotalGanho.toString());
+      lblValorGastoPrevisto.setText("R$" + valorTotalGasto.toString());
+        
+        valorTotal = valorTotalGanho.subtract(valorTotalGasto);
+        
+        lblValorTotalPrevisto.setText("R$" + valorTotal.toString());
     }
     
-    private void popularDashBoardManutencaoRealizada(){
+    
+    private void popularDashBoardUltimaManutencaoCorretiva(){
+        ManutencaoDAO manutencaoDAO = new ManutencaoDAO();
+        String tipoManutencao = "Corretiva";
+        Manutencao manutencao = manutencaoDAO.buscarUltimaManutencao(tipoManutencao);
         
+        lblPlacaVeiculoCorretiva.setText(manutencao.getVeiculo().getPlaca().toUpperCase());
+        lblDataCorretiva.setText(manutencao.getDataManutencao().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")).toString());
+        lblValorCorretiva.setText("R$" + manutencao.getValor().toString());
     }
     
-    private void popularDashBoardManutencaoPreventiva(){
+    private void popularDashBoardUltimaManutencaoPreventiva(){
+        ManutencaoDAO manutencaoDAO = new ManutencaoDAO();
+        String tipoManutencao = "Preventiva";
+        Manutencao manutencao = manutencaoDAO.buscarUltimaManutencao(tipoManutencao);
         
+        lblPlacaVeiculo.setText(manutencao.getVeiculo().getPlaca().toUpperCase());
+        lblData.setText(manutencao.getDataManutencao().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")).toString());
+        lblValor.setText("R$" + manutencao.getValor().toString());
     }
     
      /**

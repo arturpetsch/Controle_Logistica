@@ -75,7 +75,7 @@
                         <Font size="1.0" />
                      </font>
                   </Label>
-                  <Pane layoutX="40.0" layoutY="134.0" prefHeight="201.0" prefWidth="786.0" style="-fx-border-radius: 12; -fx-border-width: 1; -fx-border-color: #000000; -fx-border-insets: 2; -fx-background-color: #ffffff;">
+                  <Pane layoutX="40.0" layoutY="134.0" prefHeight="201.0" prefWidth="679.0" style="-fx-border-radius: 12; -fx-border-width: 1; -fx-border-color: #000000; -fx-border-insets: 2; -fx-background-color: #ffffff;">
                      <children>
                         <Label layoutX="11.0" layoutY="11.0" text="Valor Viagens Realizado - Últimos 12 Meses">
                            <font>
@@ -173,9 +173,9 @@
                         </Label>
                      </children>
                   </Pane>
-                  <Pane layoutX="503.0" layoutY="363.0" prefHeight="201.0" prefWidth="414.0" style="-fx-border-radius: 12; -fx-border-width: 1; -fx-border-color: #000000; -fx-border-insets: 2; -fx-background-color: #ffffff;">
+                  <Pane layoutX="503.0" layoutY="363.0" prefHeight="201.0" prefWidth="335.0" style="-fx-border-radius: 12; -fx-border-width: 1; -fx-border-color: #000000; -fx-border-insets: 2; -fx-background-color: #ffffff;">
                      <children>
-                        <Label layoutX="11.0" layoutY="11.0" text="Próxima Manuteção - Preventiva">
+                        <Label layoutX="11.0" layoutY="11.0" text="Última Manutenção - Preventiva">
                            <font>
                               <Font name="Source Sans Pro Semibold" size="14.0" />
                            </font>
@@ -195,31 +195,31 @@
                               <Font name="Source Sans Pro Semibold" size="14.0" />
                            </font>
                         </Label>
-                        <Label layoutX="42.0" layoutY="156.0" text="Valor Previsto :">
+                        <Label layoutX="95.0" layoutY="156.0" text="Valor :">
                            <font>
                               <Font name="Source Sans Pro Semibold" size="14.0" />
                            </font>
                         </Label>
-                        <Label fx:id="lblValorPreventiva" layoutX="147.0" layoutY="156.0" text="R$0,00">
+                        <Label fx:id="lblValor" layoutX="147.0" layoutY="156.0" text="R$0,00">
                            <font>
                               <Font name="Source Sans Pro Semibold" size="14.0" />
                            </font>
                         </Label>
-                        <Label fx:id="lblPlacaVeiculoPreventiva" layoutX="147.0" layoutY="71.0" text="AAA">
+                        <Label fx:id="lblPlacaVeiculo" layoutX="147.0" layoutY="71.0" text="AAA">
                            <font>
                               <Font name="Source Sans Pro Semibold" size="14.0" />
                            </font>
                         </Label>
-                        <Label fx:id="lblDataPreventiva" layoutX="147.0" layoutY="113.0" text="00/00/0000">
+                        <Label fx:id="lblData" layoutX="147.0" layoutY="113.0" text="00/00/0000">
                            <font>
                               <Font name="Source Sans Pro Semibold" size="14.0" />
                            </font>
                         </Label>
                      </children>
                   </Pane>
-                  <Pane layoutX="861.0" layoutY="134.0" prefHeight="201.0" prefWidth="414.0" style="-fx-border-radius: 12; -fx-border-width: 1; -fx-border-color: #000000; -fx-border-insets: 2; -fx-background-color: #ffffff;">
+                  <Pane layoutX="732.0" layoutY="134.0" prefHeight="201.0" prefWidth="335.0" style="-fx-border-radius: 12; -fx-border-width: 1; -fx-border-color: #000000; -fx-border-insets: 2; -fx-background-color: #ffffff;">
                      <children>
-                        <Label layoutX="11.0" layoutY="11.0" text="Última Manuteção - Realizado">
+                        <Label layoutX="11.0" layoutY="11.0" text="Última Manuteção - Corretiva">
                            <font>
                               <Font name="Source Sans Pro Semibold" size="14.0" />
                            </font>
@@ -244,17 +244,17 @@
                               <Font name="Source Sans Pro Semibold" size="14.0" />
                            </font>
                         </Label>
-                        <Label fx:id="lblValorRealizado" layoutX="147.0" layoutY="156.0" text="R$0,00">
+                        <Label fx:id="lblValorCorretiva" layoutX="147.0" layoutY="156.0" text="R$0,00">
                            <font>
                               <Font name="Source Sans Pro Semibold" size="14.0" />
                            </font>
                         </Label>
-                        <Label fx:id="lblPlacaVeiculoRealizado" layoutX="147.0" layoutY="71.0" text="AAA">
+                        <Label fx:id="lblPlacaVeiculoCorretiva" layoutX="147.0" layoutY="71.0" text="AAA">
                            <font>
                               <Font name="Source Sans Pro Semibold" size="14.0" />
                            </font>
                         </Label>
-                        <Label fx:id="lblDataRealizado" layoutX="147.0" layoutY="113.0" text="00/00/0000">
+                        <Label fx:id="lblDataCorretiva" layoutX="147.0" layoutY="113.0" text="00/00/0000">
                            <font>
                               <Font name="Source Sans Pro Semibold" size="14.0" />
                            </font>

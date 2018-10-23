@@ -79,6 +79,8 @@ public class ManutencaoDAO {
          }
     }
      
+     
+     
      /**
       * Método que salva no banco uma manutenção.
       * 
@@ -171,5 +173,64 @@ public class ManutencaoDAO {
             e.printStackTrace();
             return null;
         }
+     }
+     
+     /**
+      * Metodo que busca a ultima manutencao por id.
+      * @param idManutencao
+      * @return 
+      */
+     private Manutencao buscarUltimaManutencaoPorId(int idManutencao){
+         String sql = "SELECT * FROM manutencao WHERE idManutencao = " + idManutencao;
+         
+         ResultSet resultSet;
+         
+         VeiculoDAO veiculoDAO = new VeiculoDAO();
+         Manutencao manutencao = new Manutencao();
+                
+         try {
+            
+            connection = Conexao.conexao();
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            resultSet = preparedStatement.executeQuery(sql);
+            
+            if(resultSet.next()){
+                manutencao.setIdManutencao(resultSet.getInt("idManutencao"));
+                manutencao.setValor(resultSet.getBigDecimal("valor"));
+                manutencao.setDataManutencao(resultSet.getDate("dataManutencao").toLocalDate());
+                manutencao.setObservacao(resultSet.getString("observacao"));
+                manutencao.setTipoManutencao(resultSet.getString("tipoManutencao"));
+                 manutencao.setVeiculo(veiculoDAO.consultarVeiculoPorId(resultSet.getInt("id_veiculo")));
+           }
+            return manutencao;
+        }catch(Exception e){
+            e.printStackTrace();
+            return null;
+        }
+     }
+     
+     public Manutencao buscarUltimaManutencao(String tipoManutencao){
+         String sqlBusca = "SELECT MAX(idManutencao) as idManutencao FROM manutencao WHERE tipoManutencao = '" + tipoManutencao + "'";
+         
+         ResultSet resultSetManutencao;
+         
+         try {
+             connection = Conexao.conexao();
+             PreparedStatement preparedStatementManutencao = connection.prepareStatement(sqlBusca);
+             resultSetManutencao = preparedStatementManutencao.executeQuery(sqlBusca);
+             
+             Manutencao manutencao = new Manutencao();
+             
+             int idManutencao = 0;
+             if(resultSetManutencao.next()){
+                 idManutencao = resultSetManutencao.getInt("idManutencao");
+             }
+             
+             manutencao = buscarUltimaManutencaoPorId(idManutencao);
+             return manutencao;
+         } catch (Exception e) {
+             e.printStackTrace();
+         }
+         return null;
      }
 }
