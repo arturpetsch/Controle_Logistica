@@ -180,6 +180,8 @@ public class ConhecimentoFreteController implements Initializable {
     @FXML
     private void desmarcarRemetente(ActionEvent action){
         tomadorServicoRemetente.setSelected(false);
+        cte.getClienteDestinatario().setTomador(Boolean.TRUE);
+        cte.getClienteRemetente().setTomador(Boolean.FALSE);
     }
     
     /**
@@ -189,6 +191,8 @@ public class ConhecimentoFreteController implements Initializable {
     @FXML
     private void desmarcarDestinatario(ActionEvent action){
         tomadorServicoDestinatario.setSelected(false);
+         cte.getClienteRemetente().setTomador(Boolean.TRUE);
+         cte.getClienteDestinatario().setTomador(Boolean.FALSE);
     }
     /**
      * Método que coleta os dados da NF e insere um objeto NF e posterior em uma
@@ -581,6 +585,8 @@ public class ConhecimentoFreteController implements Initializable {
         this.clienteDestinatario = cte.getClienteDestinatario().getCliente();
         this.clienteRemetente = cte.getClienteRemetente().getCliente();
         this.notasFiscais = cte.getNotasFiscais();
+        tomadorServicoDestinatario.setSelected(cte.getClienteDestinatario().getTomador());
+        tomadorServicoRemetente.setSelected(cte.getClienteRemetente().getTomador());
         
         if(cte.getClienteRemetente().getCliente().getClienteFisico() != null && cte.getClienteRemetente().getCliente().getClienteFisico().getIdClienteFisico() > 0){
         

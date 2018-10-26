@@ -23,7 +23,8 @@ public class ClienteJuridicoDAO {
     private Connection connection = null;
     
      public ArrayList<Cliente> consultarClientePorNome(String nomeInformado){
-        String sql = "SELECT * FROM clientejuridico WHERE nomeFantasia LIKE " + "'%" + nomeInformado + "%' order by nomeFantasia";
+        String sql = "SELECT cj.*, c.idCliente AS cliente FROM clientejuridico cj, cliente c WHERE cj.idClienteJuridico = c.idClienteJuridico AND cj.nomeFantasia LIKE " + "'%" + nomeInformado + "%' order by razaoSocial";
+
         
         ResultSet resultSet;
         ArrayList<Cliente> clientes = new ArrayList<Cliente>();
@@ -42,6 +43,7 @@ public class ClienteJuridicoDAO {
                 clienteJuridico.getClienteJuridico().setCnpj(resultSet.getString("cnpj"));
                 clienteJuridico.getClienteJuridico().setIe(resultSet.getString("inscricaoEstadual"));
                 clienteDAO.buscarClienteJuridico(clienteJuridico);
+                clienteJuridico.setIdCliente(resultSet.getInt("cliente"));
                 clientes.add(clienteJuridico);
                 
             }

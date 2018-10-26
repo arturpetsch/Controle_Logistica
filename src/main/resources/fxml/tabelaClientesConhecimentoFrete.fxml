@@ -36,5 +36,11 @@
          </font>
       </Label>
       <ComboBox fx:id="comboBoxTipoCliente" layoutX="387.0" layoutY="43.0" prefHeight="25.0" prefWidth="139.0" />
+      <TableView fx:id="tabelaClientesJuridicos" layoutX="12.0" layoutY="79.0" prefHeight="259.0" prefWidth="573.0">
+         <columns>
+            <TableColumn fx:id="cpfCnpjTabelaClientesJuridicos" prefWidth="179.0" resizable="false" text="CPF / CNPJ" />
+            <TableColumn fx:id="nomeTabelaClientesJuridicos" prefWidth="392.0" resizable="false" text="Nome " />
+         </columns>
+      </TableView>
    </children>
 </AnchorPane>

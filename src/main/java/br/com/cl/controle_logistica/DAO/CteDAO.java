@@ -274,16 +274,27 @@ public class CteDAO {
             preparedStatement.setDouble(7, cte.getVolume());
             preparedStatement.setString(8, cte.getEspecie());
             preparedStatement.setString(9, cte.getObservacao());
-            preparedStatement.setInt(10, cte.getClienteRemetente().getCliente().getIdCliente());
-            preparedStatement.setInt(11, cte.getClienteDestinatario().getCliente().getIdCliente());
-
+            
+            if(cte.getClienteRemetente().getCliente().getClienteFisico().getIdClienteFisico() > 0){
+                preparedStatement.setInt(10, cte.getClienteRemetente().getCliente().getClienteFisico().getIdClienteFisico());
+            }else if(cte.getClienteRemetente().getCliente().getClienteJuridico().getIdClienteJuridico() > 0){
+                preparedStatement.setInt(10, cte.getClienteRemetente().getCliente().getClienteJuridico().getIdClienteJuridico());
+            }
+            
+            if(cte.getClienteDestinatario().getCliente().getClienteFisico().getIdClienteFisico() > 0){
+                preparedStatement.setInt(11, cte.getClienteDestinatario().getCliente().getClienteFisico().getIdClienteFisico());
+            }else if(cte.getClienteDestinatario().getCliente().getClienteJuridico().getIdClienteJuridico() > 0){
+                preparedStatement.setInt(11, cte.getClienteDestinatario().getCliente().getClienteJuridico().getIdClienteJuridico());
+            }
+            
+            
             preparedStatement.executeUpdate();
 
             deletarNf(cte);
 
             int i = 0;
             preparedStatement.close();
-            while (cte.getNotasFiscais().size() >= i) {
+            while (cte.getNotasFiscais().size() > i) {
                 salvarNF(cte.getNotasFiscais().get(i), cte.getNumeroCte());
                 i++;
             }

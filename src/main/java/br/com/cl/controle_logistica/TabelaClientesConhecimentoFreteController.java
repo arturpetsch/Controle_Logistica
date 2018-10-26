@@ -48,21 +48,30 @@ public class TabelaClientesConhecimentoFreteController implements Initializable 
    @FXML
     private TableView tabelaClientes = new TableView();
 
-    @FXML
-    private TableColumn<Cliente, String> cpfCnpjTabelaClientes = new TableColumn();
+   @FXML
+    private TableView tabelaClientesJuridicos = new TableView();
 
     @FXML
-    private TableColumn<Cliente, String> nomeTabelaClientes = new TableColumn();
+    private TableColumn<Cliente, ClienteFisico> cpfCnpjTabelaClientes = new TableColumn();
 
+    @FXML
+    private TableColumn<Cliente, ClienteFisico> nomeTabelaClientes = new TableColumn();
+    
+    @FXML
+    private TableColumn<Cliente, ClienteJuridico> cpfCnpjTabelaClientesJuridicos = new TableColumn();
+
+    @FXML
+    private TableColumn<Cliente, ClienteJuridico> nomeTabelaClientesJuridicos = new TableColumn();
+    
     @FXML
     private TextField txtNomeCliente;
     
     @FXML
     private Button botaoPesquisar;
     
-    ObservableList<Cliente> clienteFBusca = FXCollections.observableArrayList();
+    ObservableList<Cliente> clienteBusca = FXCollections.observableArrayList();
     
-    ObservableList<Cliente> clienteJBusca = FXCollections.observableArrayList();
+    //ObservableList<ClienteJuridico> clienteJBusca = FXCollections.observableArrayList();
         
     ArrayList<Cliente> clientes = new ArrayList<Cliente>();
         
@@ -114,15 +123,17 @@ public class TabelaClientesConhecimentoFreteController implements Initializable 
     @FXML
     protected void popularTabelaClientesJuridicos(ArrayList<Cliente> clientesJuridicos){
         if(clientesJuridicos != null){
-            cpfCnpjTabelaClientes.setCellValueFactory(new PropertyValueFactory("cnpj"));
-            nomeTabelaClientes.setCellValueFactory(new PropertyValueFactory("nomeCliente"));
+            tabelaClientes.setVisible(false);
+            tabelaClientesJuridicos.setVisible(true);
+            cpfCnpjTabelaClientesJuridicos.setCellValueFactory(new PropertyValueFactory("clienteJuridico"));
+            nomeTabelaClientesJuridicos.setCellValueFactory(new PropertyValueFactory("clienteJuridico"));
             
-            //formatarNomeClienteRemetente();
-            //formatarCpfCnpjCliente();
-            tabelaClientes.setItems(clienteJBusca);
-            tabelaClientes.getItems().setAll(clientesJuridicos);
+            formatarNomeClienteJuridico();
+            formatarCpfCnpjClienteJuridico();
+            tabelaClientesJuridicos.setItems(clienteBusca);
+            tabelaClientesJuridicos.getItems().setAll(clientesJuridicos);
 
-            tabelaClientes.setRowFactory(tv -> {
+            tabelaClientesJuridicos.setRowFactory(tv -> {
             TableRow<Cliente> row = new TableRow<>();
             row.setOnMouseClicked(event -> {
                 if (event.getClickCount() == 2 && (!row.isEmpty())) {
@@ -142,7 +153,7 @@ public class TabelaClientesConhecimentoFreteController implements Initializable 
      */
     private void selecionaClienteJuridico(Cliente clienteJuridico){
         this.cliente = clienteJuridico;
-         Stage stage = (Stage) tabelaClientes.getScene().getWindow();
+         Stage stage = (Stage) tabelaClientesJuridicos.getScene().getWindow();
         stage.close();
         getClienteSelecionadoJuridico();
     }
@@ -174,12 +185,14 @@ public class TabelaClientesConhecimentoFreteController implements Initializable 
     @FXML
     protected void popularTabelaClientesFisicos(ArrayList<Cliente> clientesFisicos){
         if(clientesFisicos != null){
-            cpfCnpjTabelaClientes.setCellValueFactory(new PropertyValueFactory("cpf"));
-            nomeTabelaClientes.setCellValueFactory(new PropertyValueFactory("nomeCliente"));
+            tabelaClientesJuridicos.setVisible(false);
+            tabelaClientes.setVisible(true);
+            cpfCnpjTabelaClientes.setCellValueFactory(new PropertyValueFactory("clienteFisico"));
+            nomeTabelaClientes.setCellValueFactory(new PropertyValueFactory("clienteFisico"));
             
-            //formatarNomeClienteRemetente();
-            //formatarCpfCnpjCliente();
-            tabelaClientes.setItems(clienteFBusca);
+            formatarNomeCliente();
+            formatarCpfCnpjCliente();
+            tabelaClientes.setItems(clienteBusca);
             tabelaClientes.getItems().setAll(clientesFisicos);
 
             tabelaClientes.setRowFactory(tv -> {
@@ -196,18 +209,54 @@ public class TabelaClientesConhecimentoFreteController implements Initializable 
         }
         }
     
-  /**@FXML
-    private void formatarNomeClienteRemetente() {
+  @FXML
+    private void formatarNomeCliente() {
         nomeTabelaClientes.setCellFactory(column -> {
-            return new TableCell<Cliente, String>() {
+            return new TableCell<Cliente, ClienteFisico>() {
 
                 @Override
-                protected void updateItem(String item,  boolean empty) {
+                protected void updateItem(ClienteFisico item,  boolean empty) {
                     super.updateItem(item, empty);
                     if (item == null) {
+                        
+                    } else if(item != null && item.getIdClienteFisico() > 0){
+                        setText(item.getNomeCliente());
+                    }
+                }
+            };
+        });
+    }
+    
+  @FXML
+    private void formatarCpfCnpjCliente() {
+        cpfCnpjTabelaClientes.setCellFactory(column -> {
+            return new TableCell<Cliente, ClienteFisico>() {
 
-                    } else if(item != null){
-                        setText(item);
+                @Override
+                protected void updateItem(ClienteFisico item,  boolean empty) {
+                    super.updateItem(item, empty);
+                    if (item == null) {
+                        
+                    } else if(item != null && item.getIdClienteFisico() > 0){
+                        setText(item.getCpf());
+                    }
+                }
+            };
+        });
+    }
+    
+  @FXML
+    private void formatarNomeClienteJuridico() {
+        nomeTabelaClientesJuridicos.setCellFactory(column -> {
+            return new TableCell<Cliente, ClienteJuridico>() {
+
+                @Override
+                protected void updateItem(ClienteJuridico item,  boolean empty) {
+                    super.updateItem(item, empty);
+                    if (item == null) {
+                        
+                    } else if(item != null && item.getIdClienteJuridico()> 0){
+                        setText(item.getNomeFantasia());
                     }
                 }
             };
@@ -215,23 +264,23 @@ public class TabelaClientesConhecimentoFreteController implements Initializable 
     }
     
           @FXML
-    private void formatarCpfCnpjCliente() {
-        cpfCnpjTabelaClientes.setCellFactory(column -> {
-            return new TableCell<Cliente, String>() {
+    private void formatarCpfCnpjClienteJuridico() {
+        cpfCnpjTabelaClientesJuridicos.setCellFactory(column -> {
+            return new TableCell<Cliente, ClienteJuridico>() {
 
                 @Override
-                protected void updateItem(String item, boolean empty) {
+                protected void updateItem(ClienteJuridico item, boolean empty) {
                     super.updateItem(item, empty);
                     if (item == null) {
-
+                        
                     } else if(item != null){
-                        setText(item);
+                        setText(item.getCnpj());
                     }
                 }
             };
         });
         }
-   */
+   
     
     /**
      * Metodo que popula o tipo do cliente no combobox.

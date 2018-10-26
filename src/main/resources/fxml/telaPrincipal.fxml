@@ -24,7 +24,7 @@
                         <Font size="13.0" />
                      </font>
                   </MenuButton>
-                  <MenuButton alignment="CENTER_RIGHT" contentDisplay="TOP" layoutY="331.0" mnemonicParsing="false" popupSide="RIGHT" prefHeight="40.0" prefWidth="174.0" style="-fx-background-color: #000054;" text="Usuário" textFill="#fffdfd">
+                  <MenuButton alignment="CENTER_RIGHT" contentDisplay="TOP" disable="true" layoutY="331.0" mnemonicParsing="false" popupSide="RIGHT" prefHeight="40.0" prefWidth="174.0" style="-fx-background-color: #000054;" text="Usuário" textFill="#fffdfd" visible="false">
                     <items>
                       <MenuItem mnemonicParsing="false" text="Usuário" />
                       <MenuItem mnemonicParsing="false" text="Alteração de Senha" />
