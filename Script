@@ -1,0 +1,282 @@
+SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
+SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
+
+-- -----------------------------------------------------
+-- Schema controlelogistica
+-- -----------------------------------------------------
+
+-- -----------------------------------------------------
+-- Schema controlelogistica
+-- -----------------------------------------------------
+CREATE SCHEMA IF NOT EXISTS `controlelogistica` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci ;
+USE `controlelogistica` ;
+
+-- -----------------------------------------------------
+-- Table `controlelogistica`.`Cargo`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `controlelogistica`.`Cargo` (
+  `idCargo` INT NOT NULL AUTO_INCREMENT,
+  `descricao` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`idCargo`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `controlelogistica`.`Funcionario`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `controlelogistica`.`Funcionario` (
+  `idFuncionario` INT NOT NULL AUTO_INCREMENT,
+  `nome` VARCHAR(144) NOT NULL,
+  `CPF` VARCHAR(14) NOT NULL,
+  `RG` VARCHAR(20) NOT NULL,
+  `dataNascimento` DATETIME NOT NULL,
+  `salario` DECIMAL NOT NULL,
+  `porcentagem` FLOAT NULL,
+  `dataAdmissao` DATETIME NOT NULL,
+  `dataRescisao` DATETIME NULL,
+  `contato` VARCHAR(20) NOT NULL,
+  `contato2` VARCHAR(20) NULL,
+  `endereco` VARCHAR(150) NOT NULL,
+  `bairro` VARCHAR(150) NOT NULL,
+  `cidade` VARCHAR(45) NOT NULL,
+  `estado` VARCHAR(15) NOT NULL,
+  `CEP` VARCHAR(20) NOT NULL,
+  `cargo_fk` INT NOT NULL,
+  `email` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`idFuncionario`),
+  INDEX `cargo_idx` (`cargo_fk` ASC),
+  UNIQUE INDEX `cpf_UNIQUE` (`CPF` ASC),
+  CONSTRAINT `cargo`
+    FOREIGN KEY (`cargo_fk`)
+    REFERENCES `controlelogistica`.`Cargo` (`idCargo`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `controlelogistica`.`Veiculo`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `controlelogistica`.`Veiculo` (
+  `idVeiculo` INT NOT NULL AUTO_INCREMENT,
+  `placa` VARCHAR(10) NOT NULL,
+  `modeloVeiculo` VARCHAR(45) NOT NULL,
+  `pesoTara` DOUBLE NOT NULL,
+  `placaCarreta` VARCHAR(10) NULL,
+  `anoVeiculo` VARCHAR(15) NOT NULL,
+  `KM` INT NOT NULL,
+  `funcionario_fk` INT NOT NULL,
+  `mediaKmLitro` DOUBLE NOT NULL,
+  PRIMARY KEY (`idVeiculo`),
+  INDEX `funcionario_idx` (`funcionario_fk` ASC),
+  UNIQUE INDEX `placa_UNIQUE` (`placa` ASC),
+  CONSTRAINT `funcionario`
+    FOREIGN KEY (`funcionario_fk`)
+    REFERENCES `controlelogistica`.`Funcionario` (`idFuncionario`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `controlelogistica`.`Manutencao`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `controlelogistica`.`Manutencao` (
+  `idManutencao` INT NOT NULL AUTO_INCREMENT,
+  `dataManutencao` DATETIME NOT NULL,
+  `valor` DECIMAL NOT NULL,
+  `tipoManutencao` VARCHAR(15) NOT NULL,
+  `observacao` VARCHAR(300) NULL,
+  `id_veiculo` INT NOT NULL,
+  PRIMARY KEY (`idManutencao`),
+  INDEX `veiculo_idx` (`id_veiculo` ASC),
+  CONSTRAINT `veiculo`
+    FOREIGN KEY (`id_veiculo`)
+    REFERENCES `controlelogistica`.`Veiculo` (`idVeiculo`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `controlelogistica`.`ClienteFisico`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `controlelogistica`.`ClienteFisico` (
+  `idCliente` INT NOT NULL AUTO_INCREMENT,
+  `nomeCliente` VARCHAR(144) NOT NULL,
+  `CPF` VARCHAR(14) NOT NULL,
+  `dataNascimento` DATETIME NOT NULL,
+  PRIMARY KEY (`idCliente`),
+  UNIQUE INDEX `CPF_UNIQUE` (`CPF` ASC))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `controlelogistica`.`ClienteJuridico`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `controlelogistica`.`ClienteJuridico` (
+  `idClienteJuridico` INT NOT NULL AUTO_INCREMENT,
+  `nomeFantasia` VARCHAR(150) NOT NULL,
+  `razaoSocial` VARCHAR(150) NOT NULL,
+  `CNPJ` VARCHAR(25) NOT NULL,
+  `inscricaoEstadual` VARCHAR(15) NOT NULL,
+  PRIMARY KEY (`idClienteJuridico`),
+  UNIQUE INDEX `CNPJ_UNIQUE` (`CNPJ` ASC))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `controlelogistica`.`Usuario`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `controlelogistica`.`Usuario` (
+  `idUsuario` INT NOT NULL AUTO_INCREMENT,
+  `tipoUsuario` TINYINT(1) NOT NULL,
+  `senhaUsuario` VARCHAR(20) NOT NULL,
+  `funcionario_fk` INT NOT NULL,
+  PRIMARY KEY (`idUsuario`),
+  INDEX `funcionario_idx` (`funcionario_fk` ASC),
+  CONSTRAINT `func`
+    FOREIGN KEY (`funcionario_fk`)
+    REFERENCES `controlelogistica`.`Funcionario` (`idFuncionario`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `controlelogistica`.`Cliente`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `controlelogistica`.`Cliente` (
+  `idCliente` INT NOT NULL AUTO_INCREMENT,
+  `idClienteFisico` INT NULL,
+  `idClienteJuridico` INT NULL,
+  `endereco` VARCHAR(150) NOT NULL,
+  `bairro` VARCHAR(150) NOT NULL,
+  `cidade` VARCHAR(45) NOT NULL,
+  `estado` VARCHAR(15) NOT NULL,
+  `cep` VARCHAR(20) NOT NULL,
+  `email` VARCHAR(45) NOT NULL,
+  `contato` VARCHAR(20) NOT NULL,
+  `contato2` VARCHAR(20) NULL,
+  `dataCadastro` DATETIME NOT NULL,
+  PRIMARY KEY (`idCliente`),
+  INDEX `cliente_f_idx` (`idClienteFisico` ASC),
+  INDEX `cliente_j_idx` (`idClienteJuridico` ASC),
+  CONSTRAINT `cliente_f`
+    FOREIGN KEY (`idClienteFisico`)
+    REFERENCES `controlelogistica`.`ClienteFisico` (`idCliente`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `cliente_j`
+    FOREIGN KEY (`idClienteJuridico`)
+    REFERENCES `controlelogistica`.`ClienteJuridico` (`idClienteJuridico`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `controlelogistica`.`Cte`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `controlelogistica`.`Cte` (
+  `valor` DECIMAL NOT NULL,
+  `dataEmissao` DATETIME NOT NULL,
+  `numeroCte` INT NOT NULL AUTO_INCREMENT,
+  `chaveAcesso` VARCHAR(60) NOT NULL,
+  `produto` VARCHAR(60) NOT NULL,
+  `pesoBruto` DOUBLE NOT NULL,
+  `pesoLiquido` DOUBLE NOT NULL,
+  `volume` DOUBLE NOT NULL,
+  `especie` VARCHAR(15) NOT NULL,
+  `observacao` VARCHAR(30) NOT NULL,
+  `clienteFisico_fk` INT NULL,
+  `clienteJuridico_fk` INT NULL,
+  PRIMARY KEY (`numeroCte`),
+  UNIQUE INDEX `numeroCte_UNIQUE` (`numeroCte` ASC),
+  INDEX `cliente_f_idx` (`clienteFisico_fk` ASC),
+  INDEX `cliente_j_idx` (`clienteJuridico_fk` ASC),
+  CONSTRAINT `c`
+    FOREIGN KEY (`clienteFisico_fk`)
+    REFERENCES `controlelogistica`.`Cliente` (`idClienteFisico`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `cliente`
+    FOREIGN KEY (`clienteJuridico_fk`)
+    REFERENCES `controlelogistica`.`Cliente` (`idClienteJuridico`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+COMMENT = '	';
+
+
+-- -----------------------------------------------------
+-- Table `controlelogistica`.`notaFiscal`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `controlelogistica`.`notaFiscal` (
+  `idnotaFiscal` INT NOT NULL AUTO_INCREMENT,
+  `valorNf` DECIMAL NOT NULL,
+  `chaveAcesso` VARCHAR(60) NOT NULL,
+  `numero` MEDIUMTEXT NOT NULL,
+  `cte_fk` INT NULL,
+  PRIMARY KEY (`idnotaFiscal`),
+  UNIQUE INDEX `chaveAcesso_UNIQUE` (`chaveAcesso` ASC),
+  INDEX `cte_idx` (`cte_fk` ASC),
+  CONSTRAINT `cte`
+    FOREIGN KEY (`cte_fk`)
+    REFERENCES `controlelogistica`.`Cte` (`numeroCte`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `controlelogistica`.`Viagem`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `controlelogistica`.`Viagem` (
+  `idViagem` INT NOT NULL AUTO_INCREMENT,
+  `veiculo_fk` INT NOT NULL,
+  `kmInicial` DOUBLE NOT NULL,
+  `kmFinal` DOUBLE NULL,
+  `cte_fk` INT NOT NULL,
+  `totalKmPrevisto` DOUBLE NOT NULL,
+  `totalKmRealizado` DOUBLE NULL,
+  PRIMARY KEY (`idViagem`),
+  UNIQUE INDEX `veiculo_id_UNIQUE` (`veiculo_fk` ASC),
+  INDEX `cte_idx` (`cte_fk` ASC),
+  CONSTRAINT `veic`
+    FOREIGN KEY (`veiculo_fk`)
+    REFERENCES `controlelogistica`.`Veiculo` (`idVeiculo`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `frete`
+    FOREIGN KEY (`cte_fk`)
+    REFERENCES `controlelogistica`.`Cte` (`numeroCte`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `controlelogistica`.`ViagemDespesa`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `controlelogistica`.`ViagemDespesa` (
+  `viagem_fk` INT NOT NULL,
+  `tipoDespesa` VARCHAR(20) NOT NULL,
+  `descricao` VARCHAR(100) NOT NULL,
+  `valor` DECIMAL NOT NULL,
+  `idViagemDespesa` INT NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`idViagemDespesa`),
+  CONSTRAINT `viagem`
+    FOREIGN KEY (`viagem_fk`)
+    REFERENCES `controlelogistica`.`Viagem` (`idViagem`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+INSERT INTO controlelogistica.usuario(tipoUsuario,senhaUsuario,funcionario_fk) VALUES ('1','ADMIN','1');
+
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
