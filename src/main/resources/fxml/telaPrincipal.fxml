@@ -75,7 +75,7 @@
                         <Font size="1.0" />
                      </font>
                   </Label>
-                  <Pane layoutX="40.0" layoutY="134.0" prefHeight="201.0" prefWidth="679.0" style="-fx-border-radius: 12; -fx-border-width: 1; -fx-border-color: #000000; -fx-border-insets: 2; -fx-background-color: #ffffff;">
+                  <Pane layoutX="40.0" layoutY="134.0" prefHeight="201.0" prefWidth="414.0" style="-fx-border-radius: 12; -fx-border-width: 1; -fx-border-color: #000000; -fx-border-insets: 2; -fx-background-color: #ffffff;">
                      <children>
                         <Label layoutX="11.0" layoutY="11.0" text="Valor Viagens Realizado - Últimos 12 Meses">
                            <font>
@@ -217,7 +217,7 @@
                         </Label>
                      </children>
                   </Pane>
-                  <Pane layoutX="732.0" layoutY="134.0" prefHeight="201.0" prefWidth="335.0" style="-fx-border-radius: 12; -fx-border-width: 1; -fx-border-color: #000000; -fx-border-insets: 2; -fx-background-color: #ffffff;">
+                  <Pane layoutX="511.0" layoutY="134.0" prefHeight="201.0" prefWidth="335.0" style="-fx-border-radius: 12; -fx-border-width: 1; -fx-border-color: #000000; -fx-border-insets: 2; -fx-background-color: #ffffff;">
                      <children>
                         <Label layoutX="11.0" layoutY="11.0" text="Última Manuteção - Corretiva">
                            <font>

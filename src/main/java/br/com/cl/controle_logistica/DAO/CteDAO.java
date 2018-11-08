@@ -54,14 +54,14 @@ public class CteDAO {
 
                 Integer idClienteDestinatario = resultSet.getInt("clienteDestinatario_fk");
                 cte.setClienteDestinatario(buscarCteCliente(idClienteDestinatario));
-                 cte.getClienteDestinatario().setCte(cte);
-                 
+                cte.getClienteDestinatario().setCte(cte);
+
                 Integer idClienteRemetente = resultSet.getInt("clienteRemetente_fk");
                 cte.setClienteRemetente(buscarCteCliente(idClienteRemetente));
                 cte.getClienteRemetente().setCte(cte);
-                
+
                 cte.setNotasFiscais(buscarNotasFiscais(cte.getNumeroCte()));
-                
+
                 fretes.add(cte);
             }
             return fretes;
@@ -105,7 +105,7 @@ public class CteDAO {
                 Integer idClienteDestinatario = resultSet.getInt("clienteDestinatario_fk");
                 cte.setClienteDestinatario(buscarCteCliente(idClienteDestinatario));
                 cte.getClienteDestinatario().setCte(cte);
-              
+
                 Integer idClienteRemetente = resultSet.getInt("clienteRemetente_fk");
                 cte.setClienteRemetente(buscarCteCliente(idClienteRemetente));
                 cte.getClienteRemetente().setCte(cte);
@@ -127,12 +127,12 @@ public class CteDAO {
      */
     private CteCliente buscarCteCliente(int idClienteCte) {
         String sqlCteCliente = "SELECT * FROM cte_cliente WHERE idCteCliente = " + idClienteCte;
-        
+
         CteCliente cteCliente = new CteCliente();
         ResultSet resultSet;
         ClienteDAO clienteDAO = new ClienteDAO();
         CteDAO cteDAO = new CteDAO();
-        
+
         try {
 
             connection = Conexao.conexao();
@@ -141,12 +141,12 @@ public class CteDAO {
 
             if (resultSet.next()) {
 
-                cteCliente.setCliente(clienteDAO.buscarCliente(resultSet.getInt("cliente_fk"))); 
+                cteCliente.setCliente(clienteDAO.buscarCliente(resultSet.getInt("cliente_fk")));
                 cteCliente.setTomador(resultSet.getBoolean("tomadorServico"));
-                
+
             }
             return cteCliente;
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
@@ -260,7 +260,11 @@ public class CteDAO {
     public boolean atualizarCTe(Cte cte) {
         String sql = "UPDATE cte SET valor = ?, dataEmissao = ?, chaveAcesso = ?, produto = ?, pesoBruto = ?,"
                 + " pesoLiquido = ?, volume = ?, especie = ?,"
-                + " observacao = ?, clienteRemetente_fk = ?, clienteDestinatario_fk = ? WHERE numeroCte = " + cte.getNumeroCte();
+                + " observacao = ? WHERE numeroCte = " + cte.getNumeroCte();
+
+        String buscaIdCteCliente = "SELECT idCteCliente FROM cte_cliente WHERE cte_fk = " + cte.getClienteDestinatario().getCte().getNumeroCte();
+
+        ResultSet resultSetBuscaIdCteCliente;
 
         try {
             connection = Conexao.conexao();
@@ -274,21 +278,58 @@ public class CteDAO {
             preparedStatement.setDouble(7, cte.getVolume());
             preparedStatement.setString(8, cte.getEspecie());
             preparedStatement.setString(9, cte.getObservacao());
-            
-            if(cte.getClienteRemetente().getCliente().getClienteFisico().getIdClienteFisico() > 0){
-                preparedStatement.setInt(10, cte.getClienteRemetente().getCliente().getClienteFisico().getIdClienteFisico());
-            }else if(cte.getClienteRemetente().getCliente().getClienteJuridico().getIdClienteJuridico() > 0){
-                preparedStatement.setInt(10, cte.getClienteRemetente().getCliente().getClienteJuridico().getIdClienteJuridico());
-            }
-            
-            if(cte.getClienteDestinatario().getCliente().getClienteFisico().getIdClienteFisico() > 0){
-                preparedStatement.setInt(11, cte.getClienteDestinatario().getCliente().getClienteFisico().getIdClienteFisico());
-            }else if(cte.getClienteDestinatario().getCliente().getClienteJuridico().getIdClienteJuridico() > 0){
-                preparedStatement.setInt(11, cte.getClienteDestinatario().getCliente().getClienteJuridico().getIdClienteJuridico());
-            }
-            
-            
+
             preparedStatement.executeUpdate();
+            PreparedStatement preparedStatementBuscaIdCteCliente = connection.prepareStatement(buscaIdCteCliente);
+            resultSetBuscaIdCteCliente = preparedStatementBuscaIdCteCliente.executeQuery(buscaIdCteCliente);
+
+            ArrayList<Integer> idsCteCliente = new ArrayList<>();
+
+            while (resultSetBuscaIdCteCliente.next()) {
+                int id = (resultSetBuscaIdCteCliente.getInt("idCteCliente"));
+                idsCteCliente.add(id);
+            }
+
+            if(cte.getClienteRemetente().getCliente().getIdCliente() == 0){ 
+                if(cte.getClienteRemetente().getCliente().getClienteFisico().getIdClienteFisico() > 0){
+                    cte.getClienteRemetente().getCliente().setIdCliente(cte.getClienteRemetente().getCliente().getClienteFisico().getIdClienteFisico());
+                }else{
+                    cte.getClienteRemetente().getCliente().setIdCliente(cte.getClienteRemetente().getCliente().getClienteJuridico().getIdClienteJuridico());
+                }
+            }
+            
+            
+            if(cte.getClienteDestinatario().getCliente().getIdCliente() == 0){ 
+                if( cte.getClienteDestinatario().getCliente().getClienteFisico().getIdClienteFisico() > 0){
+                    cte.getClienteDestinatario().getCliente().setIdCliente(cte.getClienteDestinatario().getCliente().getClienteFisico().getIdClienteFisico());
+                }else{
+                    cte.getClienteDestinatario().getCliente().setIdCliente(cte.getClienteDestinatario().getCliente().getClienteJuridico().getIdClienteJuridico());
+                }
+            }
+            
+            String sqlUpdateCteClienteRemetente = "UPDATE cte_cliente SET cte_fk = ?, cliente_fk = ?, tomadorServico = ? WHERE idCteCliente = "
+                    + idsCteCliente.get(0);
+
+            //atualiza o CteCliente Remetente com as novas informações;
+            PreparedStatement preparedStatementUpdateCteClienteRemetente = connection.prepareStatement(sqlUpdateCteClienteRemetente);
+            preparedStatementUpdateCteClienteRemetente.setInt(1, cte.getClienteRemetente().getCte().getNumeroCte());
+            preparedStatementUpdateCteClienteRemetente.setInt(2, cte.getClienteRemetente().getCliente().getIdCliente());
+            preparedStatementUpdateCteClienteRemetente.setBoolean(3, cte.getClienteRemetente().getTomador());
+            preparedStatementUpdateCteClienteRemetente.execute();
+            preparedStatementUpdateCteClienteRemetente.close();
+            
+            
+            
+            String sqlUpdateCteCliente = "UPDATE cte_cliente SET cte_fk = ?, cliente_fk = ?, tomadorServico = ? WHERE idCteCliente = "
+                    + idsCteCliente.get(1);
+
+            //atualiza o CteCliente Destinatário com as novas informações;
+            PreparedStatement preparedStatementUpdateCteCliente = connection.prepareStatement(sqlUpdateCteCliente);
+            preparedStatementUpdateCteCliente.setInt(1, cte.getClienteDestinatario().getCte().getNumeroCte());
+            preparedStatementUpdateCteCliente.setInt(2, cte.getClienteDestinatario().getCliente().getIdCliente());
+            preparedStatementUpdateCteCliente.setBoolean(3, cte.getClienteDestinatario().getTomador());
+            preparedStatementUpdateCteCliente.executeUpdate();
+            preparedStatementUpdateCteCliente.close();
 
             deletarNf(cte);
 
@@ -298,8 +339,7 @@ public class CteDAO {
                 salvarNF(cte.getNotasFiscais().get(i), cte.getNumeroCte());
                 i++;
             }
-            
-            
+
         } catch (Exception e) {
             e.printStackTrace();
             return false;
@@ -316,6 +356,7 @@ public class CteDAO {
     public boolean deletarCTe(Cte cte) {
         String sql = "DELETE FROM cte WHERE numeroCte = " + cte.getNumeroCte();
         deletarNf(cte);
+        deletarCteCliente(cte);
         try {
             connection = Conexao.conexao();
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
@@ -327,7 +368,26 @@ public class CteDAO {
         }
         return true;
     }
-
+    
+    /**
+     * Método que deleta os cteCliente referente a um frete.
+     * @param cte 
+     */
+    private void deletarCteCliente(Cte cte){
+        String sqlDeletarCteCliente = "DELETE From cte_cliente WHERE cte_fk = " + cte.getNumeroCte();
+        
+        try {
+            connection = Conexao.conexao();
+            PreparedStatement preparedStatement = connection.prepareStatement(sqlDeletarCteCliente);
+            preparedStatement.executeUpdate(sqlDeletarCteCliente);
+            preparedStatement.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            
+        }
+        
+    }
+    
     //================= NOTAS FISCAIS ==========================================
     /**
      * Método que deleta do banco de dados a(s) nota(s) conforme numero do cte.
